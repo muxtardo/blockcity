@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 
 // Set locale
 Route::get('locale/{locale}', function ($locale) {
-    if (!in_array($locale, Config::get('app.locales'))) {
+    if (!array_key_exists($locale, Config::get('app.locales'))) {
         abort(400);
     }
 	Cookie::queue(Cookie::forever('locale', $locale));

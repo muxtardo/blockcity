@@ -9,7 +9,7 @@
 			</li> --}}
 
 			<li class="dropdown notification-list">
-				<a href="{{ Config::get('app.theme') == 'light' ? url('theme/dark') : url('theme/light') }}" class="nav-link right-bar-toggle waves-effect waves-{{ Config::get('app.theme') }}">
+				<a href="{{ config('app.theme') == 'light' ? url('theme/dark') : url('theme/light') }}" class="nav-link right-bar-toggle waves-effect waves-{{ config('app.theme') }}">
 					<i class="fe-moon noti-icon"></i>
 				</a>
 			</li>
@@ -18,21 +18,12 @@
 					<img src="{{ asset('assets/images/flags/' . App::currentLocale() . '.jpg') }}" alt="user-image" height="16">
 				</a>
 				<div class="dropdown-menu dropdown-menu-end">
-					<!-- item-->
-					<a href="{{ url('locale/br') }}" class="dropdown-item">
-						<img src="{{ asset('assets/images/flags/br.jpg') }}" alt="user-image" class="me-1" height="12">
-						<span class="align-middle">Português</span>
-					</a>
-					<!-- item-->
-					<a href="{{ url('locale/es') }}" class="dropdown-item">
-						<img src="{{ asset('assets/images/flags/es.jpg') }}" alt="user-image" class="me-1" height="12">
-						<span class="align-middle">Español</span>
-					</a>
-					<!-- item-->
-					<a href="{{ url('locale/en') }}" class="dropdown-item">
-						<img src="{{ asset('assets/images/flags/en.jpg') }}" alt="user-image" class="me-1" height="12">
-						<span class="align-middle">English</span>
-					</a>
+					@foreach (config('app.locales') as $localeCode => $language)
+						<a class="dropdown-item" href="{{ url('locale/' . $localeCode) }}">
+							<img src="{{ asset('assets/images/flags/' . $localeCode . '.jpg') }}" alt="user-image" class="me-1" height="12">
+							{{ $language }}
+						</a>
+					@endforeach
 				</div>
 			</li>
 
