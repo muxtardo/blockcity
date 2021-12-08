@@ -179,7 +179,7 @@ async function loginWithMetamask(wallet) {
 			params: [ passphrase, secretKey ],
 		}).then((res) => {
 
-			axiosInstance.post('/auth/login', { wallet: res, secret: secretKey }).then((res) => {
+			axiosInstance.post('/login', { wallet: res, secret: secretKey }).then((res) => {
 				const { title, message, redirect, success } = res.data;
 				if (success) {
 					showAlert(title, message, 'success');

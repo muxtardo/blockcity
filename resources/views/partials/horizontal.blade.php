@@ -5,27 +5,27 @@
 				<ul class="navbar-nav">
 					<li class="nav-item dropdown">
 						<a class="nav-link arrow-none" href="#" id="topnav-dashboard">
-							<i class="fe-home me-1"></i> My Houses
+							<i class="fe-home me-1"></i> {{ __('My Houses') }}
 						</a>
 					</li>
 					<li class="nav-item dropdown">
 						<a class="nav-link arrow-none" href="#" id="topnav-dashboard">
-							<i class="fe-box me-1"></i> Inventory
+							<i class="fe-box me-1"></i> {{ __('Inventory') }}
 						</a>
 					</li>
 					<li class="nav-item dropdown">
 						<a class="nav-link arrow-none" href="#" id="topnav-dashboard">
-							<i class="fe-check-square me-1"></i> Daily Quests
+							<i class="fe-check-square me-1"></i> {{ __('Daily Quests') }}
 						</a>
 					</li>
 					<li class="nav-item dropdown">
 						<a class="nav-link arrow-none" href="#" id="topnav-dashboard">
-							<i class="fe-shopping-cart me-1"></i> Marketplace
+							<i class="fe-shopping-cart me-1"></i> {{ __('Marketplace') }}
 						</a>
 					</li>
 					<li class="nav-item dropdown">
 						<a class="nav-link arrow-none" href="#" id="topnav-dashboard">
-							<i class="fe-refresh-cw me-1"></i> Exchange
+							<i class="fe-refresh-cw me-1"></i> {{ __('Exchange') }}
 						</a>
 					</li>
 				</ul> <!-- end navbar-->

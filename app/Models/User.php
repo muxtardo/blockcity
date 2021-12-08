@@ -32,7 +32,7 @@ class User extends Authenticatable
         'deleted_at',
     ];
 
-    // return the user's wallet address 
+    // return the user's wallet address
     public function getUsername()
 	{
 		$username = substr($this->wallet, 0, 7);
@@ -48,4 +48,18 @@ class User extends Authenticatable
             ->first();
     }
 
+	public function sumLevel()
+	{
+		return 0;
+	}
+
+	public function houses()
+	{
+		$buildingsId = Item::where('type', 'house')->pluck('id');
+		return UserItem::where('user_id', $this->id)->where(function($query) use ($buildingsId) {
+			if (sizeof($buildingsId)) {
+				$query->whereIn('item_id', $buildingsId);
+			}
+		})->get();
+	}
 }
