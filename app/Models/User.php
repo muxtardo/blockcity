@@ -55,11 +55,9 @@ class User extends Authenticatable
 
 	public function houses()
 	{
-		$buildingsId = Item::where('type', 'house')->pluck('id');
-		return UserItem::where('user_id', $this->id)->where(function($query) use ($buildingsId) {
-			if (sizeof($buildingsId)) {
-				$query->whereIn('item_id', $buildingsId);
-			}
-		})->get();
+        return UserItem::select('user_items.*')
+            ->join('items', 'items.id', '=', 'user_items.item_id')
+            ->where('user_items.user_id', $this->id)
+            ->where('items.type', 'house')->get();
 	}
 }
