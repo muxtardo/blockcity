@@ -21,7 +21,7 @@ if (isTestnet) {
 }
 
 if (typeof window.ethereum !== 'undefined') {
-	$(".metamask").click(function() {
+	$(".loginmetamask").click(function() {
 		ethereum.request({
 			method: 'eth_requestAccounts'
 		}).then(function(wallets) {
@@ -33,14 +33,6 @@ if (typeof window.ethereum !== 'undefined') {
 
 	if (window.ethereum) {
 		providerMeta = new ethers.providers.Web3Provider(window.ethereum);
-
-		ethereum.request({
-			method: 'eth_accounts'
-		}).then(function(wallets) {
-			loginWithMetamask(wallets[0]);
-		}).catch((err) => {
-			console.error(err);
-		});
 
 		let noReload = false;
 		ethereum.on('accountsChanged', (wallets) => { // when changing account
@@ -63,15 +55,17 @@ if (typeof window.ethereum !== 'undefined') {
 }
 
 function noMetaMask() {
-	Swal.fire({
-		icon: 'warning',
-		title: 'Install MetaMask',
-		text: 'No MetaMask detected, please install MetaMask!',
-		confirmButtonText: "Yes, install it!"
-	}).then(function (result) {
-		if (result.value) {
-			window.open("https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn", '_blank').focus();
-		}
+	$(".loginmetamask").click(function() {
+		Swal.fire({
+			icon: 'warning',
+			title: 'Install MetaMask',
+			text: 'No MetaMask detected, please install MetaMask!',
+			confirmButtonText: "Yes, install it!"
+		}).then(function (result) {
+			if (result.value) {
+				window.open("https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn", '_blank').focus();
+			}
+		});
 	});
 }
 
@@ -145,7 +139,6 @@ async function addCustomToken() {
 }
 
 async function loginWithMetamask(wallet) {
-	console.log(wallet);
 	const chainId = await ethereum.request({
 		method: 'eth_chainId'
 	});
@@ -162,6 +155,53 @@ async function loginWithMetamask(wallet) {
 
 	if (account == undefined || account != wallet) {
 		return false;
+	}
+
+	let passphrase	= `Secure Login ${site_url}`;
+	let secretKey	= localStorage.getItem("Signed" + wallet);
+	if (secretKey == undefined) {
+		await ethereum.request({
+			method: 'personal_sign',
+			domain: domainName,
+			params: [ wallet, passphrase ],
+		}).then((res) => {
+			console.log(res);
+			secretKey = res;
+			localStorage.setItem("Signed" + wallet, res);
+		}).catch((err) => {
+			console.error(err);
+
+			showAlert("Alert", "You have rejected the signature", 'error');
+		});
+	} else {
+		await ethereum.request({
+			method: 'personal_ecRecover',
+			params: [ passphrase, secretKey ],
+		}).then((res) => {
+			$.ajax({
+				url: site_url + "/auth",
+				data: {
+					wallet: res,
+					secret: secretKey,
+				},
+				type: "POST",
+				dataType: "json",
+				success: function(result) {
+					if (!result.success) {
+						showAlert("Alert", result.message, 'error');
+					} else {
+						showAlert("Alert", "You have successfully logged in", 'success');
+					}
+				}
+			});
+
+			showAlert("Success", "Your signature is correct", 'success');
+		}).catch((err) => { // signature not correct
+			console.error(err);
+
+			localStorage.removeItem("Signed" + wallet);
+			showAlert("Alert", "Your signature is not correct, please try again", 'error');
+		});
 	}
 }
 
