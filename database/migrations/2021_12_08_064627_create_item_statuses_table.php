@@ -17,8 +17,8 @@ class CreateItemStatusesTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('color');
-            $table->float('loss');
-            $table->float('fix_price');
+            $table->float('loss', 0);
+            $table->float('fix_price', 0);
             $table->timestamps();
             $table->softDeletes();
         });

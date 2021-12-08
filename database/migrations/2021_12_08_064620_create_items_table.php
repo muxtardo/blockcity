@@ -18,10 +18,10 @@ class CreateItemsTable extends Migration
             $table->string('name');
             $table->enum('type', ['box', 'consumable', 'house']);
             $table->tinyInteger('rarity');
-            $table->float('price');
-            $table->float('upgrade_cost');
-            $table->float('drop_chance');
-            $table->float('incomes');
+            $table->float('price', 0);
+            $table->float('upgrade_cost', 0);
+            $table->float('drop_chance', 0);
+            $table->float('incomes', 0);
             $table->timestamps();
             $table->softDeletes();
         });

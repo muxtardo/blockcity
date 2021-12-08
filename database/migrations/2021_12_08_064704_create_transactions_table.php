@@ -18,7 +18,7 @@ class CreateTransactionsTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->enum('type', ['exchange', 'withdraw']);
             $table->enum('status', ['pending', 'failed', 'success'])->default('pending');
-            $table->float('amount');
+            $table->float('amount', 0);
             $table->integer('attempts')->default(0);
             $table->string('txid');
             $table->integer('fee')->default(0);

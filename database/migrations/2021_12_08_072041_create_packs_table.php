@@ -17,8 +17,8 @@ class CreatePacksTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('image');
-            $table->float('price');
-            $table->float('price_bnb');
+            $table->float('price', 0);
+            $table->float('price_bnb', 0);
             $table->integer('sell_limit')->default(1);
             $table->json('rewards');
             $table->timestamps();
