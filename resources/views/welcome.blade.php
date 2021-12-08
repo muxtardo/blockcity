@@ -2,8 +2,8 @@
 @section('content')
 <div class="row">
 	<div class="col-md-3">
-		<div>
-			<div style="position: sticky; top: 90px;">
+		<div class="user-houses-stats">
+			<div>
 				<div class="card card-body">
 					<h5 class="card-title text-center">Mint House</h5>
 					<button type="button" class="btn btn-primary waves-effect waves-light text-uppercase">
