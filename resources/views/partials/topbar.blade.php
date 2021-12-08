@@ -9,7 +9,7 @@
 			</li> --}}
 
 			<li class="dropdown notification-list">
-				<a href="{{ config('app.theme') == 'light' ? url('theme/dark') : url('theme/light') }}" class="nav-link right-bar-toggle waves-effect waves-{{ config('app.theme') }}">
+				<a href="{{ url('theme/' . reverseThemeColor()) }}" class="nav-link right-bar-toggle waves-effect waves-{{ config('app.theme') }}">
 					<i class="fe-moon noti-icon"></i>
 				</a>
 			</li>

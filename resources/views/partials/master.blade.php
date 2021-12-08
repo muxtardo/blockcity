@@ -8,7 +8,7 @@
 	@include('partials/headCss')
 </head>
 <!-- body start -->
-<body class="loading" data-layout-mode="horizontal" data-layout='{"mode": "dark", "width": "fluid", "menuPosition": "fixed", "sidebar": { "color": "light", "size": "default", "showuser": false}, "topbar": {"color": "light"}, "showRightSidebarOnPageLoad": true}'>
+<body class="loading" data-layout-mode="horizontal" data-layout='{"mode": "dark", "width": "fluid", "menuPosition": "fixed", "sidebar": { "color": "light", "size": "default", "showuser": false}, "topbar": {"color": "{{ reverseThemeColor() }}"}, "showRightSidebarOnPageLoad": true}'>
 	<!-- Begin page -->
 	<div id="wrapper">
 		@include('partials/menu')

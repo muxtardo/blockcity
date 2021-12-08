@@ -163,3 +163,12 @@ if (!function_exists('timeLeft')) {
 		return join(', ', $data);
 	}
 }
+
+if (!function_exists('reverseThemeColor')) {
+	function reverseThemeColor(){
+		if (config('app.theme') == 'light') {
+			return 'dark';
+		} 
+		return 'light';
+	}
+}

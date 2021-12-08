@@ -5,7 +5,7 @@
 <link href="{{ asset('assets/css/config/creative/bootstrap.min.css') }}" rel="stylesheet" type="text/css" id="bs-default-stylesheet" />
 <link href="{{ asset('assets/css/config/creative/app.min.css') }}" rel="stylesheet" type="text/css" id="app-default-stylesheet" />
 
-@if (Config::get('app.theme') == 'light')
+@if (config('app.theme') == 'light')
     <link href="{{ asset('assets/css/config/creative/bootstrap.min.css') }}" rel="stylesheet" type="text/css" id="bs-stylesheet" />
     <link href="{{ asset('assets/css/config/creative/app.min.css') }}" rel="stylesheet" type="text/css" id="app-stylesheet" />
 @else
