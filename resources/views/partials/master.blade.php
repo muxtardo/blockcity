@@ -39,8 +39,6 @@
 	</div>
 	<!-- END wrapper -->
 
-	@include('partials/rightSidebar')
-
 	<!-- Vendor Js -->
 	<script src="{{ asset('assets/js/vendor.min.js') }}"></script>
 

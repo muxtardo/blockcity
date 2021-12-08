@@ -22,22 +22,26 @@ class AuthController extends Controller
 		}
 
 		if (Auth::loginUsingId($user->id)) {
-			return redirect('/?' . Auth::user()->wallet);
+			$request->session()->regenerate();
+
+			return redirect()->intended('/');
 		}
+	}
 
-		// if (Auth::attempt(
-		// 	[
-		// 		'wallet'	=> 'aaaaaaaaaaaaa',
-		// 		'password'	=> 'aaaaaaaaaaaaa',
-		// 	]
-		// )) {
-		// 	$request->session()->regenerate();
+	/**
+	 * Log the user out of the application.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function logout(Request $request)
+	{
+		Auth::logout();
 
-		// 	return redirect()->intended();
-		// }
+		$request->session()->invalidate();
 
-		// return redirect('/')->withErrors([
-		// 	'wallet' => 'The provided credentials do not match our records.',
-		// ]);
+		$request->session()->regenerateToken();
+
+		return redirect('/');
 	}
 }
