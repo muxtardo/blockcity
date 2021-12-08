@@ -17,8 +17,8 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('wallet')->unique();
             $table->string('secret');
-            $table->float('earnings')->default(0);
-            $table->float('currency')->default(0);
+            $table->float('earnings', 0)->default(0);
+            $table->float('currency', 0)->default(0);
             $table->tinyInteger('presale')->default(0);
             $table->timestamp('last_captcha_check')->nullable();
             $table->timestamps();

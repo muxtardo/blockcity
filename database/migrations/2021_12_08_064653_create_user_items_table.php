@@ -21,8 +21,8 @@ class CreateUserItemsTable extends Migration
             $table->integer('item_status_id')->default(1);
             $table->integer('quantity')->default(0);
             $table->integer('level')->default(1);
-            $table->float('earnings')->default(0);
-            $table->float('last_claim');
+            $table->float('earnings', 0)->default(0);
+            $table->float('last_claim', 0);
             $table->timestamp('last_claimed')->useCurrent();
             $table->timestamps();
             $table->softDeletes();
