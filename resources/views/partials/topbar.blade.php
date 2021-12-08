@@ -27,7 +27,7 @@
 			<li class="dropdown notification-list topbar-dropdown">
 				<span class="nav-link nav-user me-0">
 					<span class="pro-user-name ms-1">
-						{{ Auth::user()->wallet }}
+						{{ Auth::user()->getUsername() }}
 					</span>
 				</span>
 			</li>
