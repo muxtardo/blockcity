@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 
+use Config;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -28,10 +30,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
         if (Cookie::has('locale')) {
             $locale = Str::afterLast(Crypt::decrypt(Cookie::get('locale'), false), '|');
             Carbon::setLocale($locale);
             App::setLocale($locale);
+        }
+        if (Cookie::has('theme')) {
+            $theme = Str::afterLast(Crypt::decrypt(Cookie::get('theme'), false), '|');
+            Config::set('app.theme', $theme);
         }
     }
 }

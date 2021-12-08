@@ -1,6 +1,7 @@
 @extends('partials/master')
 @section('content')
 <div class="row">
+	@auth
 	<div class="col-md-3">
 		<div class="user-houses-stats mb-2">
 			<div>
@@ -65,6 +66,7 @@
 			</div>
 		</div>
 	</div>
+	@endauth
 	<div class="col-md-9">
 		<div class="alert alert-primary bg-primary text-white border-0" role="alert">
 			This is a <strong>primary</strong> alert—check it out!

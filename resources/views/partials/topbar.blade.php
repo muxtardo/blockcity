@@ -9,9 +9,9 @@
 			</li> --}}
 
 			<li class="dropdown notification-list">
-				<div class="nav-link right-bar-toggle waves-effect waves-light">
+				<a href="{{ Config::get('app.theme') == 'light' ? url('theme/dark') : url('theme/light') }}" class="nav-link right-bar-toggle waves-effect waves-{{ Config::get('app.theme') }}">
 					<i class="fe-moon noti-icon"></i>
-				</div>
+				</a>
 			</li>
 			<li class="dropdown d-none d-lg-inline-block topbar-dropdown">
 				<a class="nav-link dropdown-toggle arrow-none waves-effect waves-light" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">

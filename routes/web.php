@@ -18,14 +18,18 @@ use Illuminate\Support\Facades\Route;
 
 // Set locale
 Route::get('locale/{locale}', function ($locale) {
-    if (!in_array($locale, [ 'en', 'es', 'br' ])) {
+    if (!in_array($locale, Config::get('app.locales'))) {
         abort(400);
     }
-
-    App::setLocale($locale);
-
 	Cookie::queue(Cookie::forever('locale', $locale));
-
+	return redirect()->back();
+});
+// Set Theme
+Route::get('theme/{theme}', function ($theme) {
+    if (!in_array($theme, Config::get('app.themes'))) {
+        abort(400);
+    }
+	Cookie::queue(Cookie::forever('theme', $theme));
 	return redirect()->back();
 });
 

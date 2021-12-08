@@ -1,4 +1,5 @@
 <?php
+
 use Carbon\Carbon;
 
 if (!function_exists('currency')) {
