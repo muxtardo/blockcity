@@ -42,5 +42,10 @@ class User extends Authenticatable
 		return $username;
 	}
 
+    public static function getByWallet($wallet)
+    {
+        return self::where('wallet', $wallet)
+            ->first();
+    }
 
 }

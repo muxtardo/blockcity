@@ -45,6 +45,7 @@
 
 	<!-- Custom Js -->
 	<script src="{{ asset('assets/libs/sweetalert2/sweetalert2.all.min.js') }}"></script>
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.4.5/ethers.umd.min.js"></script>
 	<script type="text/javascript">
@@ -62,6 +63,12 @@
 				image:		'{{ asset('favicon.ico') }}'
 			}
 		};
+		const axiosInstance = axios.create({
+			baseURL: site_url,
+			headers: {
+				'X-CSRF-TOKEN': '{{ csrf_token() }}',
+			},
+		});
 	</script>
 	<script type="application/javascript" src="{{ asset('assets/js/global.js') }}"></script>
 	@yield('script')

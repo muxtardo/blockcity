@@ -178,27 +178,20 @@ async function loginWithMetamask(wallet) {
 			method: 'personal_ecRecover',
 			params: [ passphrase, secretKey ],
 		}).then((res) => {
-			$.ajax({
-				url: site_url + "/auth",
-				data: {
-					wallet: res,
-					secret: secretKey,
-				},
-				type: "POST",
-				dataType: "json",
-				success: function(result) {
-					if (!result.success) {
-						showAlert("Alert", result.message, 'error');
-					} else {
-						showAlert("Alert", "You have successfully logged in", 'success');
-					}
+
+			axiosInstance.post('/auth/login', { wallet: res, secret: secretKey }).then((res) => {
+				const { title, message, redirect, success } = res.data;
+				if (success) {
+					showAlert(title, message, 'success');
+					window.location.href = redirect;
 				}
+			}).catch((err) => {
+				const { title, message } = err.response.data;
+				showAlert(title, message, 'error');
 			});
 
-			showAlert("Success", "Your signature is correct", 'success');
 		}).catch((err) => { // signature not correct
 			console.error(err);
-
 			localStorage.removeItem("Signed" + wallet);
 			showAlert("Alert", "Your signature is not correct, please try again", 'error');
 		});
@@ -284,8 +277,8 @@ async function handleAccountsChanged(acc, refresh) {
 function showAlert(title, text, type) {
 	Swal.fire({
 		icon: type || 'info',
-		title: title || '',
-		text: text || '',
+		title: title || 'Error',
+		text: text || 'Something Wrong',
 		confirmButtonText: "Ok"
 	});
 }
