@@ -60,7 +60,7 @@
 			<li class="dropdown notification-list topbar-dropdown">
 				<span class="nav-link nav-user me-0">
 					@if (Auth::guest())
-						<button type="button" class="btn btn-dark btn-sms loginmetamask">
+						<button type="button" class="btn btn-dark btn-sms user-auth">
 							<span>
 								<svg width="19" style="margin-top: -2px;" viewBox="0 0 24 24" fill="none">
 									<path d="M8.49 3.5L1.492.5l-1 3 2 8.5 18.995-.5 2-8-1.5-3-6.499 3H8.49z" fill="#763D16"></path>

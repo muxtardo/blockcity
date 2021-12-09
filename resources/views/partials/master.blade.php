@@ -78,7 +78,14 @@
 			})
 		})
 	</script>
-	<script type="application/javascript" src="{{ asset('assets/js/global.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('assets/js/global.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('assets/js/metamask.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('assets/js/modules/users.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('assets/js/modules/buildings.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('assets/js/modules/inventory.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('assets/js/modules/quests.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('assets/js/modules/marketplace.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('assets/js/modules/exchange.js') }}"></script>
 	@yield('script')
 	@yield('script-bottom')
 </body>
