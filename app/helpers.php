@@ -172,3 +172,10 @@ if (!function_exists('reverseThemeColor')) {
 		return 'light';
 	}
 }
+
+if (!function_exists('generateRandomWords')) {
+	function generateRandomWords($numberWords) {
+		$words = file(__DIR__ . '/../resources/words.txt');
+		return ucwords(implode(" ", array_map(function ($index) use ($words) { return $words[$index];  }, array_rand($words, $numberWords))));
+	}
+}

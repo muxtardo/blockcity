@@ -11,6 +11,7 @@ class UserItem extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'name',
         'user_id',
         'item_id',
         'item_status_id',
@@ -20,5 +21,7 @@ class UserItem extends Model
         'last_claim',
         'last_claimed',
     ];
+
+
 
 }

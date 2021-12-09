@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\UserItemController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -40,4 +42,10 @@ Route::middleware(['auth'])->group(function () {
 	Route::get('logado',		function () {
 		return 'aaaaaaaaaaaaaaaaaaa';
 	});
+});
+
+Route::post('buyHouse', [UserItemController::class, 'buyHouse']);
+
+Route::get('readable', function(){
+    return generateRandomWords(3);
 });

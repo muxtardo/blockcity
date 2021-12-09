@@ -1,6 +1,8 @@
 @extends('partials/master')
 @section('script')
 <script>
+	// bootstrap modal instance
+	const myModal = new bootstrap.Modal(document.getElementById('myModal')); //new Modal(document.getElementById('myModal'));
 
 	function showStarsAnimated() {
 		$(".stars").hide().removeClass('d-none').each(function(idx) {
@@ -11,32 +13,38 @@
 	}
 
 	$("#new-mint").click(function() {
-		showStarsAnimated();
+		axiosInstance.post('buyHouse')
+			.then((res) => {
+				$("#buyHouse-name").text(res.data.userItem.name);
+				myModal.show();
+				showStarsAnimated();
+			})
+
 	});
 
 </script>
 @endsection
 @section('content')
 
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-	<div id="myModal" class="modal-dialog modal-dialog-centered">
+<div class="modal fade" id="myModal" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+	<div  class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
 			<div class="modal-body">
 				<!-- Modal content-->
 				<div class="card-body product-box">
 							<div class="bg-light text-center d-flex align-items-center justify-content-center" style="min-height: 340px;">
-								<img src="https://risecity.io/styles/img/casas/build{{ rand(1, 52) }}.png" alt="product-pic" class="img-fluid">
+								<img src="https://risecity.io/styles/img/casas/build{{ rand(1, 52) }}.png" id="buyHouse-image" alt="product-pic" class="img-fluid">
 							</div>
 
 							<div class="product-info">
 								<div class="row align-items-center">
 									<div class="col">
-										<h5 class="font-16 mt-0 sp-line-1">House {{ rand(1, 52) }}</h5>
-										<div class="text-warning mb-2 font-13">
+										<h5 class="font-16 mt-0 sp-line-1" id="buyHouse-name"></h5>
+										<div class="text-warning mb-2 font-13" id="buyHouse-stars">
 											{!! Str::repeat('<i class="fa fa-star d-none stars"></i>', rand(1, 5)) !!}
 										</div>
 										<h5 class="m-0">
-																						<span class="text-muted">Produção: <span class="green">Good</span></span>
+											<span class="text-muted">Produção: <span class="green">Good</span></span>
 										</h5>
 									</div>
 									<div class="col-auto">
@@ -62,7 +70,7 @@
 				<div class="card card-body">
 					<h5 class="card-title text-center">{{ __('Mint House') }}</h5>
 					<p class="text-muted text-center">{{ __('Click on the button below to purchase a new home.') }}</p>
-					<button type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="new-mint" class="btn btn-primary waves-effect waves-light text-uppercase">
+					<button type="button" id="new-mint" class="btn btn-primary waves-effect waves-light text-uppercase">
 						<b>{{ __('New Mint') }}</b>
 					</button>
 				</div>
