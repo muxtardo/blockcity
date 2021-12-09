@@ -11,14 +11,9 @@
 
 				lockScreen(false);
 
-				if (content) {
-					$('.buildings-list', userBuildings).html(content);
-					btnActions();
-				}
-
-				// buildings.forEach(building => {
-				// 	console.log(building);
-				// });
+				buildings.forEach(building => {
+					console.log(building);
+				});
 			} catch (err) {
 				lockScreen(false);
 
@@ -48,99 +43,99 @@
 			}
 		});
 
-		const btnActions = () => {
-			$('.claim', userBuildings).on('click', async function () {
-				lockScreen(true);
+		$('.claim', userBuildings).on('click', async function () {
+			lockScreen(true);
 
-				const buildingId = $(this).data('id');
-				try {
-					const response = await axiosInstance.post('/buildings/claim', { id: buildingId });
-					const { title, message, redirect, success, currency } = response.data;
+			const buildingId = $(this).data('id');
+			try {
+				const response = await axiosInstance.post('/buildings/claim', { id: buildingId });
+				const { title, message, redirect, success, currency } = response.data;
 
-					lockScreen(false);
+				lockScreen(false);
 
-					if (currency) {
-						$('#myCurrency').html(currency);
-					}
-
-					if (success) {
-						loadBuildings();
-					}
-
-					showAlert(title, message, success ? 'success' : 'danger');
-					if (redirect) {
-						setTimeout(() => {
-							window.location.href = redirect;
-						}, 3000);
-					}
-				} catch (err) {
-					lockScreen(false);
-
-					const { title, message } = err.response.data;
-					showAlert(title, message, 'error');
+				if (currency) {
+					$('#myCurrency').html(currency);
 				}
-			});
 
-			$('.upgrade', userBuildings).on('click', async () => {
-				lockScreen(true);
+				loadBuildings();
 
-				const buildingId = $(this).data('id');
-				try {
-					const response = await axiosInstance.post('/buildings/upgrade', { id: buildingId });
-					const { title, message, redirect, success, currency } = response.data;
-
-					lockScreen(false);
-
-					if (currency) {
-						$('#myCurrency').html(currency);
-					}
-
-					showAlert(title, message, success ? 'success' : 'danger');
-					if (redirect) {
-						setTimeout(() => {
-							window.location.href = redirect;
-						}, 3000);
-					}
-				} catch (err) {
-					lockScreen(false);
-
-					const { title, message } = err.response.data;
-					showAlert(title, message, 'error');
+				showAlert(title, message, success ? 'success' : 'danger');
+				if (redirect) {
+					setTimeout(() => {
+						window.location.href = redirect;
+					}, 3000);
 				}
-			});
+			} catch (err) {
+				lockScreen(false);
 
-			$('.repair', userBuildings).on('click', async () => {
-				lockScreen(true);
+				const { title, message } = err.response.data;
+				showAlert(title, message, 'error');
+			}
+		});
 
-				const buildingId = $(this).data('id');
-				try {
-					const response = await axiosInstance.post('/buildings/repair', { id: buildingId });
-					const { title, message, redirect, success, currency } = response.data;
+		$('.upgrade', userBuildings).on('click', async function () {
+			lockScreen(true);
 
-					lockScreen(false);
+			const buildingId = $(this).data('id');
+			try {
+				const response = await axiosInstance.post('/buildings/upgrade', { id: buildingId });
+				const { title, message, redirect, success, currency } = response.data;
 
-					if (currency) {
-						$('#myCurrency').html(currency);
-					}
+				lockScreen(false);
 
-					showAlert(title, message, success ? 'success' : 'danger');
-					if (redirect) {
-						setTimeout(() => {
-							window.location.href = redirect;
-						}, 3000);
-					}
-				} catch (err) {
-					lockScreen(false);
-
-					const { title, message } = err.response.data;
-					showAlert(title, message, 'error');
+				if (currency) {
+					$('#myCurrency').html(currency);
 				}
-			});
 
-			$('.sell', userBuildings).on('click', async () => {
-				const buildingId = $(this).data('id');
-				showAlert('Coming soon!', 'This feature is not available yet', 'info');
-			});
-		}
+				loadBuildings();
+
+				showAlert(title, message, success ? 'success' : 'danger');
+				if (redirect) {
+					setTimeout(() => {
+						window.location.href = redirect;
+					}, 3000);
+				}
+			} catch (err) {
+				lockScreen(false);
+
+				const { title, message } = err.response.data;
+				showAlert(title, message, 'error');
+			}
+		});
+
+		$('.repair', userBuildings).on('click', async function () {
+			lockScreen(true);
+
+			const buildingId = $(this).data('id');
+			try {
+				const response = await axiosInstance.post('/buildings/repair', { id: buildingId });
+				const { title, message, redirect, success, currency } = response.data;
+
+				lockScreen(false);
+
+				if (currency) {
+					$('#myCurrency').html(currency);
+				}
+
+				loadBuildings();
+
+				showAlert(title, message, success ? 'success' : 'danger');
+				if (redirect) {
+					setTimeout(() => {
+						window.location.href = redirect;
+					}, 3000);
+				}
+			} catch (err) {
+				lockScreen(false);
+
+				const { title, message } = err.response.data;
+				showAlert(title, message, 'error');
+			}
+		});
+
+		$('.sell', userBuildings).on('click', async function () {
+			const buildingId = $(this).data('id');
+			showAlert('Coming soon!', 'This feature is not available yet', 'info');
+		});
 	}
 })();

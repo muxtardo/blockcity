@@ -99,8 +99,7 @@ class UserBuilding extends Model
 	// Pode fazer upgrade?
 	public function canUpgrade()
 	{
-		return	$this->level < config('game.max_build_level') &&
-				$this->user->currency >= $this->base->upgrade_cost;
+		return	$this->level < config('game.max_build_level');
 	}
 
 	public function upgradeText()

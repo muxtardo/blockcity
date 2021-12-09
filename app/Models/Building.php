@@ -41,9 +41,8 @@ class Building extends Model
         $building = DB::table(DB::raw("({$subquerySql}) as b"))
             ->whereRaw('prob >= RAND() * total')
             ->orderBy('prob')
-            ->get();
-            //->first();
-        return $building;		
+            ->first();
+        return $building;
 	}
 
 	// Retornar todas as casas relacionadas
@@ -51,5 +50,5 @@ class Building extends Model
 	{
 		return $this->hasMany(UserBuilding::class, 'building_id', 'id');
 	}
-	
+
 }

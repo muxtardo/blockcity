@@ -14,7 +14,7 @@ class DashboardController extends Controller
 			->orderBy('user_buildings.last_claim_at', 'asc')
 			->orderBy('buildings.rarity', 'desc')
 			->orderBy('user_buildings.highlight', 'desc')
-			->paginate(6);
+			->simplePaginate(6);
 		$this->params['totalBuildings']	= $userBuildings->count();
 
 		$this->params['page_title'] = __('My Houses');
