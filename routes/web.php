@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\BuildingController;
+use App\Http\Controllers\BuildingsController;
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +27,7 @@ Route::get('locale/{locale}', function ($locale) {
     if (!array_key_exists($locale, Config::get('app.locales'))) {
         abort(400);
     }
+
 	Cookie::queue(Cookie::forever('locale', $locale));
 	return redirect()->back();
 });
@@ -35,6 +37,7 @@ Route::get('theme/{theme}', function ($theme) {
     if (!in_array($theme, Config::get('app.themes'))) {
         abort(400);
     }
+
 	Cookie::queue(Cookie::forever('theme', $theme));
 	return redirect()->back();
 });
@@ -44,14 +47,22 @@ Route::post('login',		[ AuthController::class, 'login' ])->name('login');
 Route::middleware(['auth'])->group(function () {
 	Route::get('logout',		[ AuthController::class, 'logout' ])->name('logout');
 
-	Route::prefix('dashboard')->group(function () {
-		Route::get('/',			[ DashboardController::class, 'index' ])->name('dashboard');
-	});
-	Route::post('buyHouse',		[BuildingController::class, 'buyHouse'])->name('buyHouse');
+	// Dashboard
+	Route::get('dashboard',	[ DashboardController::class, 'index' ])->name('dashboard');
 
-	Route::prefix('inventory')->group(function () {
-		Route::get('/',			[ DashboardController::class, 'index' ])->name('inventory');
+	// Buildings (list, mint, claim, upgrade, repair)
+	Route::prefix('buildings')->group(function () {
+		Route::get('/',				[ BuildingsController::class, 'index' ])->name('buildings');
+
+		Route::post('mint',			[ BuildingsController::class, 'mint' ])->name('buildingMint');
+		Route::post('claim',		[ BuildingsController::class, 'claim' ])->name('buildingClaim');
+		Route::post('upgrade',		[ BuildingsController::class, 'upgrade' ])->name('buildingUpgrade');
+		Route::post('repair',		[ BuildingsController::class, 'repair' ])->name('buildingRepair');
 	});
+
+	// Route::prefix('inventory')->group(function () {
+	// 	Route::get('/',			[ InvetoryController::class, 'index' ])->name('inventory');
+	// });
 });
 
 Route::get('readable', function(){

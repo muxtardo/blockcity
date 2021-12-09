@@ -121,11 +121,15 @@ class UserBuilding extends Model
 		$earning	= $this->availableClaim();
 
 		// Update user building claim
-		return $this->update([
+		if ($this->update([
 			'earnings'		=> $this->earnings + $earning,
 			'last_claim'	=> $earning,
 			'last_claim_at'	=> Carbon::now(),
-		]);
+		])) {
+			return $earning;
+		}
+
+		return false;
 	}
 
 	// Progresso do rendimento
