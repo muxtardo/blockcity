@@ -66,5 +66,5 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::get('readable', function(){
-    return (new App\Models\Building())->getRandomBuilding();
+    return (new App\Models\Building())->mint();
 });
