@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -32,7 +33,7 @@ class User extends Authenticatable
         'deleted_at',
     ];
 
-    // return the user's wallet address
+    // Gera nome de usuário baseado na wallet
     public function getUsername()
 	{
 		$username = substr($this->wallet, 0, 7);
@@ -42,22 +43,112 @@ class User extends Authenticatable
 		return $username;
 	}
 
+	// Procura pela wallet
     public static function getByWallet($wallet)
     {
         return self::where('wallet', $wallet)
             ->first();
     }
 
-	public function sumLevel()
+	// Soma dos leveis dos edificios
+	public function workers()
 	{
-		return 0;
+		return UserBuilding::where('user_id', $this->id)
+			->sum('level');
 	}
 
-	public function houses()
+	// Tras os edificios
+	public function buildings()
 	{
-        return UserItem::select('user_items.*')
-            ->join('items', 'items.id', '=', 'user_items.item_id')
-            ->where('user_items.user_id', $this->id)
-            ->where('items.type', 'house')->get();
+		return $this->hasMany('App\Models\UserBuilding', 'user_id', 'id');
+	}
+
+	// Debita dinheiro
+	public function spend($amount)
+	{
+		return $this->update([
+			'currency'	=> $this->currency - $amount
+		]);
+	}
+
+	// Credita dinheiro
+	public function earn($amount)
+	{
+		return $this->update([
+			'currency'	=> $this->currency + $amount
+		]);
+	}
+
+	// Cria o item
+	public function addItem($itemId, $amount = 1)
+	{
+		$item = UserItem::where('user_id', $this->id)
+			->where('item_id', $itemId)->first();
+		if ($item) {
+			$item->quantity += $amount;
+		} else {
+			$item	= new UserItem;
+			$item->user_id	= $this->id;
+			$item->item_id	= $itemId;
+			$item->quantity	= $amount;
+		}
+
+		return $item->save();
+	}
+
+	// Usa o item
+	public function useItem($itemId, $amount = 1)
+	{
+		$item = UserItem::where('user_id', $this->id)
+			->where('item_id', $itemId)->first();
+		return $item->use($amount);
+	}
+
+	// Tem o item?
+	public function hasItem($itemId)
+	{
+		return UserItem::where('user_id', $this->id)
+			->where('item_id', $itemId)->first();
+	}
+
+	// Verifica se tem banimento ativo
+	public function hasBanishment()
+	{
+		return Banishment::where('user_id', $this->id)
+			->where(function ($query) {
+            	$query->where('finishes_at', 'is', null)
+					->orWhere('finishes_at', '>', Carbon::now());
+        })->first();
+	}
+
+	// Tem que fazer verificação de captcha?
+	public function checkCaptcha()
+	{
+		return	$this->last_captcha_at &&
+				Carbon::parse($this->last_captcha_at)->addMinutes(15) > Carbon::now();
+	}
+
+	// Taxa para saque
+	public function withdrawFee()
+	{
+		return 36;
+	}
+
+	// Traz o ganho maximo que o cara pode ter no dia
+	public function maxDailyClaim()
+	{
+		$total = 0;
+		foreach ($this->buildings as $building) {
+			$total += $building->getIncomes();
+		}
+
+		return $total;
+	}
+
+	public function notifications()
+	{
+		$notifications	= [];
+
+		return sizeof($notifications) ? $notifications : false;
 	}
 }

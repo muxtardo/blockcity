@@ -3,8 +3,9 @@
 use Carbon\Carbon;
 
 if (!function_exists('currency')) {
-	function currency($value) {
-		return number_format($value, 4, '.', '');
+	function currency($value, $decimals = 4, $decimalPoint = '.', $thousandSeparator = '') {
+		return round($value, $decimals);
+		// return number_format($value, $decimals, $decimalPoint, $thousandSeparator);
 	}
 }
 
@@ -168,7 +169,7 @@ if (!function_exists('reverseThemeColor')) {
 	function reverseThemeColor(){
 		if (config('app.theme') == 'light') {
 			return 'dark';
-		} 
+		}
 		return 'light';
 	}
 }

@@ -41,7 +41,7 @@
 
 	<!-- Base Js -->
 	<script src="{{ asset('assets/js/vendor.min.js') }}"></script>
-	<script src="{{ asset('assets/js/app.min.js') }}"></script>
+	<script src="{{ asset('assets/js/app.js') }}"></script>
 
 	<!-- Custom Js -->
 	<script src="{{ asset('assets/libs/sweetalert2/sweetalert2.all.min.js') }}"></script>
@@ -63,12 +63,20 @@
 				image:		'{{ asset('favicon.ico') }}'
 			}
 		};
-		const axiosInstance = axios.create({
+
+		const axiosInstance	= axios.create({
 			baseURL: site_url,
 			headers: {
 				'X-CSRF-TOKEN': '{{ csrf_token() }}',
 			},
 		});
+
+		const tooltipTriggerList	= [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+		const tooltipList			= tooltipTriggerList.map(function (tooltipTriggerEl) {
+			return new bootstrap.Tooltip(tooltipTriggerEl, {
+				html: true
+			})
+		})
 	</script>
 	<script type="application/javascript" src="{{ asset('assets/js/global.js') }}"></script>
 	@yield('script')

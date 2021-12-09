@@ -9,7 +9,7 @@ File: Layout
 
 /**
  * LeftSidebar
- * @param {*} $ 
+ * @param {*} $
  */
 !function ($) {
     'use strict';
@@ -30,7 +30,7 @@ File: Layout
 
     /**
      * Changes the color of sidebar
-     * @param {*} color 
+     * @param {*} color
      */
     LeftSidebar.prototype.changeColor = function(color) {
         this.body.attr('data-sidebar-color', color);
@@ -39,7 +39,7 @@ File: Layout
 
     /**
      * Changes the size of sidebar
-     * @param {*} size 
+     * @param {*} size
      */
     LeftSidebar.prototype.changeSize = function(size) {
         this.body.attr('data-sidebar-size', size);
@@ -48,7 +48,7 @@ File: Layout
 
     /**
      * Toggle User information
-     * @param {*} showUser 
+     * @param {*} showUser
      */
     LeftSidebar.prototype.showUser = function(showUser) {
         this.body.attr('data-sidebar-showuser', showUser);
@@ -85,7 +85,7 @@ File: Layout
         });
 
         // sidebar - main menu
-        if ($("#side-menu").length) { 
+        if ($("#side-menu").length) {
             var navCollapse = $('#side-menu li .collapse');
 
             // open one menu at a time only
@@ -104,13 +104,13 @@ File: Layout
                     $(this).parent().addClass("menuitem-active");
                     $(this).parent().parent().parent().addClass("show");
                     $(this).parent().parent().parent().parent().addClass("menuitem-active"); // add active to li of the current link
-                    
+
                     var firstLevelParent = $(this).parent().parent().parent().parent().parent().parent();
                     if (firstLevelParent.attr('id') !== 'sidebar-menu')
                         firstLevelParent.addClass("show");
-                    
+
                     $(this).parent().parent().parent().parent().parent().parent().parent().addClass("menuitem-active");
-                    
+
                     var secondLevelParent = $(this).parent().parent().parent().parent().parent().parent().parent().parent().parent();
                     if (secondLevelParent.attr('id') !== 'wrapper')
                         secondLevelParent.addClass("show");
@@ -240,14 +240,14 @@ File: Layout
             self.initLayout();
         });
     },
-  
+
     $.LeftSidebar = new LeftSidebar, $.LeftSidebar.Constructor = LeftSidebar
 }(window.jQuery),
 
 
 /**
  * Topbar
- * @param {*} $ 
+ * @param {*} $
  */
 function ($) {
     'use strict';
@@ -274,17 +274,17 @@ function ($) {
         //activate the menu in topbar(horizontal menu) based on url
         $(".navbar-nav a").each(function () {
             var pageUrl = window.location.href.split(/[?#]/)[0];
-            if (this.href == pageUrl) { 
+            if (this.href == pageUrl) {
                 $(this).addClass("active");
                 $(this).parent().addClass("active");
                 $(this).parent().parent().addClass("active");
-             
+
                 $(this).parent().parent().parent().addClass("active");
                 $(this).parent().parent().parent().parent().addClass("active");
                 if($(this).parent().parent().parent().parent().hasClass('mega-dropdown-menu')){
                     $(this).parent().parent().parent().parent().parent().addClass("active");
                     $(this).parent().parent().parent().parent().parent().parent().addClass("active");
-                    
+
                 }else{
                     var child = $(this).parent().parent()[0].querySelector('.dropdown-item');
                     if(child){
@@ -322,7 +322,7 @@ function ($) {
                     bootstrap.Dropdown.getInstance(element).show();
                 }
             });
-            
+
             element.addEventListener('hide.bs.dropdown', function(event){
                 if(isInner){
                     event.preventDefault();
@@ -336,7 +336,7 @@ function ($) {
 
     /**
      * Changes the color of topbar
-     * @param {*} color 
+     * @param {*} color
      */
     Topbar.prototype.changeColor = function(color) {
         this.body.attr('data-topbar-color', color);
@@ -355,7 +355,7 @@ function ($) {
 
 /**
  * RightBar
- * @param {*} $ 
+ * @param {*} $
  */
 function ($) {
     'use strict';
@@ -365,14 +365,14 @@ function ($) {
         this.window = $(window)
     };
 
-    /** 
+    /**
      * Select the option based on saved config
     */
    RightBar.prototype.selectOptionsFromConfig = function() {
        var self = this;
 
         var config = self.layout.getConfig();
-        
+
         if (config) {
             $('.right-bar input[type=checkbox]').prop('checked',false);
             $('input[type=checkbox][name=color-scheme-mode][value=' + config.mode + ']').prop('checked', true);
@@ -386,7 +386,7 @@ function ($) {
             $('input[type=checkbox][name=topbar-color][value=' + config.topbar.color + ']').prop('checked', true);
         }
     },
-  
+
     /**
      * Toggles the right sidebar
      */
@@ -491,7 +491,7 @@ function ($) {
 
 /**
  * Layout and theme manager
- * @param {*} $ 
+ * @param {*} $
  */
 
 function ($) {
@@ -520,8 +520,8 @@ function ($) {
 
     /**
      * Update the config for given config
-     * @param {*} param 
-     * @param {*} config 
+     * @param {*} param
+     * @param {*} config
      */
     LayoutThemeApp.prototype.updateConfig = function(param, config) {
         var newObj = {};
@@ -539,7 +539,7 @@ function ($) {
      */
      LayoutThemeApp.prototype.loadConfig = function() {
         var bodyConfig = JSON.parse(this.body.attr('data-layout') ? this.body.attr('data-layout') : '{}');
-        
+
         var config = $.extend({}, {
             mode: "light",
             width: "fluid",
@@ -566,21 +566,21 @@ function ($) {
     LayoutThemeApp.prototype.applyConfig = function() {
         // getting the saved config if available
         this.config = this.loadConfig();
-       
+
         // activate menus
         this.leftSidebar.init();
-        
+
         this.topbar.init();
 
         this.leftSidebar.parent = this;
-        
+
         this.topbar.parent = this;
-        
+
 
         // mode
         this.changeMode(this.config.mode);
 
-       
+
         // width
         this.changeLayoutWidth(this.config.width);
 
@@ -600,7 +600,7 @@ function ($) {
 
     /**
      * Toggle dark or light mode
-     * @param {*} mode 
+     * @param {*} mode
      */
     LayoutThemeApp.prototype.changeMode = function(mode,fromCheckbox) {
         var self = this;
@@ -647,7 +647,7 @@ function ($) {
                 break;
             }
         }
-        
+
         this.rightBar.selectOptionsFromConfig();
     }
 
@@ -738,12 +738,21 @@ File: Main Js File
 
     //initializing tooltip
     Components.prototype.initTooltipPlugin = function () {
-        $.fn.tooltip && $('[data-bs-toggle="tooltip"]').tooltip()
+		if (!$.fn.tooltip) return;
+
+		// const tooltipTriggerList	= [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+		// tooltipTriggerList.map(function (tooltipTriggerEl) {
+		// 	return new bootstrap.Tooltip(tooltipTriggerEl, {
+		// 		html: true
+		// 	})
+		// })
     },
 
     //initializing popover
     Components.prototype.initPopoverPlugin = function () {
-        $.fn.popover && $('[data-bs-toggle="popover"]').popover()
+        $.fn.popover && $('[data-bs-toggle="popover"]').popover({
+			html: true
+		})
     },
 
     //initializing toast
@@ -829,8 +838,6 @@ File: Main Js File
     },
 
     Components.prototype.initTippyTooltips = function () {
-        
-        console.log($('[data-plugin="tippy"]').length);
         if($('[data-plugin="tippy"]').length > 0){
             tippy('[data-plugin="tippy"]');
         }
@@ -857,9 +864,9 @@ File: Main Js File
             }
             var $subMenu = $(this).next(".dropdown-menu");
             $subMenu.toggleClass('show');
-    
+
             return false;
-        });   
+        });
     },
 
     //initilizing
@@ -923,7 +930,7 @@ function($) {
     },
     //
     $.Portlet = new Portlet, $.Portlet.Constructor = Portlet
-    
+
 }(window.jQuery),
 
 function ($) {
@@ -934,7 +941,7 @@ function ($) {
         this.$window = $(window)
     };
 
-    /** 
+    /**
      * Initlizes the controls
     */
     App.prototype.initControls = function () {
@@ -942,7 +949,7 @@ function ($) {
         setTimeout(function() {
             document.body.classList.remove('loading');
         }, 400);
-        
+
         // Preloader
         $(window).on('load', function () {
             $('#status').fadeOut();
@@ -993,10 +1000,10 @@ function ($) {
         this.rightBar = $.RightBar;
         this.rightBar.layout = this.layout;
         this.layout.rightBar = this.rightBar;
-    
+
         this.layout.init();
         this.rightBar.init(this.layout);
-        
+
 
         // showing the sidebar on load if user is visiting the page first time only
         var bodyConfig = this.$body.data('layout');
@@ -1040,13 +1047,13 @@ function ($) {
 
         //  RTL support js
 
-        if(document.getElementById('app-default-stylesheet').href.includes('rtl.min.css')){
-            document.getElementsByTagName('html')[0].dir="rtl";
-        }
+        // if(document.getElementById('app-default-stylesheet').href.includes('rtl.min.css')){
+        //     document.getElementsByTagName('html')[0].dir="rtl";
+        // }
 
-        if(document.getElementById('app-dark-stylesheet').href.includes('rtl.min.css')){
-            document.getElementsByTagName('html')[0].dir="rtl";
-        }
+        // if(document.getElementById('app-dark-stylesheet').href.includes('rtl.min.css')){
+        //     document.getElementsByTagName('html')[0].dir="rtl";
+        // }
 
 
 
