@@ -11,12 +11,9 @@ class BuildingsController extends Controller
 {
 	public function index(Request $request)
 	{
-		$userBuildings				= $request->user()->buildings();
-		$getUserBuildings = $userBuildings->select('buildings.*', 'user_buildings.*')
-				->join('buildings', 'buildings.id', '=', 'user_buildings.building_id')
-				->orderBy('user_buildings.last_claim_at', 'asc')
-				->orderBy('buildings.rarity', 'desc')
-				->orderBy('user_buildings.highlight', 'desc')->paginate(6);
+		$userBuildings		= $request->user()->buildings();
+		$getUserBuildings	= $userBuildings->orderBy('highlight', 'desc')
+			->orderBy('last_claim_at', 'asc')->paginate(6);
 
 		$buildings = [];
 		foreach ($getUserBuildings as $building) {
