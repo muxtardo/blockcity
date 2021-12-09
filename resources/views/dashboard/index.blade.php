@@ -20,62 +20,59 @@
 		display:block;
 	}
 
-.star-on {
-	animation-fill-mode: forwards;
-	animation-name: example;
-  	animation-duration: 4s;
-	  filter: filter: drop-shadow(0px 0px 0px yellow);
-}
-@keyframes example {
-  from {color: #6c757d; filter: drop-shadow(0px 0px 0px yellow);}
-  to {color: gold; filter: drop-shadow(0px 0px 5px yellow);}
-}
-.stars-content {
-    position: absolute;
-    top: 10px;
-    left: 0;
-}
-.stars-content .star-1 {
-    position: absolute;
-    left: 20px;
-    top: 50px;
-    font-size: 40px;
-}
-.stars-content .star-2 {
-    position: absolute;
-    left: 110px;
-    top: 5px;
-    font-size: 60px;
-}
-.stars-content .star-3 {
-    position: absolute;
-    left: 210px;
-    top: 50px;
-    font-size: 40px;
-}
-.star-on {
-	animation-fill-mode: forwards;
-	animation-name: example;
-  	animation-duration: 2s;
-}
-.buyHouse-name{
-	position: absolute;
-    left: 0;
-    bottom: 0px;
-    padding: 0.5rem;
-    font-size: 2rem;
-    background: rgb(0 0 0 / 89%);
-    box-sizing: border-box;
-    width: 100%;
-    color: white;
-    text-align: center;
-}
-#myModal .card-body, #myModal .modal-body {
-	padding: 0px;
-}
-#buyHouse-image {
-	margin-top: 100px;
-}
+	.star-on {
+		animation-fill-mode: forwards;
+		animation-name: example;
+		animation-duration: 4s;
+		filter: filter: drop-shadow(0px 0px 0px yellow);
+	}
+	@keyframes example {
+		from {color: #6c757d; filter: drop-shadow(0px 0px 0px yellow);}
+		to {color: gold; filter: drop-shadow(0px 0px 5px yellow);}
+	}
+	.stars-content {
+		position: absolute;
+		top: 10px;
+		left: 0;
+	}
+	.stars-content .star-1 {
+		position: absolute;
+		left: 20px;
+		top: 50px;
+		font-size: 40px;
+	}
+	.stars-content .star-2 {
+		position: absolute;
+		left: 110px;
+		top: 5px;
+		font-size: 60px;
+	}
+	.stars-content .star-3 {
+		position: absolute;
+		left: 210px;
+		top: 50px;
+		font-size: 40px;
+	}
+	.star-on {
+		animation-fill-mode: forwards;
+		animation-name: example;
+		animation-duration: 2s;
+	}
+	.buyHouse-name{
+		position: absolute;
+		left: 0;
+		bottom: 0px;
+		padding: 0.5rem;
+		font-size: 2rem;
+		background: rgb(0 0 0 / 89%);
+		box-sizing: border-box;
+		width: 100%;
+		color: white;
+		text-align: center;
+	}
+	.buyHouse-image {
+		margin-top: 100px;
+	}
 </style>
 <script>
 	// bootstrap modal instance

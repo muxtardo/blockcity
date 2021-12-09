@@ -25,6 +25,26 @@
 		// First load
 		loadBuildings();
 
+		const mintTemplate = `<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-body">
+						<div class="card-body product-box">
+							<div class="bg-sky text-center d-flex align-items-center justify-content-center" style="min-height: 340px; position: relative;">
+								<div class="stars-content">
+									<i class="fa fa-star stars star-1"></i>
+									<i class="fa fa-star stars star-2"></i>
+									<i class="fa fa-star stars star-3"></i>
+								</div>
+								<img src="{image}" alt="product-pic" class="img-fluid">
+								<div class="buyHouse-name">{name}</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>`;
+
 		$('.mint', userBuildings).on('click', async function () {
 			lockScreen(true);
 			try {

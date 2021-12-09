@@ -187,4 +187,11 @@ class UserBuilding extends Model
 
 		return '<b>'. __('Cost') . ':</b> ' . currency($cost);
 	}
+
+	public function repair()
+	{
+		return $this->update([
+			'building_status_id'	=> BuildingStatus::where('loss', 0)->first()->id,
+		]);
+	}
 }

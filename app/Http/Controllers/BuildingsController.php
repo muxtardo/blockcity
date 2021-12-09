@@ -82,7 +82,7 @@ class BuildingsController extends Controller
 
 		if (($claim = $building->claim())) {
 			$request->user()->earn($claim);
-			return response()->json([
+			return $this->json([
 				'success'	=> true,
 				'title' 	=> __('Success'),
 				'message'	=> __('Claimed building successfully.'),
@@ -93,6 +93,121 @@ class BuildingsController extends Controller
 				'success'	=> false,
 				'title' 	=> __('Error'),
 				'message'	=> __('Failed to claim building.'),
+			], 400);
+		}
+	}
+
+	public function upgrade(Request $request)
+	{
+		if (!$request->has([ 'id' ]))
+		{
+			return $this->json([
+				'success'	=> false,
+				'title'		=> __('Error'),
+				'message'	=> __('Missing required parameters.'),
+			], 400);
+		}
+
+		$buildingId	= $request->input('id');
+		$building	= UserBuilding::where('user_id', Auth::id())
+			->where('id', $buildingId)->first();
+		if (!$building)
+		{
+			return $this->json([
+				'success'	=> false,
+				'title'		=> __('Error'),
+				'message'	=> __('Building not found.'),
+			], 400);
+		}
+
+		$cost = $building->base->upgrade_cost;
+		if ($request->user()->currency < $cost) {
+			return $this->json([
+				'success'	=> false,
+				'title' 	=> __('Error'),
+				'message'	=> __('Not enough currency.'),
+			], 400);
+		}
+
+		if ($building->level >= config('game.max_build_level'))
+		{
+			return $this->json([
+				'success'	=> false,
+				'title' 	=> __('Error'),
+				'message'	=> __('The building does not accommodate new citizens.'),
+			], 400);
+		}
+
+		if ($building->upgrade()) {
+			$request->user()->spend($cost);
+			return $this->json([
+				'success'	=> true,
+				'title' 	=> __('Success'),
+				'message'	=> __('Upgraded building successfully.'),
+				'currency'	=> currency($request->user()->currency),
+			]);
+		} else {
+			return $this->json([
+				'success'	=> false,
+				'title' 	=> __('Error'),
+				'message'	=> __('Failed to upgrade building.'),
+			], 400);
+		}
+	}
+
+	public function repair(Request $request)
+	{
+		if (!$request->has([ 'id' ]))
+		{
+			return $this->json([
+				'success'	=> false,
+				'title'		=> __('Error'),
+				'message'	=> __('Missing required parameters.'),
+			], 400);
+		}
+
+		$buildingId	= $request->input('id');
+		$building	= UserBuilding::where('user_id', Auth::id())
+			->where('id', $buildingId)->first();
+		if (!$building)
+		{
+			return $this->json([
+				'success'	=> false,
+				'title'		=> __('Error'),
+				'message'	=> __('Building not found.'),
+			], 400);
+		}
+
+		$cost = $building->repairCost();
+		if ($request->user()->currency < $cost) {
+			return $this->json([
+				'success'	=> false,
+				'title' 	=> __('Error'),
+				'message'	=> __('Not enough currency.'),
+			], 400);
+		}
+
+		if (!$building->needRepair()) {
+			return $this->json([
+				'success'	=> false,
+				'title' 	=> __('Error'),
+				'message'	=> __('The building is not in need of repair.'),
+			], 400);
+		}
+
+		if ($building->repair()) {
+			$request->user()->spend($cost);
+			return $this->json([
+				'success'	=> true,
+				'title' 	=> __('Success'),
+				'message'	=> __('Repaired building successfully.'),
+				'currency'	=> currency($request->user()->currency),
+			]);
+		} else {
+			return $this->json([
+				'success'	=> false,
+				'title' 	=> __('Error'),
+				'message'	=> __('Failed to repair building.'),
 			], 400);
 		}
 	}
