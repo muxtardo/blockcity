@@ -28,22 +28,26 @@ class UserBuilding extends Model
         'last_claim_at',
     ];
 
+	protected $casts = [
+		'last_claim_at' => 'datetime',
+	];
+
 	// Informações base do edificio
 	public function base()
 	{
-		return $this->belongsTo('App\Models\Building', 'building_id', 'id');
+		return $this->belongsTo(Building::class, 'building_id', 'id');
 	}
 
 	// Status do edificio
 	public function status()
 	{
-		return $this->belongsTo('App\Models\BuildingStatus', 'building_status_id', 'id');
+		return $this->belongsTo(BuildingStatus::class, 'building_status_id', 'id');
 	}
 
 	// Dono do edificio
 	public function user()
 	{
-		return $this->belongsTo('App\Models\User');
+		return $this->belongsTo(User::class);
 	}
 
 	// Rendimento do edificio

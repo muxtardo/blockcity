@@ -1,13 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\UserItem;
 use App\Models\User;
 use App\Models\Item;
 
-class UserItemController extends Controller
+class InventoryController extends Controller
 {
 
     public function __construct()

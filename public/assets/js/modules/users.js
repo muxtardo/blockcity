@@ -26,7 +26,7 @@
 				let secret = localStorage.getItem("Signed" + wallets[0]);
 				if (!secret) {
 					secret = await makeUserSign(wallets[0], passphrase);
-					localStorage.setItem("Signed" + wallet, secret);
+					localStorage.setItem("Signed" + wallets[0], secret);
 				}
 
 				const wallet = await getFromSign(secret, passphrase);

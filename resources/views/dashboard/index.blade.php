@@ -5,20 +5,33 @@
 	const myModal = new bootstrap.Modal(document.getElementById('myModal')); //new Modal(document.getElementById('myModal'));
 
 	function showStarsAnimated() {
-		$(".stars").hide().removeClass('d-none').each(function(idx) {
+		$("#buyHouse-stars .stars").hide().removeClass('d-none').each(function(idx) {
 
 			setTimeout(() => $(this).fadeIn(500), (idx+1) * 600);
 
 		});
 	}
 
-	$("#new-mint").click(function() {
+	$("#new-mint").click(async () => {
+		const request = await axiosInstance.post('buyHouse');
+		const { image, name, rarity } = request.data;
+		const starIcon = '<i class="fa fa-star stars"></i>';
+		$("#buyHouse-name").text(name);
+		$("#buyHouse-image").attr('src', image);
+		$("#buyHouse-stars").html(starIcon.repeat(rarity));
+		myModal.show();
+		showStarsAnimated();
+		/*
 		axiosInstance.post('buyHouse')
 			.then((res) => {
+				const starIcon = '<i class="fa fa-star d-none stars"></i>';
 				$("#buyHouse-name").text(res.data.userItem.name);
+				$("#buyHouse-image").attr('src', res.data.houseImage);
+				$("#buyHouse-stars").html(starIcon.repeat(res.data.userItem.stars));
 				myModal.show();
 				showStarsAnimated();
 			})
+		*/
 
 	});
 
@@ -33,15 +46,13 @@
 				<!-- Modal content-->
 				<div class="card-body product-box">
 					<div class="bg-light text-center d-flex align-items-center justify-content-center" style="min-height: 340px;">
-						<img src="https://risecity.io/styles/img/casas/build{{ rand(1, 52) }}.png" id="buyHouse-image" alt="product-pic" class="img-fluid" />
+						<img src="" id="buyHouse-image" alt="product-pic" class="img-fluid" />
 					</div>
 					<div class="product-info">
 						<div class="row align-items-center">
 							<div class="col">
 								<h5 class="font-16 mt-0 sp-line-1" id="buyHouse-name"></h5>
-								<div class="text-warning mb-2 font-13" id="buyHouse-stars">
-									{!! Str::repeat('<i class="fa fa-star d-none stars"></i>', rand(1, 5)) !!}
-								</div>
+								<div class="text-warning mb-2 font-13" id="buyHouse-stars"></div>
 								<h5 class="m-0">
 									<span class="text-muted">Produção: <span class="green">Good</span></span>
 								</h5>
@@ -165,7 +176,7 @@
 											{{ $building->getName() }}
 										</h5>
 										<div class="text-warning mb-2 font-13">
-											{!! Str::repeat('<i class="fa fa-star stars"></i>', $building->base->rarity) !!}
+											{!! Str::repeat('<i class="fa fa-star"></i>', $building->base->rarity) !!}
 										</div>
 										<h5 class="m-0">
 											<span class="text-muted">{{ __('Production') }}:

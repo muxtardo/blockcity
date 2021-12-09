@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateItemsTable extends Migration
+class CreateBuildingStatusesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,12 @@ class CreateItemsTable extends Migration
      */
     public function up()
     {
-        Schema::create('items', function (Blueprint $table) {
+        Schema::create('building_statuses', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->enum('type', ['box', 'consumable']);
-            $table->tinyInteger('rarity');
-            $table->float('price', 0);
-            $table->float('drop_chance', 0);
+            $table->string('color');
+            $table->float('loss', 0);
+            $table->float('fix_price', 0);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -32,6 +31,6 @@ class CreateItemsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('items');
+        Schema::dropIfExists('building_statuses');
     }
 }

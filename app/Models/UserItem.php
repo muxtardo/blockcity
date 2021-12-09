@@ -24,11 +24,13 @@ class UserItem extends Model
 	// Usa o item, faz o decremento e caso não tenha mais unidades, apaga
 	public function use($amount = 1)
 	{
+		if ($this->quantity < $amount) {
+			return false; 
+		}
 		$this->quantity -= $amount;
 		if ($this->quantity <= 0) {
 			return $this->delete();
-		} else {
-			return $this->save();
 		}
+		return $this->save();
 	}
 }

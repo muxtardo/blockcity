@@ -2,11 +2,13 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\UserItemController;
+use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\BuildingController;
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Config;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -45,13 +47,13 @@ Route::middleware(['auth'])->group(function () {
 	Route::prefix('dashboard')->group(function () {
 		Route::get('/',			[ DashboardController::class, 'index' ])->name('dashboard');
 	});
-	Route::post('buyHouse',		[UserItemController::class, 'buyHouse'])->name('buyHouse');
+	Route::post('buyHouse',		[BuildingController::class, 'buyHouse'])->name('buyHouse');
 
 	Route::prefix('inventory')->group(function () {
-		Route::get('/',			[ DashboardController::class, 'index' ])->name('dashboard');
+		Route::get('/',			[ DashboardController::class, 'index' ])->name('inventory');
 	});
 });
 
 Route::get('readable', function(){
-    return generateRandomWords(3);
+    return (new App\Models\Building())->getRandomBuilding();
 });

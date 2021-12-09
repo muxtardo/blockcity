@@ -9,7 +9,7 @@ class DashboardController extends Controller
 	public function index(Request $request)
 	{
 		$userBuildings	= $request->user()->buildings();
-		$this->params['buildings']		= $userBuildings
+		$this->params['buildings']		= $userBuildings->select('buildings.*', 'user_buildings.*')
 			->join('buildings', 'buildings.id', '=', 'user_buildings.building_id')
 			->orderBy('user_buildings.last_claim_at', 'asc')
 			->orderBy('buildings.rarity', 'desc')
