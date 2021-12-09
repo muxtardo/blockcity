@@ -38,7 +38,7 @@
 								<button data-bs-toggle="tooltip" title="{{ $building->repairText() }}" type="button" data-id="{{ $building->id }}" class="col btn btn-danger waves-effect waves-light repair">
 									<b>{{ __('Repair') }}</b>
 								</button>
-							@elseif (!$building->needRepair() && $building->canUpgrade())
+							@else
 								<button data-bs-toggle="tooltip" title="{{ $building->upgradeText() }}" type="button" data-id="{{ $building->id }}" class="col btn btn-primary waves-effect waves-light upgrade">
 									<b>{{ __('Upgrade') }}</b>
 								</button>

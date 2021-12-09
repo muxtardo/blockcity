@@ -67,12 +67,12 @@
 		for (let i = 0; i < starsOnNumber; i++) {
 			setTimeout(() => {
 				stars[i].classList.add('star-on');
-			}, i * 1000);			
+			}, i * 1000);
 		}
 	}
 
 	$("#new-mint").click(async () => {
-		const request = await axiosInstance.post('buyHouse');
+		const request = await axiosInstance.post('buildings/mint');
 		const { image, name, rarity } = request.data;
 		const starIcon = '<i class="fa fa-star stars"></i>';
 		$("#buyHouse-name").text(name);
@@ -127,7 +127,7 @@
 					{{-- <p class="text-muted text-center">
 						{{ __('Click on the button below to purchase a new home.') }}
 					</p> --}}
-					<button type="button" id="new-mint" class="btn btn-primary waves-effect waves-light text-uppercase">
+					<button type="button" class="btn btn-primary waves-effect waves-light text-uppercase mint">
 						<b>{{ __('New Mint') }}</b>
 					</button>
 				</div>

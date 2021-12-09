@@ -3,22 +3,50 @@
 	if (userBuildings.length) {
 		const buildingTemplate = ``;
 		const loadBuildings = async () => {
+			lockScreen(true);
+
 			try {
 				const response = await axiosInstance.get('/buildings');
 				const { title, message, redirect, success, buildings, content } = response.data;
+
+				lockScreen(false);
+
 				if (content) {
 					$('.buildings-list', userBuildings).html(content);
 					btnActions();
 				}
+
 				// buildings.forEach(building => {
 				// 	console.log(building);
 				// });
-			} catch (e) {
-				console.log(e);
-				showAlert(e.response.data.title, e.response.data.message, 'error');
+			} catch (err) {
+				lockScreen(false);
+
+				const { title, message } = err.response.data;
+				showAlert(title, message, 'error');
 			}
 		};
+
+		// First load
 		loadBuildings();
+
+		$('.mint', userBuildings).on('click', async function () {
+			lockScreen(true);
+			try {
+				const response = await axiosInstance.post('/buildings/mint');
+
+				lockScreen(false);
+				if (response) {
+					showAlert('Success', 'Your buildings have been minted', 'success');
+					loadBuildings();
+				}
+			} catch (err) {
+				lockScreen(false);
+
+				const { title, message } = err.response.data;
+				showAlert(title, message, 'error');
+			}
+		});
 
 		const btnActions = () => {
 			$('.claim', userBuildings).on('click', async function () {
@@ -43,7 +71,7 @@
 					if (redirect) {
 						setTimeout(() => {
 							window.location.href = redirect;
-						}, 1000);
+						}, 3000);
 					}
 				} catch (err) {
 					lockScreen(false);
@@ -71,7 +99,7 @@
 					if (redirect) {
 						setTimeout(() => {
 							window.location.href = redirect;
-						}, 1000);
+						}, 3000);
 					}
 				} catch (err) {
 					lockScreen(false);
@@ -99,7 +127,7 @@
 					if (redirect) {
 						setTimeout(() => {
 							window.location.href = redirect;
-						}, 1000);
+						}, 3000);
 					}
 				} catch (err) {
 					lockScreen(false);
