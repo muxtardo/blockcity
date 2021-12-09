@@ -34,14 +34,15 @@ class Building extends Model
         $rawTotal = DB::raw('(SELECT SUM(drop_chance) total FROM buildings) as c');
         // faz uma subquery contendo a soma consecutiva de drop_chance de todos os buildings
         $subquerySql = Building::select('*')
-            ->selectRaw('SUM(drop_chance) OVER (ORDER BY id) AS prob')
+            ->selectRaw('(SELECT SUM(drop_chance) FROM buildings sb WHERE sb.id <= `buildings`.id) AS prob')
             ->crossJoin($rawTotal)
             ->toSql();
         // faz uma query que retorna um building aleatorio
         $building = DB::table(DB::raw("({$subquerySql}) as b"))
             ->whereRaw('prob >= RAND() * total')
             ->orderBy('prob')
-            ->first();
+            ->get();
+            //->first();
         return $building;		
 	}
 

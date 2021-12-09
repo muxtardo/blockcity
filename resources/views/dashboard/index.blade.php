@@ -72,7 +72,7 @@
 	}
 
 	$("#new-mint").click(async () => {
-		const request = await axiosInstance.post('buyHouse');
+		const request = await axiosInstance.post('buildings/mint');
 		const { image, name, rarity } = request.data;
 		const starIcon = '<i class="fa fa-star stars"></i>';
 		$("#buyHouse-name").text(name);
