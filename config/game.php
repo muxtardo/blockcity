@@ -12,4 +12,5 @@ return [
 	'withdraw'				=> (bool)	env('WITHDRAW',				false),
 	'min_withdraw'			=> (float)	env('MIN_WITHDRAW',			10),
 	'max_withdraw'			=> (float)	env('MAX_WITHDRAW',			5000),
+	'mint_cost'				=> (float)	env('MINT_COST',			100)
 ];
