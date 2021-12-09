@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Building;
 use App\Models\UserBuilding;
 
+
 class BuildingsController extends Controller
 {
 	public function index(Request $request)
@@ -34,6 +35,7 @@ class BuildingsController extends Controller
 				],
 				'claim'		=> [
 					'enabled'	=> $building->canClaim(),
+					'color' 	=> $building->progressColor(),
 					'progress'	=> $building->progressClaim(),
 					'available'	=> currency($building->availableClaim()),
 				],
