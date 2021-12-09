@@ -12,9 +12,9 @@ class BuildingsController extends Controller
 {
 	public function index(Request $request)
 	{
-		$userBuildings				= $request->user()->buildings();
-		$getUserBuildings = $userBuildings->orderBy('highlight', 'desc')
-				->orderBy('last_claim_at', 'asc')->paginate(6);
+		$userBuildings		= $request->user()->buildings();
+		$getUserBuildings	= $userBuildings->orderBy('highlight', 'desc')
+			->orderBy('last_claim_at', 'asc')->paginate(6);
 
 		$buildings = [];
 		foreach ($getUserBuildings as $building) {
