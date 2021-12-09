@@ -1,15 +1,74 @@
 @extends('partials/master')
 @section('script')
+<style>
+.star-on {
+	animation-fill-mode: forwards;
+	animation-name: example;
+  	animation-duration: 4s;
+	  filter: filter: drop-shadow(0px 0px 0px yellow);
+}
+@keyframes example {
+  from {color: #6c757d; filter: drop-shadow(0px 0px 0px yellow);}
+  to {color: gold; filter: drop-shadow(0px 0px 5px yellow);}
+}
+.stars-content {
+    position: absolute;
+    top: 10px;
+    left: 0;
+}
+.stars-content .star-1 {
+    position: absolute;
+    left: 140px;
+    top: 50px;
+    font-size: 40px;
+}
+.stars-content .star-2 {
+    position: absolute;
+    left: 230px;
+    top: 5px;
+    font-size: 60px;
+}
+.stars-content .star-3 {
+    position: absolute;
+    left: 330px;
+    top: 50px;
+    font-size: 40px;
+}
+.star-on {
+	animation-fill-mode: forwards;
+	animation-name: example;
+  	animation-duration: 2s;
+}
+.buyHouse-name{
+	position: absolute;
+    left: 0;
+    bottom: 0px;
+    padding: 0.5rem;
+    font-size: 2rem;
+    background: rgb(0 0 0 / 89%);
+    box-sizing: border-box;
+    width: 100%;
+    color: white;
+    text-align: center;
+}
+#myModal .card-body, #myModal .modal-body {
+	padding: 0px;
+}
+#buyHouse-image {
+	margin-top: 100px;
+}
+</style>
 <script>
 	// bootstrap modal instance
 	const myModal = new bootstrap.Modal(document.getElementById('myModal')); //new Modal(document.getElementById('myModal'));
 
-	function showStarsAnimated() {
-		$("#buyHouse-stars .stars").hide().removeClass('d-none').each(function(idx) {
-
-			setTimeout(() => $(this).fadeIn(500), (idx+1) * 600);
-
-		});
+	function showStarsAnimated(starsOnNumber) {
+		const stars = document.querySelectorAll('.stars-content .stars');
+		for (let i = 0; i < starsOnNumber; i++) {
+			setTimeout(() => {
+				stars[i].classList.add('star-on');
+			}, i * 1000);			
+		}
 	}
 
 	$("#new-mint").click(async () => {
@@ -18,9 +77,8 @@
 		const starIcon = '<i class="fa fa-star stars"></i>';
 		$("#buyHouse-name").text(name);
 		$("#buyHouse-image").attr('src', image);
-		$("#buyHouse-stars").html(starIcon.repeat(rarity));
 		myModal.show();
-		showStarsAnimated();
+		showStarsAnimated(rarity);
 		/*
 		axiosInstance.post('buyHouse')
 			.then((res) => {
@@ -45,25 +103,15 @@
 			<div class="modal-body">
 				<!-- Modal content-->
 				<div class="card-body product-box">
-					<div class="bg-light text-center d-flex align-items-center justify-content-center" style="min-height: 340px;">
-						<img src="" id="buyHouse-image" alt="product-pic" class="img-fluid" />
+					<div class="bg-light text-center d-flex align-items-center justify-content-center" style="min-height: 340px;position: relative;">
+						<div class="stars-content">
+							<i class="fa fa-star stars star-1"></i>
+							<i class="fa fa-star stars star-2"></i>
+							<i class="fa fa-star stars star-3"></i>
+						</div>
+						<img src="http://127.0.0.1/assets/images/buildings/1/1.png" id="buyHouse-image" alt="product-pic" class="img-fluid">
+						<div id="buyHouse-name" class="buyHouse-name"></div>
 					</div>
-					<div class="product-info">
-						<div class="row align-items-center">
-							<div class="col">
-								<h5 class="font-16 mt-0 sp-line-1" id="buyHouse-name"></h5>
-								<div class="text-warning mb-2 font-13" id="buyHouse-stars"></div>
-								<h5 class="m-0">
-									<span class="text-muted">Produção: <span class="green">Good</span></span>
-								</h5>
-							</div>
-							<div class="col-auto">
-								<div class="product-price-tag">
-									<i class="fa fa-users fa-fw"></i> 1
-								</div>
-							</div>
-						</div> <!-- end row -->
-					</div> <!-- end product info-->
 				</div>
 			</div>
 		</div>
