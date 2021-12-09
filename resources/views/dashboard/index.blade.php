@@ -126,17 +126,25 @@ const Counter = {
 		return {
 			counter: 0,
 			buildings: [],
+			current_page: 0,
+			number_per_page: 6,
+			total_page: 0,
+			buildingsShow: [],
 		}
 	},
 	methods: {
-		load_buildings() {
-			axiosInstance.get('buildings').then((res) => {
+		async load_buildings(page = 1) {
+			await axiosInstance.get('buildings', { params: { page } }).then((res) => {
+				if (page == 1) {
+					this.total_page = Math.ceil(res.data.counters.buildings / this.number_per_page) -1;
+				}
 				this.buildings.push(...res.data.buildings);
 			});			  
 		},
-		reset_buildings() {
+		async reset_buildings() {
 			this.buildings = [];
-			this.load_buildings();
+			await this.load_buildings();
+			this.nextPage(0);
 		},
 		doBuildClaim(id) {
 			this.doBuildAction('claim', id);
@@ -177,14 +185,25 @@ const Counter = {
 				showAlert(title, message, 'error');
 			}
 		},
+		async nextPage(next) {
+			this.current_page = next;
+			let new_data = this.buildings.slice(this.current_page * this.number_per_page, (this.current_page+1) * this.number_per_page);
+			if (new_data.length == 0) {
+				await this.load_buildings(this.current_page + 1);
+				new_data = this.buildings.slice(this.current_page * this.number_per_page, (this.current_page+1) * this.number_per_page);
+			}
+			console.log(new_data);
+			this.buildingsShow.splice(0, this.number_per_page, ...new_data);
+		},
 	},
 
-	mounted() {
-		this.load_buildings();
+	async mounted() {
+		await this.load_buildings();
+		this.nextPage(0);
   	}
 }
 
-Vue.createApp(Counter).mount('.buildings-list')
+Vue.createApp(Counter).mount('.building-list')
 </script>
 @endsection
 @section('content')
@@ -293,9 +312,9 @@ Vue.createApp(Counter).mount('.buildings-list')
 			</div>
 		</div>
 	</div>
-	<div class="col-lg-9">
+	<div class="col-lg-9 building-list">
 		<div class="row buildings-list">
-			<template v-if="buildings" v-for="building in buildings" :key="building.id">
+			<template v-if="buildings" v-for="building in buildingsShow" :key="building.id">
 				<div class="col-md-6 col-xl-4">
 					<div class="card ribbon-box">
 						<div v-if="building.isNew" class="ribbon-two ribbon-two-blue text-uppercase"><span>{{ __('New') }}</span></div>
@@ -388,7 +407,14 @@ Vue.createApp(Counter).mount('.buildings-list')
 			</template>
 		</div>
 		<div class="text-end">
-			{!! $buildings->render() !!}
+			<ul class="pagination">
+				<li class="page-item" :class="current_page == 0 ? 'disabled' : ''" aria-disabled="true">
+					<button class="page-link" v-on:click="nextPage(current_page - 1)"><i class="fe-arrow-left"></i></button>
+				</li>
+				<li class="page-item" :class="current_page == total_page ? 'disabled' : ''">
+					<button class="page-link" v-on:click="nextPage(current_page + 1)" rel="next"><i class="fe-arrow-right"></i></button>
+				</li>
+			</ul>			
 		</div>
 	</div>
 </div>
