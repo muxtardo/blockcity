@@ -1,11 +1,12 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use Illuminate\Support\Facades\App;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserItemController;
+use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
-
-use App\Http\Controllers\UserItemController;
+use Illuminate\Support\Facades\Config;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +27,7 @@ Route::get('locale/{locale}', function ($locale) {
 	Cookie::queue(Cookie::forever('locale', $locale));
 	return redirect()->back();
 });
+
 // Set Theme
 Route::get('theme/{theme}', function ($theme) {
     if (!in_array($theme, Config::get('app.themes'))) {
@@ -35,16 +37,20 @@ Route::get('theme/{theme}', function ($theme) {
 	return redirect()->back();
 });
 
-Route::get('/',					function () { return view('dashboard'); });
-Route::post('login',			[ AuthController::class, 'login' ])->name('login');
-Route::get('logout',			[ AuthController::class, 'logout' ])->name('logout');
+Route::get('/',				[ WelcomeController::class, 'index' ])->name('welcome');
+Route::post('login',		[ AuthController::class, 'login' ])->name('login');
 Route::middleware(['auth'])->group(function () {
-	Route::get('logado',		function () {
-		return 'aaaaaaaaaaaaaaaaaaa';
+	Route::get('logout',		[ AuthController::class, 'logout' ])->name('logout');
+
+	Route::prefix('dashboard')->group(function () {
+		Route::get('/',			[ DashboardController::class, 'index' ])->name('dashboard');
+	});
+	Route::post('buyHouse',		[UserItemController::class, 'buyHouse'])->name('buyHouse');
+
+	Route::prefix('inventory')->group(function () {
+		Route::get('/',			[ DashboardController::class, 'index' ])->name('dashboard');
 	});
 });
-
-Route::post('buyHouse', [UserItemController::class, 'buyHouse']);
 
 Route::get('readable', function(){
     return generateRandomWords(3);

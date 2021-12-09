@@ -3,7 +3,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-6">
-                {{ date('Y') }} &copy; {{ config('app.name') }} - {{ __('All rights reserved') }}
+                {{ date('Y') }} &copy; <b>{{ config('app.name') }}</b> - {{ __('All rights reserved') }}.
             </div>
             <div class="col-md-6">
                 <div class="text-md-end footer-links d-none d-sm-block">

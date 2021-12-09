@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	@include("partials/titleMeta", [
-		"title"	=> "Welcome"
+		"title"	=> isset($page_title) ? $page_title : false
 	])
 
 	@include('partials/headCss')
@@ -17,13 +17,13 @@
 		<!-- Start Page Content here -->
 		<!-- ============================================================== -->
 		<div class="content-page">
-			<div class="content">
+			<div class="content {{ Auth::check() ? 'with-user' : '' }}">
 				<!-- Start Content-->
 				<div class="container-fluid">
 					<!-- start page title -->
 					@include("partials/pageTitle", [
-						"subtitle"	=> "Extras Pages",
-						"title"		=>"Starter"
+						"bc"		=> isset($bc) ? $bc : false,
+						"pageTitle"	=> isset($page_title) ? $page_title : false
 					])
 					<!-- end page title -->
 					@yield('content')

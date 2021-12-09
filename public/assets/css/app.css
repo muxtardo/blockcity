@@ -1,18 +1,37 @@
+:root {
+	--app-max-width: 1400px;
+}
+
 .content-page {
     margin-top: 0px;
     overflow: initial !important;
 }
 
-#wrapper {
-    overflow: initial!important;
-}
-
-.content {
-    margin-top: 70px;
-}
+#wrapper { overflow: initial!important; }
+.content-page > .content { margin-top: 15px; }
+.content-page > .content.with-user { margin-top: 70px; }
 
 .user-houses-stats {
     position: sticky;
-    top: 150px;    
+    top: 150px;
 }
 
+.navbar-custom { top: 0 }
+
+body #wrapper {
+	max-width: var(--app-max-width);
+	box-shadow: none;
+	margin: 0 auto;
+}
+body[data-layout-mode=horizontal] .navbar-custom,
+body[data-layout-mode=horizontal] .topnav,
+body[data-layout-mode=horizontal] .footer {
+	max-width: 100%;
+}
+
+@media (min-width: 1200px) {
+	body[data-layout-mode=horizontal] .container-fluid {
+		max-width: var(--app-max-width);
+    	margin: 0 auto;
+	}
+}

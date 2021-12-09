@@ -17,45 +17,51 @@ class AuthController extends Controller
 	 */
 	public function login(Request $request)
 	{
+		// Validate the form data
 		$validator = Validator::make($request->all(), [
-			'wallet' => 'required|string|size:42', 
+			'wallet' => 'required|string|size:42',
 			'secret' => 'required|string|size:132',
 		]);
 
+		// If validation fails
 		if ($validator->fails()) {
-			return response()->json([
-				'success' => false,
-				'title' => _('Error'),
-				'message' => _('Invalid credentials'),
+			return $this->json([
+				'success'	=> false,
+				'title'		=> _('Error'),
+				'message'	=> _('Invalid credentials'),
 			], 401);
 		}
 
-		$data = $validator->validated();
+		// Creedentials received
+		$credentials = $validator->validated();
 
-		$user = User::getByWallet($data['wallet']);
-
-		if ($user && $user->secret != $data['secret']) {
-			return response()->json([
-				'success' => false,
-				'title' => _('Error'),
-				'message' => _('Invalid credentials'),
+		// Search for the user by wallet
+		$user = User::getByWallet($credentials['wallet']);
+		if ($user && $user->secret != $credentials['secret']) {	// If the user exists and the secret is correct
+			return $this->json([
+				'success'	=> false,
+				'title'		=> _('Error'),
+				'message'	=> _('Invalid credentials'),
 			], 401);
-		} 
+		}
 
+		// If the user doesn't exist, create it!
 		if (!$user) {
 			$user = User::create([
-				'wallet' => $data['wallet'],
-				'secret' => $data['secret'],
+				'wallet' => $credentials['wallet'],
+				'secret' => $credentials['secret'],
 			]);
 		}
 
+		// Authenticate
 		Auth::login($user);
 
-		return response()->json([
-			'success' => true,
-			'title' => _('Success'),
-			'message' => _('You are now logged in'),
-			'redirect' => url('/'),
+		// Return success
+		return $this->json([
+			'success'	=> true,
+			'title'		=> _('Success'),
+			'message'	=> _('You are now logged in'),
+			'redirect'	=> url('dashboard'),
 		]);
 	}
 
@@ -67,12 +73,16 @@ class AuthController extends Controller
 	 */
 	public function logout(Request $request)
 	{
+		// Logout
 		Auth::logout();
 
+		// Invalidate the session
 		$request->session()->invalidate();
 
+		// Regenerate the session
 		$request->session()->regenerateToken();
 
+		// Redirect to the homepage
 		return redirect('/');
 	}
 }

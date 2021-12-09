@@ -1,2 +1,4 @@
 @include('partials/topbar')
-@include('partials/horizontal')
+@if (Auth::check())
+	@include('partials/horizontal')
+@endif

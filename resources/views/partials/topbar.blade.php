@@ -2,15 +2,14 @@
 <div class="navbar-custom">
 	<div class="container-fluid">
 		<ul class="list-unstyled topnav-menu float-end mb-0">
-			{{-- <li class="dropdown d-none d-lg-inline-block">
+			<li class="dropdown d-none d-lg-inline-block">
 				<a class="nav-link dropdown-toggle arrow-none waves-effect waves-light" data-toggle="fullscreen" href="#">
 					<i class="fe-maximize noti-icon"></i>
 				</a>
-			</li> --}}
-
+			</li>
 			<li class="dropdown notification-list">
 				<a href="{{ url('theme/' . reverseThemeColor()) }}" class="nav-link right-bar-toggle waves-effect waves-{{ config('app.theme') }}">
-					<i class="fe-moon noti-icon"></i>
+					<i class="fe-{{ reverseThemeColor() == 'dark' ? 'moon' : 'sun' }} noti-icon"></i>
 				</a>
 			</li>
 			<li class="dropdown d-none d-lg-inline-block topbar-dropdown">

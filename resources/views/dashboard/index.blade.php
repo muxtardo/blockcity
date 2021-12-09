@@ -9,7 +9,7 @@
 
 			setTimeout(() => $(this).fadeIn(500), (idx+1) * 600);
 
-		});	
+		});
 	}
 
 	$("#new-mint").click(function() {
@@ -32,31 +32,28 @@
 			<div class="modal-body">
 				<!-- Modal content-->
 				<div class="card-body product-box">
-							<div class="bg-light text-center d-flex align-items-center justify-content-center" style="min-height: 340px;">
-								<img src="https://risecity.io/styles/img/casas/build{{ rand(1, 52) }}.png" id="buyHouse-image" alt="product-pic" class="img-fluid">
+					<div class="bg-light text-center d-flex align-items-center justify-content-center" style="min-height: 340px;">
+						<img src="https://risecity.io/styles/img/casas/build{{ rand(1, 52) }}.png" id="buyHouse-image" alt="product-pic" class="img-fluid" />
+					</div>
+					<div class="product-info">
+						<div class="row align-items-center">
+							<div class="col">
+								<h5 class="font-16 mt-0 sp-line-1" id="buyHouse-name"></h5>
+								<div class="text-warning mb-2 font-13" id="buyHouse-stars">
+									{!! Str::repeat('<i class="fa fa-star d-none stars"></i>', rand(1, 5)) !!}
+								</div>
+								<h5 class="m-0">
+									<span class="text-muted">Produção: <span class="green">Good</span></span>
+								</h5>
 							</div>
-
-							<div class="product-info">
-								<div class="row align-items-center">
-									<div class="col">
-										<h5 class="font-16 mt-0 sp-line-1" id="buyHouse-name"></h5>
-										<div class="text-warning mb-2 font-13" id="buyHouse-stars">
-											{!! Str::repeat('<i class="fa fa-star d-none stars"></i>', rand(1, 5)) !!}
-										</div>
-										<h5 class="m-0">
-											<span class="text-muted">Produção: <span class="green">Good</span></span>
-										</h5>
-									</div>
-									<div class="col-auto">
-										<div class="product-price-tag">
-											<i class="fa fa-users fa-fw"></i> 1
-										</div>
-									</div>
-								</div> <!-- end row -->
-
-							</div> <!-- end product info-->
-						</div>
-				
+							<div class="col-auto">
+								<div class="product-price-tag">
+									<i class="fa fa-users fa-fw"></i> 1
+								</div>
+							</div>
+						</div> <!-- end row -->
+					</div> <!-- end product info-->
+				</div>
 			</div>
 		</div>
 	</div>
@@ -64,7 +61,7 @@
 
 <div class="row">
 	@auth
-	<div class="col-md-3">
+	<div class="col-lg-3">
 		<div class="user-houses-stats mb-2">
 			<div>
 				<div class="card card-body">
@@ -129,7 +126,7 @@
 		</div>
 	</div>
 	@endauth
-	<div class="col-md-9">
+	<div class="col-lg-9">
 		<div class="alert alert-primary bg-primary text-white border-0" role="alert">
 			This is a <strong>primary</strong> alert—check it out!
 		</div>
@@ -146,11 +143,9 @@
 							<div class="product-info">
 								<div class="row align-items-center">
 									<div class="col">
-										<h5 class="font-16 mt-0 sp-line-1">House {{ $i }}</h5>
+										<h5 class="font-16 mt-0 sp-line-1">House House House House House {{ $i }}</h5>
 										<div class="text-warning mb-2 font-13">
-											@for ($i2 = 1; $i2 <= rand(1, 5); $i2++)
-												<i class="fa fa-star"></i>
-											@endfor
+											{!! Str::repeat('<i class="fa fa-star stars"></i>', rand(1, 5)) !!}
 										</div>
 										<h5 class="m-0">
 											@php
@@ -161,7 +156,7 @@
 									</div>
 									<div class="col-auto">
 										<div class="product-price-tag">
-											<i class="fa fa-users fa-fw"></i> 1
+											<i class="fa fa-users fa-fw"></i> {{ rand(1, 3) }}
 										</div>
 									</div>
 								</div> <!-- end row -->
