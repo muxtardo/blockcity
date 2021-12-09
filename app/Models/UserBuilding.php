@@ -64,7 +64,7 @@ class UserBuilding extends Model
 	// Tras o nome do edificio
 	public function getName()
 	{
-		return !$this->name ? $this->base->name : $this->name;
+		return !$this->name ? $this->base->name : trim($this->name);
 	}
 
 	// Retorna a imagem do edificio

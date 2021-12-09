@@ -12,15 +12,47 @@ class BuildingsController extends Controller
 	public function index(Request $request)
 	{
 		$userBuildings				= $request->user()->buildings();
-		$this->params['buildings']	= $userBuildings->select('buildings.*', 'user_buildings.*')
+		$getUserBuildings = $userBuildings->select('buildings.*', 'user_buildings.*')
 				->join('buildings', 'buildings.id', '=', 'user_buildings.building_id')
 				->orderBy('user_buildings.last_claim_at', 'asc')
 				->orderBy('buildings.rarity', 'desc')
 				->orderBy('user_buildings.highlight', 'desc')->paginate(6);
 
+		$buildings = [];
+		foreach ($getUserBuildings as $building) {
+			$buildings[] = [
+				'id'		=> $building->id,
+				'name'		=> $building->getName(),
+				'image'		=> $building->getImage(true),
+				'rarity'	=> $building->base->rarity,
+				'level'		=> $building->level,
+				'highlight'	=> $building->isNew(),
+				'upgrade'	=> $building->canUpgrade() ? currency($building->base->upgrade_cost) : false,
+				'status'	=> [
+					'repair'	=> $building->needRepair(),
+					'color'		=> $building->status->color,
+					'name'		=> $building->status->name,
+					'loss'		=> $building->status->loss,
+					'cost'		=> currency($building->repairCost())
+				],
+				'claim'		=> [
+					'enabled'	=> $building->canClaim(),
+					'progress'	=> $building->progressClaim(),
+					'available'	=> currency($building->availableClaim()),
+				],
+				'stats'		=> [
+					'daily'		=> currency($building->getIncomes()),
+					'last'		=> currency($building->last_claim),
+					'total'		=> currency($building->earnings)
+				],
+				'created_at'	=> $building->created_at,
+				'updated_at'	=> $building->updated_at
+			];
+		}
+
 		return $this->json([
 			'success'	=> true,
-			'content'	=> $this->render('buildings.list')->render(),
+			'buildings'	=> $buildings,
 			'counters'	=> [
 				'buildings'	=> $userBuildings->count(),
 				'workers'	=> $request->user()->workers(),
