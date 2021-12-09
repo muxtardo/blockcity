@@ -48,7 +48,7 @@ const lockScreen = (show) => {
 		var d	= $(document.createElement('DIV')).addClass('screen-lock');
 		var dd	= $(document.createElement('DIV')).addClass('screen-lock-text');
 
-		dd.html('Waiting...');
+		dd.html('<i class="fas fa-cog fa-spin"></i> Loading...');
 
 		$(document.body).append(d, dd).css('overflow', 'hidden');
 
