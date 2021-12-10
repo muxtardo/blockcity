@@ -24,43 +24,81 @@ class BuildingsController extends Controller
 		return $this->json([
 			'success'	=> true,
 			'buildings'	=> $buildings,
-			'counters'	=> [
-				'buildings'	=> $userBuildings->count(),
-				'workers'	=> $request->user()->workers(),
+			'stats'  	=> [
+				'currency'		=> currency($request->user()->currency),
+				'buildings'		=> $request->user()->buildings()->count(),
+				'workers'		=> $request->user()->workers(),
+				'dailyClaim'	=> currency($request->user()->maxDailyClaim())
 			]
 		]);
 	}
 
-    public function mint()
+    public function mint(Request $request)
     {
-		sleep(2);
+		// Instancia o usuario
+		$user = $request->user();
 
-		$user = Auth::user();
-
-		if ($user->currency < config('game.mint_cost')) {
+		// Verifica o custo
+		$cost = config('game.mint_cost');
+		if ($user->currency < $cost) {
 			return $this->json([
 				'success'	=> false,
 				'title'		=> __('Not enough currency'),
 				'message'	=> __('You do not have enough currency to mint.'),
-			]);
+			], 401);
 		}
 
-		$user->spend(config('game.mint_cost'));
-
+		// Get random building
 		$randomBuilding = Building::mint();
+		if (!$randomBuilding) {
+			return $this->json([
+				'success'	=> false,
+				'title'		=> __('Minting failed'),
+				'message'	=> __('Minting failed. Please try again later.'),
+			], 401);
+		}
 
-        $userBuilding = UserBuilding::create([
-            'user_id'		=> Auth::id(),
-            'building_id'	=> $randomBuilding->id,
-            'name'			=> generateRandomWords(2),
-            'image'			=> rand(1, $randomBuilding->images),
-        ]);
+		// Create user building
+		$userBuilding	= UserBuilding::create([
+			'user_id'		=> $user->id,
+			'building_id'	=> $randomBuilding->id,
+			'name'			=> generateRandomWords(2),
+			'image'			=> rand(1, $randomBuilding->images)
+		]);
+		if ($userBuilding)
+		{
+			// Addiciona a transação no log
+			addTransaction([
+				'amount'			=> $cost,
+				'type'				=> 'mint',
+				'user_id'			=> $user->id,
+				'status'			=> 'success',
+				'user_building_id'	=> $userBuilding->id,
+			]);
 
-        return response()->json([
-            'success'	=> true,
-			'building'	=> UserBuilding::find($userBuilding->id)->publicData(),
-			'currency'  => currency($user->currency),
-        ]);
+			// Debita o saldo do usuário
+			$user->spend($cost);
+
+			// delay pra parecer quee ta rolando algo foda
+			sleep(1);
+			return $this->json([
+				'success'	=> true,
+				'building'	=> UserBuilding::find($userBuilding->id)->publicData(),
+				'stats'  	=> [
+					'currency'		=> currency($user->currency),
+					'buildings'		=> $user->buildings()->count(),
+					'workers'		=> $user->workers(),
+					'dailyClaim'	=> currency($user->maxDailyClaim())
+				]
+			]);
+		} else
+		{
+			return $this->json([
+				'success'	=> false,
+				'title'		=> __('Minting failed'),
+				'message'	=> __('Minting failed. Please try again later.'),
+			], 401);
+		}
     }
 
 	public function claim(Request $request)
@@ -97,11 +135,29 @@ class BuildingsController extends Controller
 
 		if (($claim = $building->claim())) {
 			$request->user()->earn($claim);
+
+			// Addiciona a transação no log
+			addTransaction([
+				'amount'			=> $claim,
+				'type'				=> 'claim',
+				'user_id'			=> $request->user()->id,
+				'status'			=> 'success',
+				'user_building_id'	=> $building->id
+			]);
+
+			// delay pra parecer quee ta rolando algo foda
+			sleep(1);
 			return $this->json([
 				'success'	=> true,
 				'title' 	=> __('Success'),
 				'message'	=> __('Claimed building successfully.'),
-				'currency'	=> currency($request->user()->currency),
+				'building'	=> $building->publicData(),
+				'stats'  	=> [
+					'currency'		=> currency($request->user()->currency),
+					'buildings'		=> $request->user()->buildings()->count(),
+					'workers'		=> $request->user()->workers(),
+					'dailyClaim'	=> currency($request->user()->maxDailyClaim())
+				]
 			]);
 		} else {
 			return $this->json([
@@ -155,12 +211,29 @@ class BuildingsController extends Controller
 
 		if ($building->upgrade()) {
 			$request->user()->spend($cost);
+
+			// Addiciona a transação no log
+			addTransaction([
+				'amount'			=> $cost,
+				'type'				=> 'upgrade',
+				'user_id'			=> $request->user()->id,
+				'status'			=> 'success',
+				'user_building_id'	=> $building->id
+			]);
+
+			// delay pra parecer quee ta rolando algo foda
+			sleep(1);
 			return $this->json([
 				'success'	=> true,
 				'title' 	=> __('Success'),
 				'message'	=> __('Upgraded building successfully.'),
-				'currency'	=> currency($request->user()->currency),
 				'building'	=> $building->publicData(),
+				'stats'  	=> [
+					'currency'		=> currency($request->user()->currency),
+					'buildings'		=> $request->user()->buildings()->count(),
+					'workers'		=> $request->user()->workers(),
+					'dailyClaim'	=> currency($request->user()->maxDailyClaim())
+				]
 			]);
 		} else {
 			return $this->json([
@@ -211,13 +284,31 @@ class BuildingsController extends Controller
 			], 400);
 		}
 
-		if ($building->repair()) {
+		if (($building = $building->repair())) {
 			$request->user()->spend($cost);
+
+			// Addiciona a transação no log
+			addTransaction([
+				'amount'			=> $cost,
+				'type'				=> 'repair',
+				'user_id'			=> $request->user()->id,
+				'status'			=> 'success',
+				'user_building_id'	=> $building->id
+			]);
+
+			// delay pra parecer quee ta rolando algo foda
+			sleep(1);
 			return $this->json([
 				'success'	=> true,
 				'title' 	=> __('Success'),
 				'message'	=> __('Repaired building successfully.'),
-				'currency'	=> currency($request->user()->currency),
+				'building'	=> $building->publicData(),
+				'stats'  	=> [
+					'currency'		=> currency($request->user()->currency),
+					'buildings'		=> $request->user()->buildings()->count(),
+					'workers'		=> $request->user()->workers(),
+					'dailyClaim'	=> currency($request->user()->maxDailyClaim())
+				]
 			]);
 		} else {
 			return $this->json([

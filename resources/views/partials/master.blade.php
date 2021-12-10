@@ -52,6 +52,7 @@
 	<script src="{{ asset('assets/js/web3.min.js') }}"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.4.5/ethers.umd.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.5.2/bootbox.min.js"></script>
+	@yield('js-libs')
 
 	<script type="text/javascript">
 		const domainName	= '{{ Request::server('SERVER_NAME') }}';
@@ -100,7 +101,7 @@
 	<script type="text/javascript" src="{{ asset('assets/js/modules/quests.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('assets/js/modules/marketplace.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('assets/js/modules/exchange.js') }}"></script>
+
 	@yield('script')
-	@yield('script-bottom')
 </body>
 </html>

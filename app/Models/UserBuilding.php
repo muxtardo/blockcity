@@ -190,12 +190,17 @@ class UserBuilding extends Model
 
 	public function repair()
 	{
-		return $this->update([
-			'building_status_id'	=> BuildingStatus::where('loss', 0)->first()->id,
-		]);
+		$this->building_status_id = BuildingStatus::where('loss', 0)->first()->id;
+		if ($this->save())
+		{
+			$this->status->loss = 0;
+			return $this;
+		}
+
+		return false;
 	}
 
-	public function publicData() 
+	public function publicData()
 	{
 		return [
 			'id'		=> $this->id,

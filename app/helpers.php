@@ -2,8 +2,6 @@
 
 use App\Models\Transaction;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Http;
 
 if (!function_exists('addTransaction')) {
 	function addTransaction($data) {
@@ -17,8 +15,8 @@ if (!function_exists('addTransaction')) {
 
 if (!function_exists('currency')) {
 	function currency($value, $decimals = 4, $decimalPoint = '.', $thousandSeparator = '') {
-		return round($value, $decimals);
-		// return number_format($value, $decimals, $decimalPoint, $thousandSeparator);
+		// return round($value, $decimals);
+		return number_format($value, $decimals, $decimalPoint, $thousandSeparator);
 	}
 }
 
@@ -190,6 +188,6 @@ if (!function_exists('reverseThemeColor')) {
 if (!function_exists('generateRandomWords')) {
 	function generateRandomWords($numberWords) {
 		$words = file(__DIR__ . '/../resources/words.txt');
-		return ucwords(implode(" ", array_map(function ($index) use ($words) { return $words[$index];  }, array_rand($words, $numberWords))));
+		return ucwords(implode(" ", array_map(function ($index) use ($words) { return str_replace('\n', '', trim($words[$index]));  }, array_rand($words, $numberWords))));
 	}
 }
