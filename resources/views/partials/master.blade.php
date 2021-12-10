@@ -93,14 +93,14 @@
 	</script>
 	@yield('js')
 
-	<script type="text/javascript" src="{{ asset('assets/js/global.js') }}"></script>
-	<script type="text/javascript" src="{{ asset('assets/js/metamask.js') }}"></script>
-	<script type="text/javascript" src="{{ asset('assets/js/modules/users.js') }}"></script>
-	<script type="text/javascript" src="{{ asset('assets/js/modules/buildings.js') }}"></script>
-	<script type="text/javascript" src="{{ asset('assets/js/modules/inventory.js') }}"></script>
-	<script type="text/javascript" src="{{ asset('assets/js/modules/quests.js') }}"></script>
-	<script type="text/javascript" src="{{ asset('assets/js/modules/marketplace.js') }}"></script>
-	<script type="text/javascript" src="{{ asset('assets/js/modules/exchange.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('assets/js/global.js') }}?c={{ filemtime(public_path('assets/js/global.js')) }}"></script>
+	<script type="text/javascript" src="{{ asset('assets/js/metamask.js') }}?c={{ filemtime(public_path('assets/js/metamask.js')) }}"></script>
+	<script type="text/javascript" src="{{ asset('assets/js/modules/users.js') }}?c={{ filemtime(public_path('assets/js/modules/users.js')) }}"></script>
+	<script type="text/javascript" src="{{ asset('assets/js/modules/buildings.js') }}?c={{ filemtime(public_path('assets/js/modules/buildings.js')) }}"></script>
+	<script type="text/javascript" src="{{ asset('assets/js/modules/inventory.js') }}?c={{ filemtime(public_path('assets/js/modules/inventory.js')) }}"></script>
+	<script type="text/javascript" src="{{ asset('assets/js/modules/quests.js') }}?c={{ filemtime(public_path('assets/js/modules/quests.js')) }}"></script>
+	<script type="text/javascript" src="{{ asset('assets/js/modules/marketplace.js') }}?c={{ filemtime(public_path('assets/js/modules/marketplace.js')) }}"></script>
+	<script type="text/javascript" src="{{ asset('assets/js/modules/exchange.js') }}?c={{ filemtime(public_path('assets/js/modules/exchange.js')) }}"></script>
 
 	@yield('script')
 </body>
