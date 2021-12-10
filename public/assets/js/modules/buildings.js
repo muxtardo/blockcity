@@ -8,7 +8,7 @@
 			instanceHidden.hidden = false;
 		});
 
-		const showNewMint = (name, image, rarity) => {
+		window.showNewMint = (name, image, rarity) => {
 			const stars = document.querySelectorAll('.stars-content .stars');
 
 			$("#buyHouse-name").text(name);
@@ -23,7 +23,7 @@
 			for (let i = 0; i < rarity; i++) {
 				setTimeout(() => {
 					stars[i].classList.add('star-on');
-				}, i * 1000);
+				}, i * 500);
 			}
 		}
 

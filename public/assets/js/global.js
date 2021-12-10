@@ -92,8 +92,8 @@ const inDarkMode = () => {
 	return localStorage.getItem('darkMode') == 'true';
 }
 const setDarkMode = (darkMode) => {
-	console.log(darkMode);
 	$.LayoutThemeApp.changeMode(darkMode ? 'dark' : 'light');
+	$.Topbar.changeColor(!darkMode ? 'dark' : 'light');
 	localStorage.setItem('darkMode', darkMode);
 
 	$(".change-theme").find('i').removeClass('noti-icon')
