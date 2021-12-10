@@ -17,7 +17,7 @@ class CreateTransactionsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('user_building_id');
-            $table->enum('type', ['exchange', 'withdraw', 'mint', 'upgrade', 'repair']);
+            $table->enum('type', ['claim', 'exchange', 'upgrade', 'repair', 'mint', 'withdraw']);
             $table->enum('status', ['pending', 'failed', 'success'])->default('pending');
             $table->float('amount', 0);
             $table->integer('attempts')->default(0);
