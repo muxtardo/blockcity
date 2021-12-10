@@ -64,7 +64,7 @@ class ExchangeController extends Controller
 	{
 		// Validate the form data
 		$validator = Validator::make($request->all(), [
-			'amount'	=> 'required|numeric|min:1',
+			'amount'	=> 'required|numeric|min:0.0001',
 			'hash'		=> 'required|string|size:66',
 		]);
 

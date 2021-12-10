@@ -65,17 +65,18 @@ class Transaction extends Model
 
 		// Consulta a transação na API
 		$apiData	= Http::get(config('game.api_web3_url') . '/transaction/' . $this->txid)->json();
-		var_dump($apiData);
 		if (!$apiData) { return false; }
 		if (!$apiData['success']) { return false; }
 
 		if ($this->type == 'exchange')
 		{
-			$this->processDeposit(Auth::user(), $apiData['receipt']);
+			return $this->processDeposit(Auth::user(), $apiData['receipt']);
 		} elseif ($this->type == 'withdrawal')
 		{
-			$this->processWithdrawal(Auth::user(), $apiData['receipt']);
+			return $this->processWithdrawal(Auth::user(), $apiData['receipt']);
 		}
+
+		return false;
 	}
 
 	private function processDeposit(User $user, $receipt)
@@ -109,12 +110,11 @@ class Transaction extends Model
 		$user->earn($receipt['tokens'] / 10000);
 
 		return [
-			'success'	=> true,
-			'title' 	=> 'Success!',
-			'message'	=> 'Transaction completed',
-			'attemps'	=> $this->attemps,
-			'finished'	=> $this->status == 'success',
-			'currency'	=> currency($user->currency)
+			'success'		=> true,
+			'title' 		=> 'Success!',
+			'message'		=> 'Transaction completed',
+			'currency'		=> currency($user->currency),
+			'idTransaction'	=> $user->getPendingTransaction()
 		];
 	}
 }

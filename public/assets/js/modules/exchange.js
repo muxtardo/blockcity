@@ -84,12 +84,14 @@
 					return false;
 				}
 				amount = parseFloat(amount * 10000).toFixed(0);
+				amount = parseInt(amount);
 
-				const balance = await getTokenBalance(userWallet);
+				let balance = await getTokenBalance(userWallet);
+				balance = parseInt(balance);
 				if (balance < amount) {
 					lockScreen(false);
 
-					let diffTokens	= (price - balanc) / 10000;
+					let diffTokens	= parseFloat((amount - balance) / 10000).toFixed(4);
 					showAlert("Alert", `Insuficient Balance, you need +${diffTokens} more Tokens`, 'info');
 					return false;
 				}
@@ -108,10 +110,11 @@
 						amount:	amount / 10000,
 						hash:	txHash.hash
 					});
-					const { title, message, redirect, success, currency } = response.data;
+					const { title, message, redirect, success, currency, transactionId } = response.data;
 
 					// Update interface with new user balance
 					if (currency) { $('#myCurrency').html(currency); }
+					if (transactionId) { checkTransaction(transactionId); }
 
 					showAlert(title, message, success ? 'success' : 'danger');
 					if (redirect) {
@@ -137,8 +140,9 @@
 		const loadTokenBalance = async () => {
 			const avtkns = $("#avtkns");
 			if (avtkns.length) {
-				const balance = await getTokenBalance(userWallet);
-				avtkns.html(new Intl.NumberFormat('en-US').format(balance / (10000)));
+				let balance = await getTokenBalance(userWallet);
+				balance = parseInt(balance);
+				avtkns.html(parseFloat(balance / 10000).toFixed(4));
 			}
 		};
 		loadTokenBalance();

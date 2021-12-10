@@ -10,7 +10,6 @@ class TransactionsController extends Controller
     public function checkById(Request $request)
 	{
 		$transaction = Transaction::find($request->id);
-
 		if (!$transaction) {
 			return $this->json([
 				'success'	=> false,
@@ -19,10 +18,6 @@ class TransactionsController extends Controller
 			]);
 		}
 
-		return $this->json([
-			'success'	=> true,
-			'title'		=> __('Success'),
-			'message'	=> __('Transaction has ben processed!')
-		]);
+		return $this->json($transaction->check());
 	}
 }
