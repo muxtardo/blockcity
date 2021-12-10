@@ -1,0 +1,162 @@
+:root {
+	--app-max-width: 1400px;
+}
+
+.content-page {
+    margin-top: 0px;
+    overflow: initial !important;
+}
+
+#wrapper { overflow: initial!important; }
+.content-page > .content { margin-top: 15px; }
+.content-page > .content.with-user { margin-top: 70px; }
+
+.user-houses-stats {
+    position: sticky;
+    top: 150px;
+}
+
+.navbar-custom { top: 0 }
+
+body #wrapper {
+	max-width: var(--app-max-width);
+	box-shadow: none;
+	margin: 0 auto;
+}
+body[data-layout-mode=horizontal] .navbar-custom,
+body[data-layout-mode=horizontal] .topnav,
+body[data-layout-mode=horizontal] .footer {
+	max-width: 100%;
+}
+
+@media (min-width: 1200px) {
+	body[data-layout-mode=horizontal] .container-fluid {
+		max-width: var(--app-max-width);
+    	margin: 0 auto;
+	}
+}
+
+.pagination { justify-content: end; }
+
+.screen-lock {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: #333;
+    z-index: 1000000;
+    opacity: .7;
+}
+.screen-lock-text {
+    position: fixed;
+    width: 100%;
+    text-align: center;
+    top: 49%;
+    z-index: 1000001;
+    left: 0px;
+    color: white;
+    font-size: 28px;
+}
+
+.bg-sky {
+	background: #4B79A1;												/* fallback for old browsers */
+	background: -webkit-linear-gradient(to top, #283E51, #0A2342);	  /* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(to top, #283E51, #0A2342);			  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+	background: -olinear-gradient(to top, #283E51, #0A2342);
+}
+.bg-sky::before {
+	content: '';
+	background: url(http://www.script-tutorials.com/demos/360/images/stars.png) repeat center center;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	width: 100%;
+	height: 100%;
+	display: block;
+}
+
+.star-on {
+	animation-fill-mode: forwards;
+	animation-name: example;
+	animation-duration: 4s;
+	filter: drop-shadow(0px 0px 0px yellow);
+}
+
+@keyframes example {
+	from {color: #6c757d; filter: drop-shadow(0px 0px 0px yellow);}
+	to {color: gold; filter: drop-shadow(0px 0px 5px yellow);}
+}
+
+.stars-content {
+	position: absolute;
+	top: 10px;
+	width: 290px;
+	height: 110px;
+}
+.stars-content .star-1 {
+	position: absolute;
+	left: 20px;
+	top: 50px;
+	font-size: 40px;
+}
+.stars-content .star-2 {
+	position: absolute;
+	left: 110px;
+	top: 5px;
+	font-size: 60px;
+}
+.stars-content .star-3 {
+	position: absolute;
+	left: 210px;
+	top: 50px;
+	font-size: 40px;
+}
+.star-on {
+	animation-fill-mode: forwards;
+	animation-name: example;
+	animation-duration: 2s;
+}
+
+.buyHouse-name {
+	position: absolute;
+	left: 0;
+	bottom: 0px;
+	padding: 0.5rem;
+	font-size: 2rem;
+	background: rgb(0 0 0 / 89%);
+	box-sizing: border-box;
+	width: 100%;
+	color: white;
+	text-align: center;
+	z-index: 11;
+}
+#myModal .card-body, #myModal .modal-body {
+	padding: 0px;
+}
+#buyHouse-image {
+	margin-top: 100px;
+}
+
+[v-cloak] {
+	display: none;
+}
+
+.btn-close {
+	position: absolute;
+	right: 10px;
+	top: 10px;
+	z-index: 100;
+	filter: invert(1);
+}
+
+.product-box {
+	transition: opacity 1s ease-in-out;
+	opacity: 1;
+}
+
+.building-hidden {
+	opacity: 0;
+}

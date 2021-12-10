@@ -69,8 +69,8 @@ class ExchangeController extends Controller
 		if ($validator->fails()) {
 			return $this->json([
 				'success'	=> false,
-				'title'		=> _('Error'),
-				'message'	=> _('Invalid data')
+				'title'		=> __('Error'),
+				'message'	=> __('Invalid data')
 			], 401);
 		}
 
@@ -82,8 +82,8 @@ class ExchangeController extends Controller
 		if ($checkHash) {
 			return $this->json([
 				'success'	=> false,
-				'title'		=> _('Error'),
-				'message'	=> _('Transaction already exists'),
+				'title'		=> __('Error'),
+				'message'	=> __('Transaction already exists'),
 			], 401);
 		}
 
@@ -91,8 +91,8 @@ class ExchangeController extends Controller
 		if (!is_numeric($params['amount']) || $params['amount'] < 0) {
 			return $this->json([
 				'success'	=> false,
-				'title'		=> _('Error'),
-				'message'	=> _('Invalid amount'),
+				'title'		=> __('Error'),
+				'message'	=> __('Invalid amount'),
 			], 401);
 		}
 
@@ -105,22 +105,17 @@ class ExchangeController extends Controller
 			'status'	=> 'pending'
 		]);
 		if ($transaction) {
-			$check	= $transaction->check();
-			if ($check) {
-				return $this->json($check, $check['success'] ? 200 : 401);
-			} else {
-				return $this->json([
-					'success'		=> true,
-					'title'			=> _('Success'),
-					'message'		=> _('Transaction registered successfully!'),
-					'transactionId'	=> $transaction->id
-				]);
-			}
+			return $this->json([
+				'success'		=> true,
+				'title'			=> __('Success'),
+				'message'		=> __('Transaction registered successfully!'),
+				'transactionId'	=> $transaction->id
+			]);
 		} else {
 			return $this->json([
 				'success'	=> false,
-				'title'		=> _('Error'),
-				'message'	=> _('Something went wrong'),
+				'title'		=> __('Error'),
+				'message'	=> __('Something went wrong'),
 			], 401);
 		}
 	}
