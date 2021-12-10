@@ -2,26 +2,16 @@
 
 use App\Models\Transaction;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 
 if (!function_exists('addTransaction')) {
 	function addTransaction($data) {
-		return Transaction::create($data);
-	}
-}
-
-if (!function_exists('getTransactionApi')) {
-	function getTransactionApi($hash)
-	{
-		// try
-		// {
-			$response = Http::get(config('game.api_web3_url') . '/transaction/' . $hash);
-			$transaction = $response->json();
-			return $transaction;
-		// } catch (\Exception $e)
-		// {
-		// 	return false;
-		// }
+		$transaction	= new Transaction;
+		foreach ($data as $key => $value) {
+			$transaction->$key	= $value;
+		}
+		return $transaction->save() ? $transaction : false;
 	}
 }
 

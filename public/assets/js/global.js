@@ -1,12 +1,4 @@
-let web3x		= new Web3('https://bsc-dataseed.binance.org/');
-let redOficial	= "0x38";
-let redChainID	= 56;
-
-if (isTestnet) {
-	web3x			= new Web3('https://data-seed-prebsc-1-s1.binance.org:8545/');
-	redChainID		= 97;
-	redOficial		= "0x61";
-} else {
+if (!isTestnet) {
 	const channel = new BroadcastChannel(domainName);
 	channel.postMessage({ action: "ping" });
 	channel.addEventListener("message", e => {

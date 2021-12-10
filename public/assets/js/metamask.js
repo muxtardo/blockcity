@@ -1,5 +1,19 @@
+let web3x		= new Web3('https://bsc-dataseed.binance.org/');
+let redOficial	= "0x38";
+let redChainID	= 56;
+
+if (isTestnet) {
+	web3x		= new Web3('https://data-seed-prebsc-1-s1.binance.org:8545/');
+	redChainID	= 97;
+	redOficial	= "0x61";
+}
+
+
+const providerMeta	= new ethers.providers.Web3Provider(window.ethereum);
+const signer		= providerMeta.getSigner();
+
 const haveMetaMask = () => {
-	return typeof web3 !== 'undefined';
+	return typeof web3 !== 'undefined' && window.ethereum;
 };
 
 const noMetaMask = () => {
@@ -168,4 +182,44 @@ const getFromSign = async (secret, passphrase) => {
 		showAlert("Alert", "Fail to get your wallet address", 'error');
 		return false;
 	}
+}
+
+const getTransactionReceipt = async (txHash) => {
+	if (txHash.length != 66) {
+		showAlert('Error', 'Incorrect hash! Check it and try again.', 'error');
+		return false;
+	}
+
+	let txReceipt = await providerMeta.getTransactionReceipt(txHash);
+	if (txReceipt) {
+		return txReceipt;
+	}
+
+	return false;
+};
+
+const getTokenBalance = async (wallet) => {
+	const contractAbi	= await $.getJSON(storage_url('contractAbi.json'));
+	const BNBContract	= new ethers.Contract(gameContract, contractAbi, signer);
+	const resBalance	= await BNBContract.balanceOf(wallet);
+	if (resBalance) {
+		return Web3.utils.fromWei(resBalance._hex, 'wei');
+	}
+
+	return 0;
+};
+
+const transferToken = async (wallet, amount) => {
+	const contractAbi	= await $.getJSON(storage_url('contractAbi.json'));
+	const BNBContract	= new ethers.Contract(gameContract, contractAbi, signer);
+	const txHash		= await BNBContract.transfer(wallet, amount, {
+		'gasLimit': 150000,
+		'gasPrice': ethers.utils.parseUnits('10.0', 'gwei')
+	});
+
+	if (txHash) {
+		return txHash;
+	}
+
+	return false;
 }

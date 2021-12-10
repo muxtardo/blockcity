@@ -151,4 +151,13 @@ class User extends Authenticatable
 
 		return sizeof($notifications) ? $notifications : false;
 	}
+
+	public function getPendingTransaction()
+	{
+		$transaction = Transaction::where('user_id', $this->id)
+			->where('status', 'pending')
+			->first();
+
+		return $transaction ? $transaction->id : false;
+	}
 }

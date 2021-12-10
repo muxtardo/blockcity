@@ -78,7 +78,7 @@ class ExchangeController extends Controller
 		$params = $validator->validated();
 
 		// Check if hash exists
-		$checkHash = Transaction::where('txid', $params['hash'])->first();
+		$checkHash = Transaction::where('txid', $params['hash'])->exists();
 		if ($checkHash) {
 			return $this->json([
 				'success'	=> false,
@@ -101,12 +101,10 @@ class ExchangeController extends Controller
 			'txid'		=> $params['hash'],
 			'amount'	=> $params['amount'],
 			'type'		=> 'exchange',
-			'user_id'	=> Auth::user()->id
+			'user_id'	=> Auth::user()->id,
+			'status'	=> 'pending'
 		]);
 		if ($transaction) {
-			// idle time
-			sleep(2);
-
 			$check	= $transaction->check();
 			if ($check) {
 				return $this->json($check, $check['success'] ? 200 : 401);

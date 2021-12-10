@@ -70,7 +70,7 @@
 		};
 
 		@if (Auth::check())
-			let	userWallet		= '{{ Auth::user()->id }}';
+			let	userWallet		= '{{ Auth::user()->wallet }}';
 			let	userTransaction	= '{{ Auth::user()->getPendingTransaction() }}';
 		@endif
 
