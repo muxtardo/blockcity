@@ -72,7 +72,7 @@
 
 		@if (Auth::check())
 			let	userWallet		= '{{ Auth::user()->wallet }}';
-			let	userTransaction	= {{ Auth::user()->getPendingTransaction() }};
+			let	userTransaction	= '{{ Auth::user()->getPendingTransaction() }}';
 			$(document).ready(function() {
 				if (userTransaction) {
 					checkTransaction(userTransaction);
