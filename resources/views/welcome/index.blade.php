@@ -72,19 +72,19 @@
 						<div class="text-center">
 							<div class="row mt-2">
 								<div class="col-6">
-									<h3 data-plugin="counterup">{{ rand(500, 10000) }}</h3>
+									<h3 data-plugin="counterup">{{ $totalPlayers }}</h3>
 									<p class="text-muted text-uppercase font-13 mb-0 text-truncate">{{ __('Players') }}</p>
 								</div>
 								<div class="col-6">
-									<h3 data-plugin="counterup">{{ rand(500, 10000) }}</h3>
+									<h3 data-plugin="counterup">{{ $totalHouses }}</h3>
 									<p class="text-muted text-uppercase font-13 mb-0 text-truncate">{{ __('Houses') }}</p>
 								</div>
 								<div class="col-6">
-									<h3 data-plugin="counterup">{{ rand(500, 10000) }}</h3>
-									<p class="text-muted text-uppercase font-13 mb-0 text-truncate">{{ __('Deposits') }}</p>
+									<h3 data-plugin="counterup">{{ $totalTransactions }}</h3>
+									<p class="text-muted text-uppercase font-13 mb-0 text-truncate">{{ __('Transactions') }}</p>
 								</div>
 								<div class="col-6">
-									<h3 data-plugin="counterup">{{ rand(500, 10000) }}</h3>
+									<h3 data-plugin="counterup">{{ $totalWithdrawals }}</h3>
 									<p class="text-muted text-uppercase font-13 mb-0 text-truncate">{{ __('Withdrawals') }}</p>
 								</div>
 							</div> <!-- end row -->

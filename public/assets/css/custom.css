@@ -80,14 +80,14 @@ body[data-layout-mode=horizontal] .footer {
 
 .star-on {
 	animation-fill-mode: forwards;
-	animation-name: example;
-	animation-duration: 4s;
+	animation-name: starAnimation;
+	animation-duration: 1s;
 	filter: drop-shadow(0px 0px 0px yellow);
 }
 
-@keyframes example {
-	from {color: #6c757d; filter: drop-shadow(0px 0px 0px yellow);}
-	to {color: gold; filter: drop-shadow(0px 0px 5px yellow);}
+@keyframes starAnimation {
+	from { color: #6c757d; filter: drop-shadow(0px 0px 0px yellow); }
+	to { color: gold; filter: drop-shadow(0px 0px 5px yellow); }
 }
 
 .stars-content {
@@ -98,26 +98,21 @@ body[data-layout-mode=horizontal] .footer {
 }
 .stars-content .star-1 {
 	position: absolute;
-	left: 20px;
-	top: 50px;
+	left: 19px;
+	top: 45px;
 	font-size: 40px;
 }
 .stars-content .star-2 {
 	position: absolute;
-	left: 110px;
+	left: 112px;
 	top: 5px;
 	font-size: 60px;
 }
 .stars-content .star-3 {
 	position: absolute;
-	left: 210px;
-	top: 50px;
+	left: 231px;
+	top: 45px;
 	font-size: 40px;
-}
-.star-on {
-	animation-fill-mode: forwards;
-	animation-name: example;
-	animation-duration: 2s;
 }
 
 .buyHouse-name {
@@ -133,7 +128,9 @@ body[data-layout-mode=horizontal] .footer {
 	text-align: center;
 	z-index: 11;
 }
-#myModal .card-body, #myModal .modal-body {
+
+#myModal .card-body,
+#myModal .modal-body {
 	padding: 0px;
 }
 #buyHouse-image {
@@ -159,4 +156,18 @@ body[data-layout-mode=horizontal] .footer {
 
 .building-hidden {
 	opacity: 0;
+}
+
+
+#myModal .modal-content {
+	box-shadow: rgba(0, 0, 0, .56) 0px 22px 70px 4px;
+}
+#myModal .modal-content,
+#myModal .bg-sky {
+	border-radius: 10px;
+	background-color: transparent;
+}
+#myModal #buyHouse-name {
+	border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
 }

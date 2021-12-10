@@ -80,7 +80,7 @@ class BuildingsController extends Controller
 			$user->spend($cost);
 
 			// delay pra parecer quee ta rolando algo foda
-			sleep(1);
+			// sleep(1);
 			return $this->json([
 				'success'	=> true,
 				'building'	=> UserBuilding::find($userBuilding->id)->publicData(),
@@ -146,7 +146,7 @@ class BuildingsController extends Controller
 			]);
 
 			// delay pra parecer quee ta rolando algo foda
-			sleep(1);
+			// sleep(1);
 			return $this->json([
 				'success'	=> true,
 				'title' 	=> __('Success'),
@@ -222,7 +222,7 @@ class BuildingsController extends Controller
 			]);
 
 			// delay pra parecer quee ta rolando algo foda
-			sleep(1);
+			// sleep(1);
 			return $this->json([
 				'success'	=> true,
 				'title' 	=> __('Success'),
@@ -297,7 +297,7 @@ class BuildingsController extends Controller
 			]);
 
 			// delay pra parecer quee ta rolando algo foda
-			sleep(1);
+			// sleep(1);
 			return $this->json([
 				'success'	=> true,
 				'title' 	=> __('Success'),
