@@ -18,21 +18,21 @@ class BuildingStatusesSeeder extends Seeder
             #1
             [
                 'name' => 'Good',
-                'color' => 'green',
+                'color' => 'text-success',
                 'loss' => 0,
                 'fix_price' => 0,
             ],
             #2
             [
                 'name' => 'Weathered',
-                'color' => '#896420',
+                'color' => 'text-warning',
                 'loss' => 20,
                 'fix_price' => 10,
             ],
             #3
             [
                 'name' => 'Broken',
-                'color' => 'red',
+                'color' => 'text-danger',
                 'loss' => 30,
                 'fix_price' => 20,
             ],
