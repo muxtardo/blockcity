@@ -44,10 +44,18 @@
 					lockScreen(true);
 
 					const response = await axiosInstance.get('buildings', { params: { page } }).then(res => res.data);
-					const { buildings, stats: { buildings : counterBuildings } } = response;
-					if (page == 1) {
-						this.total_mint = counterBuildings;
-					}
+					const { buildings, stats: {
+						buildings: countBuildings,
+						workers: countWorkers,
+						currency: userCurrency,
+						dailyClaim: userDailyClaim
+					}} = response;
+					if (page == 1) { this.total_mint = countBuildings; }
+
+					$("#myCurrency").html(userCurrency);
+					$("#myBuildings").html(countBuildings);
+					$("#myDailyClaim").html(userDailyClaim);
+					$("#myWorkers").html(countWorkers);
 
 					lockScreen(false);
 					return buildings;
@@ -68,11 +76,19 @@
 					lockScreen(true);
 					try {
 						const response = await axiosInstance.post('buildings/' + action, { id });
-						const { title, message, redirect, success, currency, building } = response.data;
+						const { title, message, redirect, success, building, stats: {
+							buildings: countBuildings,
+							workers: countWorkers,
+							currency: userCurrency,
+							dailyClaim: userDailyClaim
+						}} = response.data;
 
 						lockScreen(false);
 
-						if (currency) { $('#myCurrency').html(currency); }
+						$("#myCurrency").html(userCurrency);
+						$("#myBuildings").html(countBuildings);
+						$("#myDailyClaim").html(userDailyClaim);
+						$("#myWorkers").html(countWorkers);
 
 						this.buildings.value.splice(this.buildings.value.findIndex(building => building.id == id), 1, building);
 
@@ -111,12 +127,20 @@
 					lockScreen(true);
 					try {
 						const request = await axiosInstance.post('buildings/mint');
-						const { building, currency } = request.data;
+						const { building, stats: {
+							buildings: countBuildings,
+							workers: countWorkers,
+							currency: userCurrency,
+							dailyClaim: userDailyClaim
+						}} = request.data;
 						const { image, name, rarity } = building;
 						building.hidden = true;
 						instanceHidden = building;
 
-						if (currency) { $('#myCurrency').html(currency); }
+						$("#myCurrency").html(userCurrency);
+						$("#myBuildings").html(countBuildings);
+						$("#myDailyClaim").html(userDailyClaim);
+						$("#myWorkers").html(countWorkers);
 
 						this.total_mint++;
 

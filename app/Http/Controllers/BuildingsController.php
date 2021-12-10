@@ -28,7 +28,7 @@ class BuildingsController extends Controller
 				'currency'		=> currency($request->user()->currency),
 				'buildings'		=> $request->user()->buildings()->count(),
 				'workers'		=> $request->user()->workers(),
-				'dailyClaim'	=> $request->user()->maxDailyClaim()
+				'dailyClaim'	=> currency($request->user()->maxDailyClaim())
 			]
 		]);
 	}
@@ -88,7 +88,7 @@ class BuildingsController extends Controller
 					'currency'		=> currency($user->currency),
 					'buildings'		=> $user->buildings()->count(),
 					'workers'		=> $user->workers(),
-					'dailyClaim'	=> $user->maxDailyClaim()
+					'dailyClaim'	=> currency($user->maxDailyClaim())
 				]
 			]);
 		} else
@@ -156,7 +156,7 @@ class BuildingsController extends Controller
 					'currency'		=> currency($request->user()->currency),
 					'buildings'		=> $request->user()->buildings()->count(),
 					'workers'		=> $request->user()->workers(),
-					'dailyClaim'	=> $request->user()->maxDailyClaim()
+					'dailyClaim'	=> currency($request->user()->maxDailyClaim())
 				]
 			]);
 		} else {
@@ -232,7 +232,7 @@ class BuildingsController extends Controller
 					'currency'		=> currency($request->user()->currency),
 					'buildings'		=> $request->user()->buildings()->count(),
 					'workers'		=> $request->user()->workers(),
-					'dailyClaim'	=> $request->user()->maxDailyClaim()
+					'dailyClaim'	=> currency($request->user()->maxDailyClaim())
 				]
 			]);
 		} else {
@@ -307,7 +307,7 @@ class BuildingsController extends Controller
 					'currency'		=> currency($request->user()->currency),
 					'buildings'		=> $request->user()->buildings()->count(),
 					'workers'		=> $request->user()->workers(),
-					'dailyClaim'	=> $request->user()->maxDailyClaim()
+					'dailyClaim'	=> currency($request->user()->maxDailyClaim())
 				]
 			]);
 		} else {
