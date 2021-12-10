@@ -31,17 +31,7 @@ Route::get('locale/{locale}', function ($locale) {
 
 	Cookie::queue(Cookie::forever('locale', $locale));
 	return redirect()->back();
-});
-
-// Set Theme
-Route::get('theme/{theme}', function ($theme) {
-    if (!in_array($theme, Config::get('app.themes'))) {
-        abort(400);
-    }
-
-	Cookie::queue(Cookie::forever('theme', $theme));
-	return redirect()->back();
-});
+})->name('setlocale')->withoutMiddleware('set.locale');
 
 Route::get('/',			[ WelcomeController::class, 'index' ])->name('welcome');
 Route::post('auth',		[ AuthController::class, 'auth' ])->name('auth');

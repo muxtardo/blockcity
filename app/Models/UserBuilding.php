@@ -102,11 +102,6 @@ class UserBuilding extends Model
 		return	$this->level < config('game.max_build_level');
 	}
 
-	public function upgradeText()
-	{
-		return '<b>'. __('Cost') . ':</b> ' . currency($this->base->upgrade_cost);
-	}
-
 	// Pode fazer upgrade?
 	public function canClaim()
 	{
@@ -142,7 +137,7 @@ class UserBuilding extends Model
 		$dateDiffForToday	= $today - $date1;
 
 		$percentage			= percent($dateDiffForToday, $dateDiff);
-		return round($percentage > 100 ? 100 : $percentage, 2);
+		return round($percentage, 2);
 	}
 
 	// Enchendo linguiça
@@ -179,13 +174,6 @@ class UserBuilding extends Model
 		$incomes	= $this->base->incomes;
 
 		return $status->loss ? percentf($incomes, $status->loss) : 0;
-	}
-
-	public function repairText()
-	{
-		$cost	= $this->repairCost();
-
-		return '<b>'. __('Cost') . ':</b> ' . currency($cost);
 	}
 
 	public function repair()

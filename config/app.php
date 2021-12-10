@@ -83,7 +83,7 @@ return [
     'locale' => 'en',
 
     'locales' => [
-        'br' => 'Português',
+        'pt' => 'Português',
         'en' => 'English',
         'es' => 'Español',
     ],
