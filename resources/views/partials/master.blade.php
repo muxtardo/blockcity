@@ -81,13 +81,14 @@
 			},
 		});
 
-		const tooltipTriggerList	= [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-		const tooltipList			= tooltipTriggerList.map(function (tooltipTriggerEl) {
-			return new bootstrap.Tooltip(tooltipTriggerEl, {
-				html: true
+		function enableTooltip(){
+			const tooltipTriggerList	= [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+			const tooltipList			= tooltipTriggerList.map(function (tooltipTriggerEl) {
+				return new bootstrap.Tooltip(tooltipTriggerEl, {
+					html: true
+				})
 			})
-		})
-
+		}
 	</script>
 	@yield('js')
 

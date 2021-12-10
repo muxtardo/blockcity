@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use App\Models\Pack;
 
 class PacksSeeder extends Seeder
 {
@@ -14,7 +14,7 @@ class PacksSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('packs')->insert([
+        $packList = ([
             #1
             [
                 'name' => 'Little House Pack',
@@ -70,6 +70,10 @@ class PacksSeeder extends Seeder
                 'rewards' => '{"7": 30, "8": 30, "9": 30, "10": 20, "11": 20, "12": 20, "13": 15, "14": 15, "15": 15}',
             ],
         ]);
+
+        foreach ($packList as $pack) {
+            Pack::create($pack);
+        }
 
     }
 }

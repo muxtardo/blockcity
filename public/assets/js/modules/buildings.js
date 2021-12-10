@@ -12,7 +12,7 @@
 				lockScreen(false);
 
 				buildings.forEach(building => {
-					console.log(building);
+					//console.log(building);
 				});
 			} catch (err) {
 				lockScreen(false);

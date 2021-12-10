@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use App\Models\BuildingStatus;
 
 class BuildingStatusesSeeder extends Seeder
 {
@@ -14,7 +14,7 @@ class BuildingStatusesSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('building_statuses')->insert([
+        $buildingStatusList = ([
             #1
             [
                 'name' => 'Good',
@@ -36,6 +36,10 @@ class BuildingStatusesSeeder extends Seeder
                 'loss' => 30,
                 'fix_price' => 20,
             ],
-        ]);        
+        ]);
+
+        foreach ($buildingStatusList as $buildingStatus) {
+            BuildingStatus::create($buildingStatus);
+        }
     }
 }

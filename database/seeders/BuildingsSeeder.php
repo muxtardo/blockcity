@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use App\Models\Building;
 
 class BuildingsSeeder extends Seeder
 {
@@ -14,7 +14,7 @@ class BuildingsSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('buildings')->insert([
+        $buildingList = ([
             #1
             [
                 'name' => 'Common House',
@@ -42,6 +42,10 @@ class BuildingsSeeder extends Seeder
                 'incomes' => 7.77,
                 'images' => 1,
             ],            
-        ]);        
+        ]);   
+        
+        foreach ($buildingList as $building) {
+            Building::create($building);
+        }
     }
 }

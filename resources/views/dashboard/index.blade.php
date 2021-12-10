@@ -86,6 +86,7 @@
     right: 10px;
     top: 10px;
     z-index: 100;	
+	filter: invert(1);
 }
 .product-box {
 	transition: opacity 1s ease-in-out;
@@ -100,6 +101,7 @@
 	const myModal = new bootstrap.Modal(document.getElementById('myModal')); //new Modal(document.getElementById('myModal'));
 	myModal._element.addEventListener('hidden.bs.modal', function (event) {
 		$(".building-hidden").removeClass('building-hidden');
+		$("body").css("overflow", "auto");
 	});
 </script>
 <script src="https://unpkg.com/vue@next"></script>
@@ -122,28 +124,24 @@ const Counter = {
 	data() {	
 		return {
 			counter: 0,
-			buildings: [],
+			buildings: Vue.reactive({value: []}),
 			current_page: 0,
 			number_per_page: 6,
 			total_page: 0,
 			buildingsShow: [],
+			instanceHidden: null,
 		}
 	},
 	methods: {
 		async load_buildings(page = 1) {
 			lockScreen(true);
-			await axiosInstance.get('buildings', { params: { page } }).then((res) => {
-				if (page == 1) {
-					this.total_page = Math.ceil(res.data.counters.buildings / this.number_per_page) -1;
-				}
-				this.buildings.push(...res.data.buildings);
-			});		
+			const response = await axiosInstance.get('buildings', { params: { page } }).then(res => res.data);
+			const { buildings, counters: { buildings : counterBuildings } } = response;
+			if (page == 1) {
+				this.total_page = Math.ceil(counterBuildings / this.number_per_page) - 1;
+			}
 			lockScreen(false);
-		},
-		async reset_buildings() {
-			this.buildings = [];
-			await this.load_buildings();
-			this.nextPage(0);
+			return buildings;
 		},
 		doBuildClaim(id) {
 			this.doBuildAction('claim', id);
@@ -161,7 +159,7 @@ const Counter = {
 			lockScreen(true);
 			try {
 				const response = await axiosInstance.post('/buildings/' + action, { id });
-				const { title, message, redirect, success, currency } = response.data;
+				const { title, message, redirect, success, currency, building } = response.data;
 
 				lockScreen(false);
 
@@ -169,7 +167,9 @@ const Counter = {
 					$('#myCurrency').html(currency);
 				}
 
-				this.reset_buildings();
+				this.buildings.value.splice(this.buildings.value.findIndex(building => building.id == id), 1, building);
+
+				//this.nextPage(this.current_page, true);
 
 				showAlert(title, message, success ? 'success' : 'danger');
 				if (redirect) {
@@ -179,30 +179,28 @@ const Counter = {
 				}
 			} catch (err) {
 				lockScreen(false);
-
 				const { title, message } = err.response.data;
 				showAlert(title, message, 'error');
 			}
 		},
 		async nextPage(next) {
 			this.current_page = next;
-			let new_data = this.buildings.slice(this.current_page * this.number_per_page, (this.current_page+1) * this.number_per_page);
-			if (new_data.length == 0) {
-				await this.load_buildings(this.current_page + 1);
-				new_data = this.buildings.slice(this.current_page * this.number_per_page, (this.current_page+1) * this.number_per_page);
-			}
-			console.log(new_data);
-			this.buildingsShow.splice(0, this.number_per_page, ...new_data);
 		},
 		async doMint() {
 			lockScreen(true);
 			try {
 				const request = await axiosInstance.post('buildings/mint');
-				const building = request.data.building;
+				const { building, currency } = request.data;
 				const { image, name, rarity } = building;
 				building.hidden = true;
+				this.instanceHidden = building;
+
+				if (currency) {
+					$('#myCurrency').html(currency);
+				}
+
 				showNewMint(name, image, rarity);
-				this.buildings.splice(0, 0, building);
+				this.buildings.value.splice(0, 0, building);
 				this.nextPage(0);
 			} catch (e) {
 				const { title, message } = e.response.data;
@@ -213,9 +211,21 @@ const Counter = {
 
 	},
 	async mounted() {
-		await this.load_buildings();
+		this.buildings.value.push(...(await this.load_buildings()));
 		this.nextPage(0);
-  	}
+  	},
+	computed: {
+		buildingsFiltered() {
+			this.$nextTick(() => {
+				if (this.instanceHidden !== null) {
+					this.instanceHidden.hidden = false;
+					this.instanceHidden = null;
+				}
+          		enableTooltip();
+      		});
+			return this.buildings.value.slice(this.current_page * this.number_per_page, (this.current_page+1) * this.number_per_page);
+		},
+	}
 }
 
 Vue.createApp(Counter).mount('.user-buildings')
@@ -229,13 +239,13 @@ Vue.createApp(Counter).mount('.user-buildings')
 			<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>				
 				<!-- Modal content-->				
 				<div class="card-body product-box">
-					<div class="bg-light text-center d-flex align-items-center justify-content-center" style="min-height: 340px;position: relative;">
+					<div class="bg-sky text-center d-flex align-items-center justify-content-center" style="min-height: 340px;position: relative;">
 						<div class="stars-content">
 							<i class="fa fa-star stars star-1"></i>
 							<i class="fa fa-star stars star-2"></i>
 							<i class="fa fa-star stars star-3"></i>
 						</div>
-						<img src="" id="buyHouse-image" alt="product-pic" class="img-fluid">
+						<img src="" id="buyHouse-image" style="z-index: 10" alt="product-pic" class="img-fluid">
 						<div id="buyHouse-name" class="buyHouse-name"></div>
 					</div>
 				</div>
@@ -330,14 +340,14 @@ Vue.createApp(Counter).mount('.user-buildings')
 	</div>
 	<div class="col-lg-9 building-list">
 		<div class="row buildings-list">
-			<template v-if="buildings" v-for="building in buildingsShow" :key="building.id">
+			<template v-if="buildings" v-for="building in buildingsFiltered" :key="building.id">
 				<div class="col-md-6 col-xl-4">
 					<div class="card ribbon-box">
 						<div v-if="building.highlight" class="ribbon-two ribbon-two-blue text-uppercase"><span>{{ __('New') }}</span></div>
 						<div class="card-body product-box" :class="{'building-hidden': building.hidden}">
 							<div class="bg-sky text-center d-flex align-items-center justify-content-center" style="min-height: 340px; position: relative;">
 								
-								<img :src="building.image" :alt="building.name" class="img-fluid" />
+								<img :src="building.image"  style="z-index: 10" :alt="building.name" class="img-fluid" />
 							</div>
 
 							<div class="product-info">
