@@ -17,21 +17,21 @@ class BuildingStatusesSeeder extends Seeder
         $buildingStatusList = ([
             #1
             [
-                'name' => 'Good',
+                'name' => 'High',
                 'color' => 'text-success',
                 'loss' => 0,
                 'fix_price' => 0,
             ],
             #2
             [
-                'name' => 'Weathered',
+                'name' => 'Medium',
                 'color' => 'text-warning',
                 'loss' => 20,
                 'fix_price' => 10,
             ],
             #3
             [
-                'name' => 'Broken',
+                'name' => 'Low',
                 'color' => 'text-danger',
                 'loss' => 30,
                 'fix_price' => 20,
