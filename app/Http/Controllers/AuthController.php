@@ -15,7 +15,7 @@ class AuthController extends Controller
 	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function login(Request $request)
+	public function auth(Request $request)
 	{
 		// Validate the form data
 		$validator = Validator::make($request->all(), [
@@ -56,11 +56,11 @@ class AuthController extends Controller
 		// Authenticate
 		Auth::login($user);
 
+		sleep(1);
+
 		// Return success
 		return $this->json([
 			'success'	=> true,
-			'title'		=> _('Success'),
-			'message'	=> _('You are now logged in'),
 			'redirect'	=> url('dashboard'),
 		]);
 	}

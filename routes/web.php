@@ -43,8 +43,8 @@ Route::get('theme/{theme}', function ($theme) {
 	return redirect()->back();
 });
 
-Route::get('/',				[ WelcomeController::class, 'index' ])->name('welcome');
-Route::post('login',		[ AuthController::class, 'login' ])->name('login');
+Route::get('/',			[ WelcomeController::class, 'index' ])->name('welcome');
+Route::post('auth',		[ AuthController::class, 'auth' ])->name('auth');
 Route::middleware(['auth'])->group(function () {
 	Route::get('logout',		[ AuthController::class, 'logout' ])->name('logout');
 

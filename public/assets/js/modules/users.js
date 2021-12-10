@@ -6,6 +6,8 @@
 		userAuth.on('click', async function (e) {
 			e.preventDefault();
 
+			lockScreen(true);
+
 			// Verify is user have MetaMask installed
 			if (!haveMetaMask()) {
 				noMetaMask();
@@ -16,6 +18,7 @@
 			const isValidChainId = await checkChainId();
 			if (!isValidChainId) {
 				if (!await changeNetwork()) {
+					lockScreen(false);
 					showAlert('Oops!', 'Invalid chain ID. Please change your network in MetaMask and try again.', 'error');
 					return;
 				}
@@ -32,6 +35,7 @@
 				const wallet = await getFromSign(secret, passphrase);
 				authWithMetaMask(wallet, secret);
 			} else {
+				lockScreen(false);
 				showAlert('Oops!', 'Failed to get your wallet address. Please try again.', 'error');
 			}
 		});
@@ -40,17 +44,20 @@
 	const authWithMetaMask = async function (wallet, secret) {
 		const activeWallet = await getActiveWallet();
 		if (activeWallet !== wallet) {
+			lockScreen(false);
 			showAlert('Oops!', 'Invalid wallet address. Please reload the page and try again.', 'error');
 			return;
 		}
 
-		axiosInstance.post('/login', { wallet, secret }).then((res) => {
-			const { title, message, redirect, success } = res.data;
-			if (success) {
-				showAlert(title, message, 'success');
-				window.location.href = redirect;
+		axiosInstance.post('auth', { wallet, secret }).then((res) => {
+			const { redirect, success, title, message } = res.data;
+
+			// showAlert(title, message, success ? 'success' : 'error');
+			if (redirect) {
+				setTimeout(() => { window.location.href = redirect; }, 3000);
 			}
 		}).catch((err) => {
+			lockScreen(false);
 			const { title, message } = err.response.data;
 			showAlert(title, message, 'error');
 		});

@@ -87,6 +87,28 @@ const lockScreen = (show) => {
 	}
 };
 
+// Dark mode
+const inDarkMode = () => {
+	return localStorage.getItem('darkMode') == 'true';
+}
+const setDarkMode = (darkMode) => {
+	console.log(darkMode);
+	$.LayoutThemeApp.changeMode(darkMode ? 'dark' : 'light');
+	localStorage.setItem('darkMode', darkMode);
+
+	$(".change-theme").find('i').removeClass('noti-icon')
+		.removeClass('fe-' + (darkMode ? 'moon' : 'sun'))
+		.addClass('fe-' + (!darkMode ? 'moon' : 'sun'))
+		.addClass('noti-icon');
+};
+
+$(document).ready(() => {
+	setDarkMode(inDarkMode())
+
+	$(".change-theme").on('click', function() {
+		setDarkMode(!inDarkMode())
+	});
+});
 
 // Transaction Checker
 let runningCheck = false;
