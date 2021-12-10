@@ -49,6 +49,7 @@
 					current_page: 1,
 					number_per_page: 6,
 					total_mint: 0,
+					last_load_page: 1,
 					buildingsShow: [],
 				}
 			},
@@ -121,11 +122,12 @@
 				pageLoaded(number) {
 					const pages_loaded = Math.ceil(this.buildings.value.length / this.number_per_page);
 
-					return pages_loaded < number;
+					return this.last_load_page < number;
 				},
 				async nextPage(next) {
 					clearInterval(instanceInterval);
 					if (this.pageLoaded(next)) {
+						this.last_load_page = next;
 						lockScreen(true);
 
 						const buildings = await this.load_buildings(next);
