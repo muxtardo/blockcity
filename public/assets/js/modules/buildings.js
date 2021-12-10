@@ -49,6 +49,7 @@
 					current_page: 1,
 					number_per_page: 6,
 					total_mint: 0,
+					last_load_page: 1,
 					buildingsShow: [],
 				}
 			},
@@ -79,13 +80,29 @@
 				doBuildRepair(id) {
 					this.doBuildAction('repair', id);
 				},
-				doBuildUpgrade(id) {
+				async doBuildUpgrade(id) {
 					this.doBuildAction('upgrade', id);
 				},
 				doBuildSell(id){
 					showAlert('Coming soon!', 'This feature is not available yet', 'info');
 				},
 				async doBuildAction(action, id){
+					if (action != 'claim') {
+						const confirmed = await Swal.fire({
+							title: 'Are you sure?',
+							text: "You are about to spend :currency coins to " + action + " this house!".replace(':currency', this.buildings.value[id].upgrade),
+							icon: 'warning',
+							showCancelButton: true,
+							confirmButtonColor: '#3085d6',
+							cancelButtonColor: '#d33',
+							confirmButtonText: 'Yes, ' + action + ' it!'
+						}).then((result) => result.isConfirmed);
+						
+						if (!confirmed) { 
+							return; 
+						}
+					}
+
 					lockScreen(true);
 					try {
 						const response = await axiosInstance.post('buildings/' + action, { id });
@@ -121,11 +138,12 @@
 				pageLoaded(number) {
 					const pages_loaded = Math.ceil(this.buildings.value.length / this.number_per_page);
 
-					return pages_loaded < number;
+					return this.last_load_page < number;
 				},
 				async nextPage(next) {
 					clearInterval(instanceInterval);
 					if (this.pageLoaded(next)) {
+						this.last_load_page = next;
 						lockScreen(true);
 
 						const buildings = await this.load_buildings(next);
