@@ -80,13 +80,29 @@
 				doBuildRepair(id) {
 					this.doBuildAction('repair', id);
 				},
-				doBuildUpgrade(id) {
+				async doBuildUpgrade(id) {
 					this.doBuildAction('upgrade', id);
 				},
 				doBuildSell(id){
 					showAlert('Coming soon!', 'This feature is not available yet', 'info');
 				},
 				async doBuildAction(action, id){
+					if (action != 'claim') {
+						const confirmed = await Swal.fire({
+							title: 'Are you sure?',
+							text: "You are about to spend :currency coins to " + action + " this house!".replace(':currency', this.buildings.value[id].upgrade),
+							icon: 'warning',
+							showCancelButton: true,
+							confirmButtonColor: '#3085d6',
+							cancelButtonColor: '#d33',
+							confirmButtonText: 'Yes, ' + action + ' it!'
+						}).then((result) => result.isConfirmed);
+						
+						if (!confirmed) { 
+							return; 
+						}
+					}
+
 					lockScreen(true);
 					try {
 						const response = await axiosInstance.post('buildings/' + action, { id });
