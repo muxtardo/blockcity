@@ -119,7 +119,7 @@ const checkTransaction = (transcId) => {
 
 	transactionTimer = setInterval(async () => {
 		const response = await axiosInstance.post('transactionCheck', { id: transcId });
-		const { title, message, redirect, success, idTransaction } = response.data;
+		const { title, message, redirect, success, currency, idTransaction } = response.data;
 
 		if (redirect) { setTimeout(() => { window.location.href = redirect; }, 3000); }
 
@@ -130,8 +130,13 @@ const checkTransaction = (transcId) => {
 			clearInterval(transactionTimer);
 			runningCheck = false;
 
+			// Tenta atualizar na tela o saldo ddo usuário
+			if (currency) { $('#myCurrency').html(currency); }
+
 			// Começa a verificar a próxima transação pendente
-			checkTransaction(idTransaction);
+			if (idTransaction) {
+				checkTransaction(idTransaction);
+			}
 		}
 	}, 5000);
 }
