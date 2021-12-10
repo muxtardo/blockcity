@@ -33,7 +33,8 @@
 .stars-content {
     position: absolute;
     top: 10px;
-    left: 0;
+    width: 290px;
+    height: 110px;
 }
 .stars-content .star-1 {
     position: absolute;
@@ -76,51 +77,47 @@
 #buyHouse-image {
 	margin-top: 100px;
 }
+
+[v-cloak] {
+    display: none;
+}
+.btn-close {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    z-index: 100;	
+}
+.product-box {
+	transition: opacity 1s ease-in-out;
+	opacity: 1;
+}
+.building-hidden {
+	opacity: 0;
+}
+
 </style>
 <script>
-	// bootstrap modal instance
 	const myModal = new bootstrap.Modal(document.getElementById('myModal')); //new Modal(document.getElementById('myModal'));
-
-	function showStarsAnimated(starsOnNumber) {
-		const stars = document.querySelectorAll('.stars-content .stars');
-		for (let i = 0; i < starsOnNumber; i++) {
-			setTimeout(() => {
-				stars[i].classList.add('star-on');
-			}, i * 1000);
-		}
-	}
-
-	$("#new-mint").click(async () => {
-		const request = await axiosInstance.post('buildings/mint');
-		const { image, name, rarity } = request.data;
-		const starIcon = '<i class="fa fa-star stars"></i>';
-		$("#buyHouse-name").text(name);
-		$("#buyHouse-image").attr('src', image);
-		myModal.show();
-		showStarsAnimated(rarity);
-		/*
-		axiosInstance.post('buyHouse')
-			.then((res) => {
-				const starIcon = '<i class="fa fa-star d-none stars"></i>';
-				$("#buyHouse-name").text(res.data.userItem.name);
-				$("#buyHouse-image").attr('src', res.data.houseImage);
-				$("#buyHouse-stars").html(starIcon.repeat(res.data.userItem.stars));
-				myModal.show();
-				showStarsAnimated();
-			})
-		*/
-
+	myModal._element.addEventListener('hidden.bs.modal', function (event) {
+		$(".building-hidden").removeClass('building-hidden');
 	});
-
-	$("#page-item").on('click', async function(){
-		const content = await axiosInstance.get('buildings');
-		$(".buildings-list").html(content);		
-
-	});
-
 </script>
 <script src="https://unpkg.com/vue@next"></script>
 <script>
+function showNewMint(name, image, rarity) {
+	const stars = document.querySelectorAll('.stars-content .stars');
+	$("#buyHouse-name").text(name);
+	$("#buyHouse-image").attr('src', image);
+	myModal.show();
+	stars.forEach((star, index) => {
+		star.classList.remove('star-on');
+	});
+	for (let i = 0; i < rarity; i++) {
+		setTimeout(() => {
+			stars[i].classList.add('star-on');
+		}, i * 1000);
+	}
+}
 const Counter = {
 	data() {	
 		return {
@@ -134,12 +131,14 @@ const Counter = {
 	},
 	methods: {
 		async load_buildings(page = 1) {
+			lockScreen(true);
 			await axiosInstance.get('buildings', { params: { page } }).then((res) => {
 				if (page == 1) {
 					this.total_page = Math.ceil(res.data.counters.buildings / this.number_per_page) -1;
 				}
 				this.buildings.push(...res.data.buildings);
-			});			  
+			});		
+			lockScreen(false);
 		},
 		async reset_buildings() {
 			this.buildings = [];
@@ -195,15 +194,31 @@ const Counter = {
 			console.log(new_data);
 			this.buildingsShow.splice(0, this.number_per_page, ...new_data);
 		},
-	},
+		async doMint() {
+			lockScreen(true);
+			try {
+				const request = await axiosInstance.post('buildings/mint');
+				const building = request.data.building;
+				const { image, name, rarity } = building;
+				building.hidden = true;
+				showNewMint(name, image, rarity);
+				this.buildings.splice(0, 0, building);
+				this.nextPage(0);
+			} catch (e) {
+				const { title, message } = e.response.data;
+				showAlert(title, message, 'error');
+			}
+			lockScreen(false);
+		},
 
+	},
 	async mounted() {
 		await this.load_buildings();
 		this.nextPage(0);
   	}
 }
 
-Vue.createApp(Counter).mount('.building-list')
+Vue.createApp(Counter).mount('.user-buildings')
 </script>
 @endsection
 @section('content')
@@ -211,7 +226,8 @@ Vue.createApp(Counter).mount('.building-list')
 	<div  class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
 			<div class="modal-body">
-				<!-- Modal content-->
+			<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>				
+				<!-- Modal content-->				
 				<div class="card-body product-box">
 					<div class="bg-light text-center d-flex align-items-center justify-content-center" style="min-height: 340px;position: relative;">
 						<div class="stars-content">
@@ -219,7 +235,7 @@ Vue.createApp(Counter).mount('.building-list')
 							<i class="fa fa-star stars star-2"></i>
 							<i class="fa fa-star stars star-3"></i>
 						</div>
-						<img src="http://127.0.0.1/assets/images/buildings/1/1.png" id="buyHouse-image" alt="product-pic" class="img-fluid">
+						<img src="" id="buyHouse-image" alt="product-pic" class="img-fluid">
 						<div id="buyHouse-name" class="buyHouse-name"></div>
 					</div>
 				</div>
@@ -237,7 +253,7 @@ Vue.createApp(Counter).mount('.building-list')
 					{{-- <p class="text-muted text-center">
 						{{ __('Click on the button below to purchase a new home.') }}
 					</p> --}}
-					<button type="button" class="btn btn-primary waves-effect waves-light text-uppercase mint">
+					<button v-on:click="doMint()" type="button" class="btn btn-primary waves-effect waves-light text-uppercase">
 						<b>{{ __('New Mint') }}</b>
 					</button>
 				</div>
@@ -317,8 +333,8 @@ Vue.createApp(Counter).mount('.building-list')
 			<template v-if="buildings" v-for="building in buildingsShow" :key="building.id">
 				<div class="col-md-6 col-xl-4">
 					<div class="card ribbon-box">
-						<div v-if="building.isNew" class="ribbon-two ribbon-two-blue text-uppercase"><span>{{ __('New') }}</span></div>
-						<div class="card-body product-box">
+						<div v-if="building.highlight" class="ribbon-two ribbon-two-blue text-uppercase"><span>{{ __('New') }}</span></div>
+						<div class="card-body product-box" :class="{'building-hidden': building.hidden}">
 							<div class="bg-sky text-center d-flex align-items-center justify-content-center" style="min-height: 340px; position: relative;">
 								
 								<img :src="building.image" :alt="building.name" class="img-fluid" />
