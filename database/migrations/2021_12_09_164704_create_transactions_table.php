@@ -16,16 +16,18 @@ class CreateTransactionsTable extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_building_id');
             $table->enum('type', ['exchange', 'withdraw', 'mint', 'upgrade', 'repair']);
             $table->enum('status', ['pending', 'failed', 'success'])->default('pending');
             $table->float('amount', 0);
             $table->integer('attempts')->default(0);
-            $table->string('txid');
+            $table->string('txid')->nullable();
             $table->integer('fee')->default(0);
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_building_id')->references('id')->on('user_buildings');
         });
     }
 

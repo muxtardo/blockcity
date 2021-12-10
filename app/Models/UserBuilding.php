@@ -129,8 +129,8 @@ class UserBuilding extends Model
 	// Progresso do rendimento
 	public function progressClaim()
 	{
-		$date1 = Carbon::parse($this->last_claim_at)->timestamp;
-		$date2 = Carbon::parse($this->last_claim_at)->addDay()->timestamp;
+		$date1 = $this->last_claim_at->timestamp;
+		$date2 = $this->last_claim_at->addDay()->timestamp;
 		$today = Carbon::now()->timestamp;
 
 		$dateDiff			= $date2 - $date1;
@@ -138,6 +138,13 @@ class UserBuilding extends Model
 
 		$percentage			= percent($dateDiffForToday, $dateDiff);
 		return round($percentage, 2);
+	}
+
+	public function remainClaim()
+	{
+		$seconds = (24 * 3600) * (config('game.min_claim') / 100);
+		$date = $this->last_claim_at->addSeconds($seconds)->diffForHumans();
+		return $date;
 	}
 
 	// Enchendo linguiça
@@ -210,6 +217,7 @@ class UserBuilding extends Model
 				'color' 	=> $this->progressColor(),
 				'progress'	=> $this->progressClaim(),
 				'available'	=> currency($this->availableClaim()),
+				'remaining' => $this->remainClaim(),
 			],
 			'stats'		=> [
 				'daily'		=> currency($this->getIncomes()),

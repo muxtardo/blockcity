@@ -153,9 +153,11 @@
 											<button type="button" v-on:click="doBuildSell(building.id)" :data-id="building.id" class="col btn btn-dark waves-effect waves-light sell">
 												<b>{{ __('Sell') }}</b>
 											</button>
-											<button type="button" v-on:click="doBuildClaim(building.id)" :data-id="building.id" class="col btn btn-success waves-effect waves-light claim" :disabled="!building.claim.enabled">
-												<b>{{ __('Claim') }}</b>
-											</button>
+											<test data-bs-toggle="tooltip" class="col p-0" :title="'<b>{{ __('Available') }}</b> ' + building.claim.remaining">
+												<button type="button" v-on:click="doBuildClaim(building.id)" :data-id="building.id" class="col btn btn-success waves-effect waves-light claim" :disabled="!building.claim.enabled">
+													<b>{{ __('Claim') }}</b>
+												</button>
+											</test>
 										</div>
 										<small class="text-muted">
 											<b>{{ __('House Vault') }}:</b>
