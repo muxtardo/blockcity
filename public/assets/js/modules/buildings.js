@@ -88,16 +88,15 @@
 				},
 				async doBuildAction(action, id){
 					if (action != 'claim') {
-						const upgradeBuilding = this.buildings.value.find(building => building.id == id).upgrade
-						const texto = ("You are about to spend :currency coins to " + action + " this house!").replace(':currency', upgradeBuilding);
+						const currency = this.buildings.value.find(building => building.id == id).upgrade
 						const confirmed = await Swal.fire({
-							title: 'Are you sure?',
-							text: texto,
+							title: config.trans.confirmTitle,
+							text: config.trans.confirm.replace(':currency', currency).replace(':action', config.trans[action]),
 							icon: 'warning',
 							showCancelButton: true,
 							confirmButtonColor: '#3085d6',
 							cancelButtonColor: '#d33',
-							confirmButtonText: 'Yes, ' + action + ' it!'
+							confirmButtonText: config.trans.button.replace(':action', config.trans[action]),
 						}).then((result) => result.isConfirmed);
 						
 						if (!confirmed) { 
@@ -160,13 +159,13 @@
 				},
 				async doMint() {
 					const confirmed = await Swal.fire({
-						title: 'Are you sure?',
-						text: "You are about to spend :currency coins to mint a new building!".replace(':currency', '100.00'),
+						title: config.trans.confirmTitle,
+						text: config.trans.confirmMint.replace(':currency', config.mint_cost.toFixed(2)),
 						icon: 'warning',
 						showCancelButton: true,
 						confirmButtonColor: '#3085d6',
 						cancelButtonColor: '#d33',
-						confirmButtonText: 'Yes, mint it!'
+						confirmButtonText: config.trans.button.replace(':action', config.trans['mint'])
 					}).then((result) => result.isConfirmed);
 					
 					if (!confirmed) {

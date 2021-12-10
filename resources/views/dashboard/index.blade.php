@@ -153,11 +153,11 @@
 											<button type="button" v-on:click="doBuildSell(building.id)" :data-id="building.id" class="col btn btn-dark waves-effect waves-light sell">
 												<b>{{ __('Sell') }}</b>
 											</button>
-											<test data-bs-toggle="tooltip" class="col p-0" :title="'<b>{{ __('Available') }}</b> ' + building.claim.remaining">
-												<button type="button" v-on:click="doBuildClaim(building.id)" :data-id="building.id" class="col btn btn-success waves-effect waves-light claim" :disabled="!building.claim.enabled">
+											<div data-bs-toggle="tooltip" class="col" :class="{'col-6 ps-0': !building.status.repair && !building.upgrade, 'p-0': building.status.repair || building.upgrade}" :title="'<b>{{ __('Available') }}</b> ' + building.claim.remaining">
+												<button type="button" :style="!building.status.repair && !building.upgrade && 'width: 100%;'" v-on:click="doBuildClaim(building.id)" :data-id="building.id" class="col btn btn-success waves-effect waves-light claim" :disabled="!building.claim.enabled">
 													<b>{{ __('Claim') }}</b>
 												</button>
-											</test>
+											</div>
 										</div>
 										<small class="text-muted">
 											<b>{{ __('House Vault') }}:</b>
@@ -217,4 +217,21 @@
 
 @section('js-libs')
 	<script src="https://unpkg.com/vue@next"></script>
+@endsection
+@section('js')
+	<script>
+		const config = {
+			trans: {
+				confirmTitle: '{{ __("Are you sure?") }}',
+				confirmMint: '{{ __("You are about to spend :currency coins to mint a new building!") }}',
+				confirm: '{{ __("You are about to spend :currency coins to :action this house!") }}',
+				button: '{{ __("Yes, :action it!") }}',
+				repair: "{{ __('Repair') }}",
+    			upgrade: "{{ __('Upgrade') }}",
+				mint: "{{ __('Mint') }}",
+			},
+			mint_cost: {{ config('game.mint_cost') }},
+
+		};
+	</script>
 @endsection

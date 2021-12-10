@@ -3,6 +3,8 @@
     "Coins": "Moedas",
     "Status": "Status",
     "Repair": "Reparar",
+    "Upgrade": "Melhorar",
+    "Mint": "Criar",
     "Sell": "Vender",
     "Claim": "Coletar",
     "Cost": "Custo",
@@ -42,5 +44,9 @@
     "Statistics": "Estatísticas",
     "Welcome to": "Bem vindo ao",
     "Looks like you don't have any houses yet.": "Parece que você ainda não possui nenhuma casa.",
-    "But don't worry, you can purchase one at any time by clicking the \"New Mint\" button!" : "Mas não se preocupe, você pode adquirir uma a qualquer momento clicando no botão \"Criar Nova Casa\"!"
+    "But don't worry, you can purchase one at any time by clicking the \"New Mint\" button!" : "Mas não se preocupe, você pode adquirir uma a qualquer momento clicando no botão \"Criar Nova Casa\"!",
+    "Are you sure?" : "Você tem certeza?",
+    "You are about to spend :currency coins to mint a new building!": "Você está prestes a gastar :currency moedas para criar uma nova casa!",
+    "You are about to spend :currency coins to :action this house!": "Você está prestes a gastar :currency moedas para :action esta casa!",
+    "Yes, :action it!" : "Sim, :action!"
 }
