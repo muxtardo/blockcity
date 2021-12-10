@@ -37,9 +37,5 @@ class AppServiceProvider extends ServiceProvider
             Carbon::setLocale($locale);
             App::setLocale($locale);
         }
-        if (Cookie::has('theme')) {
-            $theme = Str::afterLast(Crypt::decrypt(Cookie::get('theme'), false), '|');
-            Config::set('app.theme', $theme);
-        }
     }
 }
