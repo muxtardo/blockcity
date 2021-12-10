@@ -218,6 +218,11 @@ class UserBuilding extends Model
 				'progress'	=> $this->progressClaim(),
 				'available'	=> currency($this->availableClaim()),
 				'remaining' => $this->remainClaim(),
+				'times' 	=> [
+					'last_claim_at' 	=> $this->last_claim_at->timestamp,
+					'next_claim_at'	 	=> $this->last_claim_at->addDay()->timestamp,
+					'current_time' 		=> Carbon::now()->timestamp,
+				],
 			],
 			'stats'		=> [
 				'daily'		=> currency($this->getIncomes()),

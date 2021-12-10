@@ -159,6 +159,15 @@
 			async mounted() {
 				this.buildings.value.push(...(await this.load_buildings()));
 				this.nextPage(1);
+				setInterval(() => {
+					this.buildings.value.forEach((building) => {
+						const { last_claim_at, next_claim_at, current_time } = building.claim.times;
+						t1 = current_time - last_claim_at;
+						t2 = next_claim_at - last_claim_at;
+						building.claim.times.current_time++;
+						building.claim.progress = Math.min(100, t1 / t2 * 100).toFixed(2);
+					});
+				}, 1000);				
 			},
 			computed: {
 				buildingsFiltered() {
