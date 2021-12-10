@@ -166,6 +166,7 @@
 						t2 = next_claim_at - last_claim_at;
 						building.claim.times.current_time++;
 						building.claim.progress = Math.min(100, t1 / t2 * 100).toFixed(2);
+						building.claim.available = (building.stats.daily * building.claim.progress/100).toFixed(4);
 					});
 				}, 1000);				
 			},
