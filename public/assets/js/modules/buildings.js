@@ -26,8 +26,21 @@
 				}, i * 500);
 			}
 		}
+		function updateBuildings(buildings) {
+			instanceInterval = setInterval(() => {
+					buildings.value.forEach((building) => {
+					const { last_claim_at, next_claim_at, current_time } = building.claim.times;
+					t1 = current_time - last_claim_at;
+					t2 = next_claim_at - last_claim_at;
+					building.claim.times.current_time++;
+					building.claim.progress = Math.min(100, t1 / t2 * 100).toFixed(2);
+					building.claim.available = (building.stats.daily * building.claim.progress/100).toFixed(4);
+				});
+			}, 1000);	
+		}
 
 		let instanceHidden = null;
+		let instanceInterval = null;
 		const Counter = {
 			data() {
 				return {
@@ -111,6 +124,7 @@
 					return pages_loaded < number;
 				},
 				async nextPage(next) {
+					clearInterval(instanceInterval);
 					if (this.pageLoaded(next)) {
 						lockScreen(true);
 
@@ -121,6 +135,7 @@
 					}
 					this.$nextTick(() => {
 						this.current_page = next;
+						updateBuildings(this.buildings);
 					});
 				},
 				async doMint() {
@@ -159,16 +174,9 @@
 			async mounted() {
 				this.buildings.value.push(...(await this.load_buildings()));
 				this.nextPage(1);
-				setInterval(() => {
-					this.buildings.value.forEach((building) => {
-						const { last_claim_at, next_claim_at, current_time } = building.claim.times;
-						t1 = current_time - last_claim_at;
-						t2 = next_claim_at - last_claim_at;
-						building.claim.times.current_time++;
-						building.claim.progress = Math.min(100, t1 / t2 * 100).toFixed(2);
-						building.claim.available = (building.stats.daily * building.claim.progress/100).toFixed(4);
-					});
-				}, 1000);				
+				this.$nextTick(() => {
+					updateBuildings(this.buildings);
+				});							
 			},
 			computed: {
 				buildingsFiltered() {
