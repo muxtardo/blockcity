@@ -81,7 +81,7 @@
 								<div class="col-6">
 									<div class="text-end">
 										<h3 class="text-dark mt-1"><span id="myDailyClaim">{{ currency(Auth::user()->maxDailyClaim()) }}</span></h3>
-										<p class="text-muted mb-1 text-truncate">{{ __('Max Daily Claim') }}</p>
+										<p class="text-muted mb-1 text-truncate"  title="{{ __('Max Daily Claim') }}">{{ __('Max Daily Claim') }}</p>
 									</div>
 								</div>
 							</div><!-- end row-->
