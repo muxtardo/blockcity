@@ -51,6 +51,8 @@ Route::middleware(['auth'])->group(function () {
 		Route::post('repair',		[ BuildingsController::class, 'repair' ])->name('buildingRepair');
 	});
 
+	Route::get('transactionCheck',	[ TransactionsController::class, 'checkById' ])->name('transactionCheck');
+
 	Route::prefix('exchange')->group(function () {
 		Route::get('/',				[ ExchangeController::class, 'index' ])->name('exchange');
 

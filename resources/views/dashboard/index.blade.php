@@ -201,7 +201,7 @@
 					</div>
 				</template>
 			</div>
-			<div class="text-end" v-if="hasBuildings && totalPages > 1">
+			<div class="paginator-end" v-if="hasBuildings && totalPages > 1">
 				<ul class="pagination">
 					<li class="page-item" :class="current_page <= 1 ? 'disabled' : ''" aria-disabled="true">
 						<button class="page-link" v-on:click="nextPage(current_page - 1)"><i class="fe-arrow-left"></i></button>

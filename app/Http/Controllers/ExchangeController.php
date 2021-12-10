@@ -11,6 +11,9 @@ class ExchangeController extends Controller
 {
     public function index()
 	{
+		$this->params['transactions'] = Transaction::where('user_id', Auth::user()->id)
+			->orderBy('created_at', 'desc')->paginate(10);
+
 		$this->params['page_title'] = __('Exchange');
 		$this->add_bc('#',	$this->params['page_title']);
 		return $this->render('exchange.index');

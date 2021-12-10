@@ -19,27 +19,36 @@
 									<th class="text-center">{{ __('Status') }}</th>
 									<th class="text-center">{{ __('Link') }}</th>
 									<th class="text-center">{{ __('Fee') }}</th>
+									<th class="text-center">{{ __('Actions') }}</th>
 								</tr>
 							</thead>
 							<tbody>
-								@for ($i = 0; $i < 6; $i++)
+								@foreach ($transactions as $transaction)
 									<tr>
-										<th class="text-center" scope="row">{{ Carbon::now() }}</th>
-										<td class="text-center">{{ rand()%2 == 0 ? 'Exchange' : 'Withdrawal' }}</td>
-										<td class="text-center">{{ currency(rand(1, 100 * 1000) / 1000) }}</td>
+										<th class="text-center" scope="row">{{ $transaction->created_at }}</th>
+										<td class="text-center">{{ Str::ucfirst($transaction->type) }}</td>
+										<td class="text-center">{{ currency($transaction->amount) }}</td>
 										<td class="text-center">
-											<b class="text-success">{{ __('Completed') }}</b>
+											<b class="text-{{ $transaction->statusColor() }}">{{ __(Str::ucfirst($transaction->status)) }}</b>
 										</td>
 										<td class="text-center">
-											<a href="https://bscscan.com/tx/0xf09bb9b0a0ae588b3d3796d285c7e9c8dfdb0477aa7e5c940e800014fe42b954" target="_blank">BscScan</a>
+											@if ($transaction->status == 'success' && $transaction->txid)
+												<a href="https://bscscan.com/tx/{{ $transaction->txid }}" target="_blank">BscScan</a>
+											@else
+												--
+											@endif
 										</td>
-										<td class="text-center">0%</td>
+										<td class="text-center">{{ $transaction->fee ? $transaction->fee . '%' : '--' }}</td>
+										<td class="text-center">--</td>
 									</tr>
-								@endfor
+								@endforeach
 							</tbody>
 						</table>
 					</div> <!-- end table-responsive-->
 				</div>
+			</div>
+			<div class="paginator-center">
+				{!! $transactions->render() !!}
 			</div>
 		</div>
 		<div class="col-lg-3">

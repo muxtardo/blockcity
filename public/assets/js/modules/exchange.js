@@ -74,8 +74,12 @@
 		const formExchange = $("#form-exchange");
 		if (formExchange.length) {
 			formExchange.on('submit', async function (e) {
+				lockScreen(true);
+
 				let amount = parseFloat($(".amount", formExchange).val()).toFixed(4);
 				if (amount <= 0) {
+					lockScreen(false);
+
 					showAlert('Error', 'Amount must be greater than 0');
 					return false;
 				}
@@ -83,6 +87,8 @@
 
 				const balance = await getTokenBalance(userWallet);
 				if (balance < amount) {
+					lockScreen(false);
+
 					let diffTokens	= (price - balanc) / 10000;
 					showAlert("Alert", `Insuficient Balance, you need +${diffTokens} more Tokens`, 'info');
 					return false;
@@ -91,6 +97,8 @@
 				try {
 					const txHash = await transferToken(walletPagos, amount);
 					if (!txHash) {
+						lockScreen(false);
+
 						showAlert('Error', 'Error sending tokens', 'error');
 						return false;
 					}
@@ -121,6 +129,8 @@
 					}
 
 					return false;
+				} finally {
+					lockScreen(false);
 				}
 			});
 		}

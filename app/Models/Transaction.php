@@ -22,6 +22,17 @@ class Transaction extends Model
         'fee',
     ];
 
+	public function statusColor()
+	{
+		if ($this->status == 'success') {
+			return 'success';
+		} elseif ($this->status == 'failed') {
+			return 'danger';
+		}
+
+		return 'warning';
+	}
+
 	private function checkAttempts()
 	{
 		if ($this->attempts >= 6) {

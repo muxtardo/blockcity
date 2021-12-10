@@ -113,45 +113,25 @@ $(document).ready(() => {
 // Transaction Checker
 let runningCheck = false;
 let transactionTimer;
-const checkTransactions = (transcId) => {
+const checkTransaction = (transcId) => {
 	runningCheck = true;
 	clearInterval(transactionTimer);
 
 	transactionTimer = setInterval(async () => {
-		const response = await axiosInstance.post('transactionsCheck', { id: transcId });
-		const { title, message, redirect, success, currency, idTransaction } = response.data;
+		const response = await axiosInstance.post('transactionCheck', { id: transcId });
+		const { title, message, redirect, success, idTransaction } = response.data;
 
-		showAlert(title, message, success ? 'success' : 'danger');
+		if (redirect) { setTimeout(() => { window.location.href = redirect; }, 3000); }
 
 		if (success) {
-			if (result.attemps < 6) {
-				if (result.finished) {
-					showAlert(result.title, result.msg, 1);
-					playSound(researchClick);
+			playSound(researchClick);
+			showAlert(title, message, success ? 'success' : 'danger');
 
-					clearInterval(transactionTimer);
-
-					$("#myCurrency").html(result.currency);
-					runningCheck = false;
-
-					if ($("#availdoll") != undefined && $(".housemodal").is(":visible")) {
-						tokenExchandePanel();
-					}
-				}
-			} else {
-				showAlert(result.title, result.msg, 2);
-				playSound(researchClick);
-
-				clearInterval(transactionTimer);
-				runningCheck = false;
-			}
-
-			if (idTransaction) {
-				checkTransactions(idTransaction);
-			}
-		} else {
-			runningCheck = false;
 			clearInterval(transactionTimer);
+			runningCheck = false;
+
+			// Começa a verificar a próxima transação pendente
+			checkTransaction(idTransaction);
 		}
 	}, 5000);
 }

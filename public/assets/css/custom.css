@@ -36,7 +36,9 @@ body[data-layout-mode=horizontal] .footer {
 	}
 }
 
-.pagination { justify-content: end; }
+.paginator-start .pagination { justify-content: start; }
+.paginator-center .pagination { justify-content: center; }
+.paginator-end .pagination { justify-content: end; }
 
 .screen-lock {
     position: fixed;
