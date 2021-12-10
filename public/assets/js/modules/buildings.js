@@ -88,9 +88,11 @@
 				},
 				async doBuildAction(action, id){
 					if (action != 'claim') {
+						const upgradeBuilding = this.buildings.value.find(building => building.id == id).upgrade
+						const texto = ("You are about to spend :currency coins to " + action + " this house!").replace(':currency', upgradeBuilding);
 						const confirmed = await Swal.fire({
 							title: 'Are you sure?',
-							text: "You are about to spend :currency coins to " + action + " this house!".replace(':currency', this.buildings.value[id].upgrade),
+							text: texto,
 							icon: 'warning',
 							showCancelButton: true,
 							confirmButtonColor: '#3085d6',
