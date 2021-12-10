@@ -35,6 +35,18 @@ class BuildingsController extends Controller
     {
 		sleep(2);
 
+		$user = Auth::user();
+
+		if ($user->currency < config('game.mint_cost')) {
+			return $this->json([
+				'success'	=> false,
+				'title'		=> __('Not enough currency'),
+				'message'	=> __('You do not have enough currency to mint.'),
+			]);
+		}
+
+		$user->spend(config('game.mint_cost'));
+
 		$randomBuilding = Building::mint();
 
         $userBuilding = UserBuilding::create([
@@ -44,10 +56,10 @@ class BuildingsController extends Controller
             'image'			=> rand(1, $randomBuilding->images),
         ]);
 
-
         return response()->json([
             'success'	=> true,
 			'building'	=> UserBuilding::find($userBuilding->id)->publicData(),
+			'currency'  => currency($user->currency),
         ]);
     }
 
@@ -148,6 +160,7 @@ class BuildingsController extends Controller
 				'title' 	=> __('Success'),
 				'message'	=> __('Upgraded building successfully.'),
 				'currency'	=> currency($request->user()->currency),
+				'building'	=> $building->publicData(),
 			]);
 		} else {
 			return $this->json([
