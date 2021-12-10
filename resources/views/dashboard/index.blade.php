@@ -79,6 +79,7 @@
 </style>
 <script>
 	// bootstrap modal instance
+	/*
 	const myModal = new bootstrap.Modal(document.getElementById('myModal')); //new Modal(document.getElementById('myModal'));
 
 	function showStarsAnimated(starsOnNumber) {
@@ -89,7 +90,8 @@
 			}, i * 1000);
 		}
 	}
-
+*/
+/*
 	$("#new-mint").click(async () => {
 		const request = await axiosInstance.post('buildings/mint');
 		const { image, name, rarity } = request.data;
@@ -108,16 +110,17 @@
 				myModal.show();
 				showStarsAnimated();
 			})
-		*/
+		
 
 	});
-
+*/
+/*
 	$("#page-item").on('click', async function(){
 		const content = await axiosInstance.get('buildings');
 		$(".buildings-list").html(content);		
 
 	});
-
+*/
 </script>
 <script src="https://unpkg.com/vue@next"></script>
 <script>
@@ -134,12 +137,14 @@ const Counter = {
 	},
 	methods: {
 		async load_buildings(page = 1) {
+			lockScreen(true);
 			await axiosInstance.get('buildings', { params: { page } }).then((res) => {
 				if (page == 1) {
 					this.total_page = Math.ceil(res.data.counters.buildings / this.number_per_page) -1;
 				}
 				this.buildings.push(...res.data.buildings);
-			});			  
+			});		
+			lockScreen(false);	  
 		},
 		async reset_buildings() {
 			this.buildings = [];
@@ -195,15 +200,28 @@ const Counter = {
 			console.log(new_data);
 			this.buildingsShow.splice(0, this.number_per_page, ...new_data);
 		},
-	},
+		async doMint() {
+			lockScreen(true);
+			try {
+				const request = await axiosInstance.post('buildings/mint');
+				const building = request.data.building;
+				this.buildings.splice(0, 0, building);		
+				this.nextPage(0);
+			} catch (e) {
+				const { title, message } = e.response.data;
+				showAlert(title, message, 'error');
+			}
+			lockScreen(false);
+		},
 
+	},
 	async mounted() {
 		await this.load_buildings();
 		this.nextPage(0);
   	}
 }
 
-Vue.createApp(Counter).mount('.building-list')
+Vue.createApp(Counter).mount('.user-buildings')
 </script>
 @endsection
 @section('content')
@@ -237,7 +255,7 @@ Vue.createApp(Counter).mount('.building-list')
 					{{-- <p class="text-muted text-center">
 						{{ __('Click on the button below to purchase a new home.') }}
 					</p> --}}
-					<button type="button" class="btn btn-primary waves-effect waves-light text-uppercase mint">
+					<button v-on:click="doMint()" type="button" class="btn btn-primary waves-effect waves-light text-uppercase">
 						<b>{{ __('New Mint') }}</b>
 					</button>
 				</div>
@@ -317,7 +335,7 @@ Vue.createApp(Counter).mount('.building-list')
 			<template v-if="buildings" v-for="building in buildingsShow" :key="building.id">
 				<div class="col-md-6 col-xl-4">
 					<div class="card ribbon-box">
-						<div v-if="building.isNew" class="ribbon-two ribbon-two-blue text-uppercase"><span>{{ __('New') }}</span></div>
+						<div v-if="building.highlight" class="ribbon-two ribbon-two-blue text-uppercase"><span>{{ __('New') }}</span></div>
 						<div class="card-body product-box">
 							<div class="bg-sky text-center d-flex align-items-center justify-content-center" style="min-height: 340px; position: relative;">
 								

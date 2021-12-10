@@ -18,35 +18,7 @@ class BuildingsController extends Controller
 
 		$buildings = [];
 		foreach ($getUserBuildings as $building) {
-			$buildings[] = [
-				'id'		=> $building->id,
-				'name'		=> $building->getName(),
-				'image'		=> $building->getImage(true),
-				'rarity'	=> $building->base->rarity,
-				'level'		=> $building->level,
-				'highlight'	=> $building->isNew(),
-				'upgrade'	=> $building->canUpgrade() ? currency($building->base->upgrade_cost) : false,
-				'status'	=> [
-					'repair'	=> $building->needRepair(),
-					'color'		=> $building->status->color,
-					'name'		=> $building->status->name,
-					'loss'		=> $building->status->loss,
-					'cost'		=> currency($building->repairCost())
-				],
-				'claim'		=> [
-					'enabled'	=> $building->canClaim(),
-					'color' 	=> $building->progressColor(),
-					'progress'	=> $building->progressClaim(),
-					'available'	=> currency($building->availableClaim()),
-				],
-				'stats'		=> [
-					'daily'		=> currency($building->getIncomes()),
-					'last'		=> currency($building->last_claim),
-					'total'		=> currency($building->earnings)
-				],
-				'created_at'	=> $building->created_at,
-				'updated_at'	=> $building->updated_at
-			];
+			$buildings[] = $building->publicData();
 		}
 
 		return $this->json([
@@ -61,7 +33,9 @@ class BuildingsController extends Controller
 
     public function mint()
     {
-        $randomBuilding = Building::mint();
+		sleep(2);
+
+		$randomBuilding = Building::mint();
 
         $userBuilding = UserBuilding::create([
             'user_id'		=> Auth::id(),
@@ -70,12 +44,10 @@ class BuildingsController extends Controller
             'image'			=> rand(1, $randomBuilding->images),
         ]);
 
+
         return response()->json([
             'success'	=> true,
-            'userItem'	=> $userBuilding,
-            'image'		=> $userBuilding->getImage(true),
-            'name'		=> $userBuilding->name,
-            'rarity'	=> $randomBuilding->rarity,
+			'building'	=> UserBuilding::find($userBuilding->id)->publicData(),
         ]);
     }
 

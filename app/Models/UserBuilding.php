@@ -194,4 +194,38 @@ class UserBuilding extends Model
 			'building_status_id'	=> BuildingStatus::where('loss', 0)->first()->id,
 		]);
 	}
+
+	public function publicData() 
+	{
+		return [
+			'id'		=> $this->id,
+			'name'		=> $this->getName(),
+			'image'		=> $this->getImage(true),
+			'rarity'	=> $this->base->rarity,
+			'level'		=> $this->level,
+			'highlight'	=> $this->isNew(),
+			'upgrade'	=> $this->canUpgrade() ? currency($this->base->upgrade_cost) : false,
+			'status'	=> [
+				'repair'	=> $this->needRepair(),
+				'color'		=> $this->status->color,
+				'name'		=> $this->status->name,
+				'loss'		=> $this->status->loss,
+				'cost'		=> currency($this->repairCost())
+			],
+			'claim'		=> [
+				'enabled'	=> $this->canClaim(),
+				'color' 	=> $this->progressColor(),
+				'progress'	=> $this->progressClaim(),
+				'available'	=> currency($this->availableClaim()),
+			],
+			'stats'		=> [
+				'daily'		=> currency($this->getIncomes()),
+				'last'		=> currency($this->last_claim),
+				'total'		=> currency($this->earnings)
+			],
+			'created_at'	=> $this->created_at,
+			'updated_at'	=> $this->updated_at
+		];
+
+	}
 }
