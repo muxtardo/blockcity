@@ -66,6 +66,11 @@
 			}
 		};
 
+		@if (Auth::check())
+			let	userWallet		= '{{ Auth::user()->id }}';
+			let	userTransaction	= '{{ Auth::user()->getPendingTransaction() }}';
+		@endif
+
 		const axiosInstance	= axios.create({
 			baseURL: site_url,
 			headers: {
@@ -79,7 +84,10 @@
 				html: true
 			})
 		})
+
 	</script>
+	@yield('js')
+
 	<script type="text/javascript" src="{{ asset('assets/js/global.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('assets/js/metamask.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('assets/js/modules/users.js') }}"></script>

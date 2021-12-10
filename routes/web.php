@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\BuildingController;
 use App\Http\Controllers\BuildingsController;
+use App\Http\Controllers\ExchangeController;
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
@@ -58,6 +59,14 @@ Route::middleware(['auth'])->group(function () {
 		Route::post('claim',		[ BuildingsController::class, 'claim' ])->name('buildingClaim');
 		Route::post('upgrade',		[ BuildingsController::class, 'upgrade' ])->name('buildingUpgrade');
 		Route::post('repair',		[ BuildingsController::class, 'repair' ])->name('buildingRepair');
+	});
+
+	Route::prefix('exchange')->group(function () {
+		Route::get('/',				[ ExchangeController::class, 'index' ])->name('exchange');
+
+		Route::post('check',		[ ExchangeController::class, 'check' ])->name('exchangeCheck');
+		Route::post('deposit',		[ ExchangeController::class, 'deposit' ])->name('exchangeDeposit');
+		Route::post('withdrawal',	[ ExchangeController::class, 'withdrawal' ])->name('exchangeWithdrawal');
 	});
 
 	// Route::prefix('inventory')->group(function () {
