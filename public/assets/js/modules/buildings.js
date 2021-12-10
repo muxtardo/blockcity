@@ -8,7 +8,7 @@
 			instanceHidden.hidden = false;
 		});
 
-		window.showNewMint = (name, image, rarity) => {
+		const showNewMint = (name, image, rarity) => {
 			const stars = document.querySelectorAll('.stars-content .stars');
 
 			$("#buyHouse-name").text(name);
@@ -159,6 +159,20 @@
 					});
 				},
 				async doMint() {
+					const confirmed = await Swal.fire({
+						title: 'Are you sure?',
+						text: "You are about to spend :currency coins to mint a new building!".replace(':currency', '100.00'),
+						icon: 'warning',
+						showCancelButton: true,
+						confirmButtonColor: '#3085d6',
+						cancelButtonColor: '#d33',
+						confirmButtonText: 'Yes, mint it!'
+					}).then((result) => result.isConfirmed);
+					
+					if (!confirmed) {
+						return;
+					}
+					
 					lockScreen(true);
 					try {
 						const request = await axiosInstance.post('buildings/mint');
