@@ -91,20 +91,21 @@
 					this.doBuildAction('claim', id);
 				},
 				doBuildRepair(id) {
-					this.doBuildAction('repair', id);
+					const cost = this.buildings.value.find(building => building.id == id).status.cost;
+					this.doBuildAction('repair', id, cost);
 				},
 				async doBuildUpgrade(id) {
-					this.doBuildAction('upgrade', id);
+					const cost = this.buildings.value.find(building => building.id == id).upgrade;
+					this.doBuildAction('upgrade', id, cost);
 				},
 				doBuildSell(id){
 					showAlert('Coming soon!', 'This feature is not available yet', 'info');
 				},
-				async doBuildAction(action, id){
+				async doBuildAction(action, id, cost = false){
 					if (action != 'claim') {
-						const currency = this.buildings.value.find(building => building.id == id).upgrade
 						const confirmed = await Swal.fire({
 							title: config.trans.confirmTitle,
-							text: config.trans.confirm.replace(':currency', currency).replace(':action', config.trans[action]),
+							text: config.trans.confirm.replace(':currency', cost).replace(':action', config.trans[action]),
 							icon: 'warning',
 							showCancelButton: true,
 							confirmButtonColor: '#3085d6',

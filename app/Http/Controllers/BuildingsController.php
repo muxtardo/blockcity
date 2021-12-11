@@ -284,7 +284,7 @@ class BuildingsController extends Controller
 			], 400);
 		}
 
-		if (($building = $building->repair())) {
+		if ($building->repair()) {
 			$request->user()->spend($cost);
 
 			// Addiciona a transação no log

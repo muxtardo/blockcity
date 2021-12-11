@@ -188,8 +188,8 @@ class UserBuilding extends Model
 		$this->building_status_id = BuildingStatus::where('loss', 0)->first()->id;
 		if ($this->save())
 		{
-			$this->status->loss = 0;
-			return $this;
+			unset($this->status);
+			return true;
 		}
 
 		return false;
