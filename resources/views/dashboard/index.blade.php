@@ -49,7 +49,6 @@
 @section('js-libs')
 	<script src="https://unpkg.com/vue@next"></script>
 	<script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/min/moment-with-locales.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/date-fns/1.30.1/date_fns.min.js"></script>
 @endsection
 @section('js')
 	<script type="text/javascript">
