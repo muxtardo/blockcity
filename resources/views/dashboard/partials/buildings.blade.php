@@ -32,48 +32,51 @@
 						</div><!-- end row -->
 
 						<div class="mt-1 text-center">
-							<div class="button-list row mb-1">
-								<button v-if="building.status.repair" v-on:click="doBuildRepair(building.id)" data-bs-toggle="tooltip" :title="'<b>{{ __('Cost') }}:</b> ' + building.status.cost" type="button" :data-id="building.id" class="col btn btn-danger waves-effect waves-light repair">
+							<div class="button-list row ssmb-1">
+								<button v-if="building.status.repair" v-on:click="doBuildRepair(building.id)" data-bs-toggle="tooltip" :title="'<b>{{ __('Cost') }}:</b> ' + building.status.cost" type="button" class="col btn btn-danger waves-effect waves-light">
 									<b>{{ __('Repair') }}</b>
 								</button>
-								<button v-if="!building.status.repair && building.upgrade" v-on:click="doBuildUpgrade(building.id)" data-bs-toggle="tooltip" :title="'<b>{{ __('Cost') }}:</b> ' + building.upgrade" type="button" :data-id="building.id" class="col btn btn-primary waves-effect waves-light upgrade">
+								<button v-if="!building.status.repair && building.upgrade" v-on:click="doBuildUpgrade(building.id)" data-bs-toggle="tooltip" :title="'<b>{{ __('Cost') }}:</b> ' + building.upgrade" type="button" class="col btn btn-primary waves-effect waves-light">
 									<b>{{ __('Upgrade') }}</b>
 								</button>
-								<button type="button" v-on:click="doBuildSell(building.id)" :data-id="building.id" class="col btn btn-dark waves-effect waves-light sell">
+								<button type="button" v-on:click="doBuildSell(building.id)" class="col btn btn-dark waves-effect waves-light">
 									<b>{{ __('Sell') }}</b>
 								</button>
-								<button type="button" v-on:click="building.claim.enabled && doBuildClaim(building.id)" data-bs-toggle="tooltip" :title="'<b>{{ __('Available') }}</b> ' + building.claim.remaining" :class="{'opacity-50': !building.claim.enabled, 'waves-effect waves-light': building.claim.enabled }" :data-id="building.id" class="col btn btn-success  claim">
-									<b >{{ __('Claim') }}</b>
+								<button type="button" v-on:click="building.claim.enabled && doBuildClaim(building.id)" :disabled="!building.claim.enabled" class="col btn btn-success waves-effect waves-light">
+									<b>{{ __('Claim') }}</b>
 								</button>
 							</div>
-							<small class="text-muted">
-								<b>{{ __('House Vault') }}:</b>
-								@{{ building.claim.progress }}% ( @{{ building.claim.available }} {{ __('Coins') }} )
-							</small>
+							<div class="mt-1">
+								<small class="text-muted">
+									<b>{{ __('Available') }}:</b>&nbsp;
+									<span class="text-capitalize">@{{ building.claim.remaining }}</span>
+								</small>
+							</div>
 						</div>
 
 						<div class="progress position-relative" style="height: 20px;">
 							<div :class="building.claim.color + ' ' + (building.claim.progress < 100 ? 'progress-bar-animated' : '')" class="progress-bar progress-bar-striped" :style="'width:' + building.claim.progress + '%'"></div>
 						</div>
 
+						<div class="text-center mb-1">
+							<small class="text-muted">
+								<b>{{ __('House Vault') }}:</b>
+								@{{ building.claim.progress }}% ( @{{ building.claim.available }} {{ __('Coins') }} )
+							</small>
+						</div>
+
 						<div class="row text-center">
 							<div class="col-4">
-								<div class="mt-3">
-									<h4>@{{ building.stats.daily }}</h4>
-									<p class="mb-0 text-muted text-truncate">{{ __('Daily Claim') }}</p>
-								</div>
+								<h4>@{{ building.stats.daily }}</h4>
+								<p class="mb-0 text-muted text-truncate">{{ __('Daily Claim') }}</p>
 							</div>
 							<div class="col-4">
-								<div class="mt-3">
-									<h4>@{{ building.stats.last }}</h4>
-									<p class="mb-0 text-muted text-truncate">{{ __('Last Claim') }}</p>
-								</div>
+								<h4>@{{ building.stats.last }}</h4>
+								<p class="mb-0 text-muted text-truncate">{{ __('Last Claim') }}</p>
 							</div>
 							<div class="col-4">
-								<div class="mt-3">
-									<h4>@{{ building.stats.total }}</h4>
-									<p class="mb-0 text-muted text-truncate">{{ __('Total Claim') }}</p>
-								</div>
+								<h4>@{{ building.stats.total }}</h4>
+								<p class="mb-0 text-muted text-truncate">{{ __('Total Claim') }}</p>
 							</div>
 						</div>
 					</div><!-- end product info-->
