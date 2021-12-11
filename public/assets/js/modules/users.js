@@ -54,7 +54,7 @@
 
 			// showAlert(title, message, success ? 'success' : 'error');
 			if (redirect) {
-				setTimeout(() => { window.location.href = redirect; }, 3000);
+				setTimeout(() => { window.location.href = redirect; }, 1000);
 			}
 		}).catch((err) => {
 			lockScreen(false);

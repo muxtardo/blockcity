@@ -56,7 +56,7 @@ class AuthController extends Controller
 		// Authenticate
 		Auth::login($user);
 
-		sleep(1);
+		// sleep(1);
 
 		// Return success
 		return $this->json([
