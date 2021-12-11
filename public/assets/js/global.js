@@ -102,13 +102,14 @@ const setDarkMode = (darkMode) => {
 		.addClass('noti-icon');
 };
 
-$(document).ready(() => {
-	setDarkMode(inDarkMode())
-
-	$(".change-theme").on('click', function() {
-		setDarkMode(!inDarkMode())
-	});
-});
+const enableTooltip = () => {
+	const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+	tooltipTriggerList.map(function (tooltipTriggerEl) {
+		return new bootstrap.Tooltip(tooltipTriggerEl, {
+			html: true
+		})
+	})
+}
 
 // Transaction Checker
 let runningCheck = false;
@@ -140,3 +141,40 @@ const checkTransaction = (transcId) => {
 		}
 	}, 5000);
 }
+
+$(document).ready(() => {
+	// Enable Tooltips
+	enableTooltip();
+
+	// Check user pending transaction
+	if (typeof userTransaction !== 'undefined' && userTransaction) {
+		checkTransaction(userTransaction);
+	}
+
+	// Set selected theme
+	setDarkMode(inDarkMode());
+
+	// Change theme
+	$(".change-theme").on('click', function() {
+		setDarkMode(!inDarkMode())
+	});
+
+	$('[data-toggle="input-money"]').each(function(a, e) {
+		$(e).maskMoney({
+			thousands: '',
+			allowZero: true,
+			precision: 4
+		});
+	});
+
+	// Instance of masks plugin
+	$('[data-toggle="input-mask"]').each(function(a, e) {
+        const t = $(e).data("maskFormat");
+        const n = $(e).data("reverse");
+        if (n != null) {
+			$(e).mask(t, { reverse: n });
+		} else {
+			$(e).mask(t);
+		}
+    })
+});

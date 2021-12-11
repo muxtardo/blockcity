@@ -209,6 +209,15 @@ const getTokenBalance = async (wallet) => {
 	return 0;
 };
 
+const loadTokenBalance = async () => {
+	const myTokens = $("#myTokens");
+	if (myTokens.length) {
+		let balance = await getTokenBalance(userWallet);
+		balance = parseInt(balance);
+		myTokens.html(parseFloat(balance / 10000).toFixed(4));
+	}
+};
+
 const transferToken = async (wallet, amount) => {
 	const contractAbi	= await $.getJSON(storage_url('contractAbi.json'));
 	const BNBContract	= new ethers.Contract(gameContract, contractAbi, signer);
@@ -223,3 +232,39 @@ const transferToken = async (wallet, amount) => {
 
 	return false;
 }
+
+const transferBNB = async (sender, receiver, amount) => {
+	if (!Web3.utils.isAddress(sender)) {
+		showAlert('Error', 'Incorrect sender wallet address! Check it and try again.', 'error');
+		return false;
+	}
+
+	if (!Web3.utils.isAddress(receiver)) {
+		showAlert('Error', 'Incorrect receiver wallet address! Check it and try again.', 'error');
+		return false;
+	}
+
+	amount = parseFloat(amount);
+	if (amount <= 0) {
+		showAlert('Error', 'Incorrect amount! Check it and try again.', 'error');
+		return false;
+	}
+
+	return await ethereum.request({
+		method: 'eth_sendTransaction',
+		params: [{
+			from:		sender,
+			value:		Web3.utils.toHex(Web3.utils.toWei(amount + "")),
+			to:			receiver,
+			chainId:	redOficial
+		}]
+	}).catch((err) => {
+		if (err.code == 4001) {
+			showAlert("Warning", "Transaction canceled", 'warning');
+		} else {
+			showAlert("Warning", "Transaction error", 'warning');
+		}
+
+		return false;
+	});
+};

@@ -1,13 +1,14 @@
 (async function () {
 	const exchange = $('.exchange');
 	if (exchange.length) {
+		loadTokenBalance();
 
-		const formCheckHash = $("#form-check-hash");
-		if (formCheckHash.length) {
-			formCheckHash.on('submit', async function (e) {
+		const formConsult = $("#form-consult");
+		if (formConsult.length) {
+			formConsult.on('submit', async function (e) {
 				lockScreen(true);
 
-				const transHash	= $(".hash", formCheckHash).val();
+				const transHash	= $(".hash", formConsult).val();
 				const txReceipt	= await getTransactionReceipt(transHash);
 				if (!txReceipt) {
 					lockScreen(false);
@@ -35,7 +36,6 @@
 				}
 				receiver = receiver.toLowerCase();
 
-
 				let sender = txReceipt.from.toLowerCase();
 				if (sender != userWallet) {
 					lockScreen(false);
@@ -51,7 +51,7 @@
 				}
 
 				try {
-					const response = await axiosInstance.post('exchange/check', { hash: txReceipt.transactionHash });
+					const response = await axiosInstance.post('exchange/consult', { hash: txReceipt.transactionHash });
 					const { title, message, redirect, success, currency } = response.data;
 
 					lockScreen(false);
@@ -71,12 +71,12 @@
 			});
 		};
 
-		const formExchange = $("#form-exchange");
-		if (formExchange.length) {
-			formExchange.on('submit', async function (e) {
+		const formDeposit = $("#form-deposit");
+		if (formDeposit.length) {
+			formDeposit.on('submit', async function (e) {
 				lockScreen(true);
 
-				let amount = parseFloat($(".amount", formExchange).val()).toFixed(4);
+				let amount = parseFloat($(".amount", formDeposit).val()).toFixed(4);
 				if (amount <= 0) {
 					lockScreen(false);
 
@@ -121,8 +121,6 @@
 						setTimeout(() => { window.location.href = redirect; }, 3000);
 					}
 				} catch (err) {
-					console.log(err);
-
 					if (err.code == -32603) {
 						showAlert("Error", 'Transaction underpriced!', 'error');
 					} else if (err.code == 4001) {
@@ -137,14 +135,33 @@
 				}
 			});
 		}
-		const loadTokenBalance = async () => {
-			const avtkns = $("#avtkns");
-			if (avtkns.length) {
-				let balance = await getTokenBalance(userWallet);
-				balance = parseInt(balance);
-				avtkns.html(parseFloat(balance / 10000).toFixed(4));
-			}
-		};
-		loadTokenBalance();
+
+		const formWithdrawal = $("#form-withdrawal");
+		if (formWithdrawal.length) {
+			formWithdrawal.on('submit', async function (e) {
+				lockScreen(true);
+
+				let amount	= parseFloat($(".amount", formWithdrawal).val());
+				if (amount <= 0) {
+					lockScreen(false);
+
+					showAlert('Error', 'Amount must be greater than 0');
+					return false;
+				}
+
+				const response = await axiosInstance.post('exchange/withdrawal', { amount });
+				const { title, message, redirect, success, currency, transactionId } = response.data;
+
+				// Update interface with new user balance
+				if (currency) {
+					loadTokenBalance();
+					$('#myCurrency').html(currency);
+				}
+				if (transactionId) { checkTransaction(transactionId); }
+
+				showAlert(title, message, success ? 'success' : 'danger');
+				if (redirect) { setTimeout(() => { window.location.href = redirect; }, 3000); }
+			});
+		}
 	}
 })();

@@ -13,9 +13,6 @@
 	<div id="wrapper">
 		@include('partials/menu')
 
-		<!-- ============================================================== -->
-		<!-- Start Page Content here -->
-		<!-- ============================================================== -->
 		<div class="content-page">
 			<div class="content {{ Auth::check() ? 'with-user' : '' }}">
 				<!-- Start Content-->
@@ -27,15 +24,11 @@
 					])
 					<!-- end page title -->
 					@yield('content')
-				</div> <!-- container -->
-
-			</div> <!-- content -->
+				</div><!-- container -->
+			</div><!-- content -->
 
 			@include('partials/footer')
 		</div>
-		<!-- ============================================================== -->
-		<!-- End Page content -->
-		<!-- ============================================================== -->
 	</div>
 	<!-- END wrapper -->
 
@@ -43,17 +36,16 @@
 	<script src="{{ asset('assets/js/vendor.min.js') }}"></script>
 	<script src="{{ asset('assets/js/app.js') }}"></script>
 
-	<!-- Custom Js -->
-	<script src="{{ asset('assets/libs/sweetalert2/sweetalert2.all.min.js') }}"></script>
-	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-	<!--
-	<script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
-	-->
+	<!-- Plugins js -->
 	<script src="{{ asset('assets/js/web3.min.js') }}"></script>
+	<script src="{{ asset('assets/libs/sweetalert2/sweetalert2.all.min.js') }}"></script>
+	<script src="{{ asset('assets/libs/maskMoney/jquery.maskMoney.min.js') }}"></script>
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.4.5/ethers.umd.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.5.2/bootbox.min.js"></script>
 	@yield('js-libs')
 
+	<!-- App Variables -->
 	<script type="text/javascript">
 		const domainName	= '{{ Request::server('SERVER_NAME') }}';
 		const site_url		= '{{ url('/') }}';
@@ -71,33 +63,20 @@
 		};
 
 		@if (Auth::check())
+			// Set user variables
 			let	userWallet		= '{{ Auth::user()->wallet }}';
 			let	userTransaction	= {{ Auth::user()->getPendingTransaction() ? Auth::user()->getPendingTransaction() : 'false' }};
-			$(document).ready(function() {
-				if (userTransaction) {
-					checkTransaction(userTransaction);
-				}
-			});
 		@endif
 
+		// Instance of axios
 		const axiosInstance	= axios.create({
 			baseURL: site_url,
-			headers: {
-				'X-CSRF-TOKEN': '{{ csrf_token() }}',
-			},
+			headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
 		});
-
-		function enableTooltip(){
-			const tooltipTriggerList	= [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-			const tooltipList			= tooltipTriggerList.map(function (tooltipTriggerEl) {
-				return new bootstrap.Tooltip(tooltipTriggerEl, {
-					html: true
-				})
-			})
-		}
 	</script>
 	@yield('js')
 
+	<!-- Custom Js -->
 	<script type="text/javascript" src="{{ asset('assets/js/global.js') }}?c={{ filemtime(public_path('assets/js/global.js')) }}"></script>
 	<script type="text/javascript" src="{{ asset('assets/js/metamask.js') }}?c={{ filemtime(public_path('assets/js/metamask.js')) }}"></script>
 	<script type="text/javascript" src="{{ asset('assets/js/modules/users.js') }}?c={{ filemtime(public_path('assets/js/modules/users.js')) }}"></script>
@@ -106,7 +85,6 @@
 	<script type="text/javascript" src="{{ asset('assets/js/modules/quests.js') }}?c={{ filemtime(public_path('assets/js/modules/quests.js')) }}"></script>
 	<script type="text/javascript" src="{{ asset('assets/js/modules/marketplace.js') }}?c={{ filemtime(public_path('assets/js/modules/marketplace.js')) }}"></script>
 	<script type="text/javascript" src="{{ asset('assets/js/modules/exchange.js') }}?c={{ filemtime(public_path('assets/js/modules/exchange.js')) }}"></script>
-
 	@yield('script')
 </body>
 </html>
