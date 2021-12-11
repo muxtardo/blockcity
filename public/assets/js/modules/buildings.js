@@ -11,7 +11,7 @@
 		});
 
 		const showNewMint = (name, image, rarity) => {
-			const stars = document.querySelectorAll('.stars-content .stars');
+			const stars = document.querySelectorAll('#myModal .stars-content > .stars');
 
 			$("#buyHouse-name").text(name);
 			$("#buyHouse-image").attr('src', image);

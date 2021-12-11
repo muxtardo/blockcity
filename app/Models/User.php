@@ -24,13 +24,11 @@ class User extends Authenticatable
         'earnings',
         'currency',
         'presale',
-        'last_captcha_check',
+        'last_captcha_at',
     ];
 
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
+    protected $casts = [
+		"last_captcha_at" => 'datetime'
     ];
 
     // Gera nome de usuário baseado na wallet
@@ -117,7 +115,7 @@ class User extends Authenticatable
 		return Banishment::where('user_id', $this->id)
 			->where(function ($query) {
             	$query->where('finishes_at', 'is', null)
-					->orWhere('finishes_at', '>', Carbon::now());
+					->orWhere('finishes_at', '>', now());
         })->first();
 	}
 
@@ -125,7 +123,7 @@ class User extends Authenticatable
 	public function checkCaptcha()
 	{
 		return	$this->last_captcha_at &&
-				Carbon::parse($this->last_captcha_at)->addMinutes(15) > Carbon::now();
+				$this->last_captcha_at->addMinutes(15) > now();
 	}
 
 	// Taxa para saque

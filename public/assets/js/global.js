@@ -137,9 +137,7 @@ const checkTransaction = (transcId) => {
 			if (currency) { $('#myCurrency').html(currency); }
 
 			// Começa a verificar a próxima transação pendente
-			if (idTransaction) {
-				checkTransaction(idTransaction);
-			}
+			if (idTransaction) { checkTransaction(idTransaction); }
 		}
 	}, 5000);
 }

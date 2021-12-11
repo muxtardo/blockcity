@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -118,7 +117,7 @@ class UserBuilding extends Model
 		if ($this->update([
 			'earnings'		=> $this->earnings + $earning,
 			'last_claim'	=> $earning,
-			'last_claim_at'	=> Carbon::now(),
+			'last_claim_at'	=> now(),
 		])) {
 			return $earning;
 		}
@@ -131,7 +130,7 @@ class UserBuilding extends Model
 	{
 		$date1 = $this->last_claim_at->timestamp;
 		$date2 = $this->last_claim_at->addDay()->timestamp;
-		$today = Carbon::now()->timestamp;
+		$today = now()->timestamp;
 
 		$dateDiff			= $date2 - $date1;
 		$dateDiffForToday	= $today - $date1;
@@ -217,11 +216,11 @@ class UserBuilding extends Model
 				'color' 	=> $this->progressColor(),
 				'progress'	=> $this->progressClaim(),
 				'available'	=> currency($this->availableClaim()),
-				'remaining' => $this->remainClaim(),
+				// 'remaining' => $this->remainClaim(),
 				'times' 	=> [
 					'last_claim_at' 	=> $this->last_claim_at->timestamp,
 					'next_claim_at'	 	=> $this->last_claim_at->addDay()->timestamp,
-					'current_time' 		=> Carbon::now()->timestamp,
+					'current_time' 		=> now()->timestamp,
 				],
 			],
 			'stats'		=> [
