@@ -104,6 +104,7 @@ const setDarkMode = (darkMode) => {
 
 const enableTooltip = () => {
 	const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+	$(".tooltip").tooltip("dispose");
 	tooltipTriggerList.map(function (tooltipTriggerEl) {
 		return new bootstrap.Tooltip(tooltipTriggerEl, {
 			html: true

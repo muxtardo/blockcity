@@ -48,9 +48,11 @@
 
 @section('js-libs')
 	<script src="https://unpkg.com/vue@next"></script>
+	<script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/min/moment-with-locales.min.js"></script>
 @endsection
 @section('js')
 	<script type="text/javascript">
+		moment.locale('{{ config('app.locale') }}');
 		const config = {
 			trans: {
 				confirmTitle: '{{ __("Are you sure?") }}',
@@ -62,6 +64,7 @@
 				mint: "{{ __('Mint') }}",
 			},
 			mint_cost: {{ config('game.mint_cost') }},
+			min_claim: {{ config('game.min_claim') }},
 		};
 	</script>
 @endsection

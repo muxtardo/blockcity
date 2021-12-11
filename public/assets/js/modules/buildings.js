@@ -1,5 +1,6 @@
 (function () {
 	const userBuildings = $('.user-buildings');
+	
 	if (userBuildings.length) {
 		const myModal = new bootstrap.Modal(document.getElementById('myModal'));
 		myModal._element.addEventListener('hidden.bs.modal', function (event) {
@@ -35,8 +36,18 @@
 					building.claim.times.current_time++;
 					building.claim.progress = Math.min(100, t1 / t2 * 100).toFixed(2);
 					building.claim.available = (building.stats.daily * building.claim.progress/100).toFixed(4);
+					let claimColor = 'bg-success';
+					if (building.claim.progress < 30) {
+						claimColor = 'bg-warning';
+					} else if (building.claim.progress >= 30 && building.claim.progress < 100) {
+						claimColor = 'bg-primary';
+					}
+					building.claim.color = claimColor;
+					building.claim.enabled = building.claim.progress >= 30;
+					building.claim.remaining = moment((last_claim_at + ((24 * 3600) * ((config.min_claim-1) / 100))) * 1000).fromNow();
+					enableTooltip();
 				});
-			}, 1000);	
+			}, 2000);
 		}
 
 		let instanceHidden = null;
