@@ -1,5 +1,6 @@
 (function () {
 	const userBuildings = $('.user-buildings');
+	const current_timestamp = Date.now();
 
 	if (userBuildings.length) {
 		const myModal = new bootstrap.Modal(document.getElementById('myModal'));
@@ -28,12 +29,12 @@
 			}
 		}
 		function updateBuildings(buildings) {
-			instanceInterval = setInterval(() => {
+			const updateBuildingsData = () => {
 				buildings.value.forEach((building) => {
 					const { last_claim_at, next_claim_at, current_time } = building.claim.times;
-					t1 = current_time - last_claim_at;
-					t2 = next_claim_at - last_claim_at;
-					building.claim.times.current_time++;
+					const timeElapsed = (Date.now() - current_timestamp) / 1000;
+					const t1 = (current_time + timeElapsed) - last_claim_at;
+					const t2 = next_claim_at - last_claim_at;
 					building.claim.progress = Math.min(100, t1 / t2 * 100).toFixed(2);
 					building.claim.available = (building.stats.daily * building.claim.progress/100).toFixed(4);
 					let claimColor = 'bg-success';
@@ -46,7 +47,9 @@
 					building.claim.enabled = building.claim.progress >= 30;
 					building.claim.remaining = moment((last_claim_at + ((24 * 3600) * ((config.min_claim) / 100))) * 1000).fromNow();
 				});
-			}, 2000);
+			};
+			updateBuildingsData();
+			instanceInterval = setInterval(updateBuildingsData, 1000);
 		}
 
 		let instanceHidden = null;
