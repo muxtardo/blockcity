@@ -1,6 +1,6 @@
 (function () {
 	const userBuildings = $('.user-buildings');
-	
+
 	if (userBuildings.length) {
 		const myModal = new bootstrap.Modal(document.getElementById('myModal'));
 		myModal._element.addEventListener('hidden.bs.modal', function (event) {
@@ -29,7 +29,7 @@
 		}
 		function updateBuildings(buildings) {
 			instanceInterval = setInterval(() => {
-					buildings.value.forEach((building) => {
+				buildings.value.forEach((building) => {
 					const { last_claim_at, next_claim_at, current_time } = building.claim.times;
 					t1 = current_time - last_claim_at;
 					t2 = next_claim_at - last_claim_at;
@@ -45,7 +45,6 @@
 					building.claim.color = claimColor;
 					building.claim.enabled = building.claim.progress >= 30;
 					building.claim.remaining = moment((last_claim_at + ((24 * 3600) * ((config.min_claim-1) / 100))) * 1000).fromNow();
-					enableTooltip();
 				});
 			}, 2000);
 		}
@@ -109,9 +108,9 @@
 							cancelButtonColor: '#d33',
 							confirmButtonText: config.trans.button.replace(':action', config.trans[action]),
 						}).then((result) => result.isConfirmed);
-						
-						if (!confirmed) { 
-							return; 
+
+						if (!confirmed) {
+							return;
 						}
 					}
 
@@ -124,8 +123,6 @@
 							currency: userCurrency,
 							dailyClaim: userDailyClaim
 						}} = response.data;
-
-						lockScreen(false);
 
 						$("#myCurrency").html(userCurrency);
 						$("#myBuildings").html(countBuildings);
@@ -142,9 +139,11 @@
 							}, 3000);
 						}
 					} catch (err) {
-						lockScreen(false);
 						const { title, message } = err.response.data;
 						showAlert(title, message, 'error');
+					} finally {
+						lockScreen(false);
+						enableTooltip();
 					}
 				},
 				pageLoaded(number) {
@@ -178,11 +177,11 @@
 						cancelButtonColor: '#d33',
 						confirmButtonText: config.trans.button.replace(':action', config.trans['mint'])
 					}).then((result) => result.isConfirmed);
-					
+
 					if (!confirmed) {
 						return;
 					}
-					
+
 					lockScreen(true);
 					try {
 						const request = await axiosInstance.post('buildings/mint');
@@ -220,7 +219,7 @@
 				this.nextPage(1);
 				this.$nextTick(() => {
 					updateBuildings(this.buildings);
-				});							
+				});
 			},
 			computed: {
 				buildingsFiltered() {
