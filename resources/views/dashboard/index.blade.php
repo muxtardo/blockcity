@@ -49,10 +49,17 @@
 @section('js-libs')
 	<script src="https://unpkg.com/vue@next"></script>
 	<script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/min/moment-with-locales.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/date-fns/1.30.1/date_fns.min.js"></script>
 @endsection
 @section('js')
 	<script type="text/javascript">
+		// momentJs setting prefferences
 		moment.locale('{{ config('app.locale') }}');
+		moment.relativeTimeThreshold('s', 3); 
+		moment.relativeTimeThreshold('ss', 3); // less than 3 seconds hidden the number of seconds
+		moment.relativeTimeThreshold('m', 59); // greater than 59 seconds hidden the number of minutes
+		moment.relativeTimeThreshold('h', 23); // greater than 20 minutes hidden the number of hours
+
 		const config = {
 			trans: {
 				confirmTitle: '{{ __("Are you sure?") }}',

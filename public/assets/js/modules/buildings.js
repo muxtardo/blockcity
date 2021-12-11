@@ -44,7 +44,7 @@
 					}
 					building.claim.color = claimColor;
 					building.claim.enabled = building.claim.progress >= 30;
-					building.claim.remaining = moment((last_claim_at + ((24 * 3600) * ((config.min_claim-1) / 100))) * 1000).fromNow();
+					building.claim.remaining = moment((last_claim_at + ((24 * 3600) * ((config.min_claim) / 100))) * 1000).fromNow();
 				});
 			}, 2000);
 		}
