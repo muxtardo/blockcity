@@ -56,6 +56,13 @@
 		let instanceInterval = null;
 		const Counter = {
 			data() {
+				let orderBy = 'claim_progress';
+				if (localStorage.getItem('orderBy') !== null) {
+					orderBy = localStorage.getItem('orderBy');
+				} else {
+					localStorage.setItem('orderBy', orderBy);
+				}
+
 				return {
 					counter: 0,
 					buildings: Vue.reactive({ value: {}}),
@@ -63,12 +70,14 @@
 					number_per_page: 6,
 					total_mint: 0,
 					last_load_page: 1,
-					orderBy: 'claim_progress',
+					orderBy: orderBy,
 				}
 			},
 			methods: {
 				changeOrderBy($event) {
 					const orderBy = $event.target.value;
+					localStorage.setItem('orderBy', orderBy);
+
 					this.orderBy = orderBy;
 					if (this.total_mint != Object.values(this.buildings.value).length) {
 						this.last_load_page = 0;
