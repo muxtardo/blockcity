@@ -54,7 +54,7 @@
 
 		let instanceHidden = null;
 		let instanceInterval = null;
-		const Counter = {
+		const buildingsApp = {
 			data() {
 				return {
 					counter: 0,
@@ -299,6 +299,6 @@
 			}
 		}
 
-		Vue.createApp(Counter).mount('.user-buildings');
+		Vue.createApp(buildingsApp).mount('.user-buildings');
 	}
 })();

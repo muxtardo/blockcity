@@ -18,6 +18,26 @@ class ExchangeController extends Controller
 		$this->add_bc('#',	$this->params['page_title']);
 		return $this->render('exchange.index');
 	}
+	public function transactions(Request $request)
+	{
+		$userTransactions	= Transaction::where('user_id', Auth::user()->id);
+		$getTransactions	= $userTransactions
+			->orderBy('created_at', 'desc')->paginate(10);
+
+		$transactions = [];
+		foreach ($getTransactions as $transaction) {
+			$transactions[] = $transaction->publicData();
+		}
+
+		return $this->json([
+			'success'		=> true,
+			'transactions'	=> $transactions,
+			'stats'			=>  [
+				'total'	=> $userTransactions->count()
+			],
+
+		]);
+	}
 
 	public function check(Request $request)
 	{

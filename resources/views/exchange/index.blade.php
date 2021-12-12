@@ -13,6 +13,7 @@
 		</div>
 	</div>
 @endsection
+
 @section('js-libs')
 	<script src="{{ asset('assets/libs/jquery-mask-plugin/jquery.mask.min.js') }}"></script>
 	<script src="{{ asset('assets/libs/autonumeric/autoNumeric.min.js') }}"></script>

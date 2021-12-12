@@ -56,6 +56,7 @@ Route::middleware(['auth'])->group(function () {
 
 	Route::prefix('exchange')->group(function () {
 		Route::get('/',				[ ExchangeController::class, 'index' ])->name('exchange');
+		Route::get('transactions',	[ ExchangeController::class, 'transactions' ])->name('exchangeTransactions');
 
 		Route::post('check',		[ ExchangeController::class, 'check' ])->name('exchangeCheck');
 		Route::post('deposit',		[ ExchangeController::class, 'deposit' ])->name('exchangeDeposit');
