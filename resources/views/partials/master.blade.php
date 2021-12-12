@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ config('app.locale') }}">
+<html lang="{{ config('app.locale') }}" dir="{{ config('app.locale') == 'he' ? 'rtl' : 'ltr' }}">
 <head>
 	@include("partials/titleMeta", [
 		"title"	=> isset($page_title) ? $page_title : false
@@ -73,10 +73,15 @@
 			baseURL: site_url,
 			headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
 		});
+
+		const I18n = {!! $locale !!}
+
 	</script>
 	@yield('js')
 
 	<!-- Custom Js -->
+
+	<script type="text/javascript" src="{{ asset('assets/js/i18n.js') }}?c={{ filemtime(public_path('assets/js/i18n.js')) }}"></script>
 	<script type="text/javascript" src="{{ asset('assets/js/global.js') }}?c={{ filemtime(public_path('assets/js/global.js')) }}"></script>
 	<script type="text/javascript" src="{{ asset('assets/js/metamask.js') }}?c={{ filemtime(public_path('assets/js/metamask.js')) }}"></script>
 	<script type="text/javascript" src="{{ asset('assets/js/modules/users.js') }}?c={{ filemtime(public_path('assets/js/modules/users.js')) }}"></script>

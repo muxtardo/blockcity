@@ -117,9 +117,9 @@ class Transaction extends Model
 	{
 		return [
 			'id'			=> $this->id,
-			'type'			=> $this->type,
+			'type'			=> __(ucwords($this->type)),
 			'amount'		=> currency($this->amount),
-			'status'		=> $this->status,
+			'status'		=> __(ucwords($this->status)),
 			'statusColor'	=> $this->statusColor(),
 			'txid'			=> $this->txid,
 			'fee'			=> $this->fee,

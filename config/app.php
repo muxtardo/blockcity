@@ -83,9 +83,12 @@ return [
     'locale' => 'en',
 
     'locales' => [
-        'pt' => 'Português',
-        'en' => 'English',
-        'es' => 'Español',
+		'zh-CN' => '中文',
+		'en' => 'English',
+		'es' => 'Español',
+		'fr' => 'Français',
+		'he' => 'עִברִית',
+        'pt-BR' => 'Português'
     ],
 
     /*

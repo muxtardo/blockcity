@@ -8,20 +8,29 @@ if (isTestnet) {
 	redOficial	= "0x61";
 }
 
+let providerMeta	= false
+	signer			= false;
+try {
+	providerMeta	= new ethers.providers.Web3Provider(window.ethereum);
+	signer			= providerMeta.getSigner();
+} catch (err) {
+	noMetaMask();
+}
 
-const providerMeta	= new ethers.providers.Web3Provider(window.ethereum);
-const signer		= providerMeta.getSigner();
-
-const haveMetaMask = () => {
+function haveMetaMask() {
 	return typeof web3 !== 'undefined' && window.ethereum;
 };
 
-const noMetaMask = () => {
+function noMetaMask() {
+	lockScreen(false);
+
 	Swal.fire({
 		icon: 'warning',
-		title: 'Install MetaMask',
-		text: 'No MetaMask detected, please install MetaMask!',
-		confirmButtonText: "Yes, install it!"
+		title: __('Install MetaMask'),
+		text: __('No MetaMask detected, please install MetaMask!'),
+		confirmButtonText: __("Yes, :action it!", { action: 'install' }),
+		showCancelButton: true,
+		caancelButtonText: __('Cancel')
 	}).then((result) => {
 		if (result.value) {
 			window.open("https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn", '_blank').focus();
@@ -85,9 +94,9 @@ const changeNetwork = async () => {
 			return true;
 		}).catch(async (err) => {
 			if (err.code == 4001) {
-				showAlert("Alert", "You have rejected the network change", 'error');
+				showAlert(__("Alert"), __("You have rejected the network change"), 'error');
 			} else if (err.code == 4902) {
-				showAlert("Alert", "It seems that you do not have this network added to your MetaMask, I will give you a hand", 'warning');
+				showAlert(__("Alert"), __("It seems that you do not have this network added to your MetaMask, I will give you a hand"), 'warning');
 				if (!isTestnet) {
 					if (!await addMainnetNetwork()) {
 						return false;
@@ -124,7 +133,7 @@ const addMainnetNetwork = async () => {
 	}).then(() => {
 		return true;
 	}).catch(() => {
-		showAlert("Alert", "There was a problem adding the network ", 'error');
+		showAlert(__("Alert"), __("There was a problem adding the network"), 'error');
 		return false;
 	});
 };
@@ -146,7 +155,7 @@ const addTestnetNetwork = async () => {
 	}).then(() => {
 		return true;
 	}).catch(() => {
-		showAlert("Alert", "There was a problem adding the network ", 'error');
+		showAlert(__("Alert"), __("There was a problem adding the network"), 'error');
 		return false;
 	});
 };
@@ -160,11 +169,11 @@ const makeUserSign = async (string, passphrase) => {
 		}).then((sign) => {
 			return sign;
 		}).catch(() => {
-			showAlert("Alert", "You have rejected the signature", 'error');
+			showAlert(__("Alert"), __("You have rejected the signature"), 'error');
 			return false;
 		});
 	} catch (err) {
-		showAlert("Alert", "You have rejected the signature", 'error');
+		showAlert(__("Alert"), __("You have rejected the signature"), 'error');
 		return false;
 	}
 }
@@ -175,18 +184,22 @@ const getFromSign = async (secret, passphrase) => {
 			method: 'personal_ecRecover',
 			params: [ passphrase, secret ],
 		}).catch((err) => {
-			showAlert("Alert", "Your signature is invalid", 'error');
+			showAlert(__("Alert"), __("Your signature is invalid"), 'error');
 			return false;
 		})
 	} catch (err) {
-		showAlert("Alert", "Fail to get your wallet address", 'error');
+		showAlert(__("Alert"), __("Fail to get your wallet address"), 'error');
 		return false;
 	}
 }
 
 const getTransactionReceipt = async (txHash) => {
+	if (!providerMeta) {
+		return false;
+	}
+
 	if (txHash.length != 66) {
-		showAlert('Error', 'Incorrect hash! Check it and try again.', 'error');
+		showAlert(__('Error'), __('Incorrect hash! Check it and try again.'), 'error');
 		return false;
 	}
 
@@ -199,6 +212,10 @@ const getTransactionReceipt = async (txHash) => {
 };
 
 const getTokenBalance = async (wallet) => {
+	if (!providerMeta) {
+		return false;
+	}
+
 	const contractAbi	= await $.getJSON(storage_url('contractAbi.json'));
 	const BNBContract	= new ethers.Contract(gameContract, contractAbi, signer);
 	const resBalance	= await BNBContract.balanceOf(wallet);
@@ -219,6 +236,10 @@ const loadTokenBalance = async () => {
 };
 
 const transferToken = async (wallet, amount) => {
+	if (!providerMeta) {
+		return false;
+	}
+
 	const contractAbi	= await $.getJSON(storage_url('contractAbi.json'));
 	const BNBContract	= new ethers.Contract(gameContract, contractAbi, signer);
 	const txHash		= await BNBContract.transfer(wallet, amount, {
@@ -235,18 +256,18 @@ const transferToken = async (wallet, amount) => {
 
 const transferBNB = async (sender, receiver, amount) => {
 	if (!Web3.utils.isAddress(sender)) {
-		showAlert('Error', 'Incorrect sender wallet address! Check it and try again.', 'error');
+		showAlert(__('Error'), __('Incorrect sender wallet address! Check it and try again.'), 'error');
 		return false;
 	}
 
 	if (!Web3.utils.isAddress(receiver)) {
-		showAlert('Error', 'Incorrect receiver wallet address! Check it and try again.', 'error');
+		showAlert(__('Error'), __('Incorrect receiver wallet address! Check it and try again.'), 'error');
 		return false;
 	}
 
 	amount = parseFloat(amount);
 	if (amount <= 0) {
-		showAlert('Error', 'Incorrect amount! Check it and try again.', 'error');
+		showAlert(__('Error'), __('Incorrect amount! Check it and try again.'), 'error');
 		return false;
 	}
 
@@ -260,9 +281,9 @@ const transferBNB = async (sender, receiver, amount) => {
 		}]
 	}).catch((err) => {
 		if (err.code == 4001) {
-			showAlert("Warning", "Transaction canceled", 'warning');
+			showAlert(__("Warning"), __("Transaction canceled"), 'warning');
 		} else {
-			showAlert("Warning", "Transaction error", 'warning');
+			showAlert(__("Warning"), __("Transaction error"), 'warning');
 		}
 
 		return false;

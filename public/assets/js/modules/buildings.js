@@ -114,18 +114,19 @@
 					this.doBuildAction('upgrade', id, cost);
 				},
 				doBuildSell(id) {
-					showAlert(config.trans.comingSoonTitle, config.trans.comingSoonMessage, 'info');
+					showAlert(__("Coming soon!"), __("This feature is not available yet"), 'info');
 				},
 				async doBuildAction(action, id, cost = false){
 					if (action != 'claim') {
 						const confirmed = await Swal.fire({
-							title: config.trans.confirmTitle,
-							text: config.trans.confirm.replace(':currency', cost).replace(':action', config.trans[action]),
+							title: __("Are you sure?"),
+							text: __("You are about to spend :currency coins to :action this house!", {action: __(action), currency: cost}),
 							icon: 'warning',
 							showCancelButton: true,
 							confirmButtonColor: '#3085d6',
 							cancelButtonColor: '#d33',
-							confirmButtonText: config.trans.button.replace(':action', config.trans[action]),
+							cancelButtonText: __('Cancel'),
+							confirmButtonText: __("Yes, :action it!", {action: __(action)}),
 						}).then((result) => result.isConfirmed);
 
 						if (!confirmed) { return; }
@@ -192,13 +193,14 @@
 				},
 				async doMint() {
 					const confirmed = await Swal.fire({
-						title: config.trans.confirmTitle,
-						text: config.trans.confirmMint.replace(':currency', config.mint_cost.toFixed(2)),
+						title: __("Are you sure?"),
+						text: __("You are about to spend :currency coins to mint a new building!", {currency: config.mint_cost.toFixed(2)}),
 						icon: 'warning',
 						showCancelButton: true,
 						confirmButtonColor: '#3085d6',
 						cancelButtonColor: '#d33',
-						confirmButtonText: config.trans.button.replace(':action', config.trans['mint'])
+						cancelButtonText: __('Cancel'),
+						confirmButtonText: __("Yes, :action it!", {action: __("Mint")}),
 					}).then((result) => result.isConfirmed);
 
 					if (!confirmed) { return; }

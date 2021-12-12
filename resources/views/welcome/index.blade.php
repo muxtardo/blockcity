@@ -52,7 +52,7 @@
 		<div class="col-sm-4">
 			<div class="card">
 				<div class="card-body">
-					<h4 class="header-title mb-0 text-uppercase">{{ __('Welcome to') }} {{ config('app.name') }}</h4>
+					<h4 class="header-title mb-0 text-uppercase">{{ __('Welcome to :name', ['name' => config('app.name')]) }}</h4>
 					<p class="my-3" style="word-break: break-word;">
 						First you need deposit {{ config('game.symbol') }} from your Metamask wallet into the game,
 						please go to <a href="{{ url('exchange') }}">Exchange</a> and use <b>Deposit {{ config('game.symbol') }}</b> button.
@@ -67,7 +67,7 @@
 			</div>
 			<div class="card">
 				<div class="card-body">
-					<h4 class="header-title mb-0 text-uppercase">{{ config('app.name') }} {{ __('Statistics') }}</h4>
+					<h4 class="header-title mb-0 text-uppercase">{{ __(':name Statistics', ['name' => config('app.name')]) }}</h4>
 					<div class="collapse pt-3 show">
 						<div class="text-center">
 							<div class="row mt-2">

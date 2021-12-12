@@ -1,7 +1,7 @@
 (async function () {
 	const exchange = $('.exchange');
 	if (exchange.length) {
-		window.exchangeApp = {
+		exchangeAppData = {
 			data() {
 				return {
 					counter: 0,
@@ -29,6 +29,11 @@
 					lockScreen(false);
 					const transactionsObject = transactions.reduce((acc, transaction) => ({...acc, [transaction.id]: transaction }), {});
 					return transactionsObject;
+				},
+				async reset_transactions() {
+					this.last_load_page = 0;
+					this.current_page = 1;
+					this.nextPage(this.current_page);
 				},
 				pageLoaded(number) {
 					const pages_loaded = Math.ceil(Object.values(this.transactions.value).length / this.number_per_page);
@@ -70,11 +75,11 @@
 			}
 		}
 
-		window.foda = Vue.createApp(exchangeApp).mount('.user-transactions');
+		window.exchangeApp = Vue.createApp(exchangeAppData).mount('.user-transactions');
 
 		loadTokenBalance();
 
-		const formConsult = $("#form-consult");
+		const formConsult = $("#form-consult", exchange);
 		if (formConsult.length) {
 			formConsult.on('submit', async function (e) {
 				lockScreen(true);
@@ -83,26 +88,26 @@
 				const txReceipt	= await getTransactionReceipt(transHash);
 				if (!txReceipt) {
 					lockScreen(false);
-					showAlert('Error', 'Transaction not found! Check it and try again.', 'error');
+					showAlert(__('Error'), __('Transaction not found! Check it and try again.'), 'error');
 					return false;
 				}
 
 				if (txReceipt.status == 0) {
 					lockScreen(false);
-					showAlert('Error', 'Transaction status failed', 'error');
+					showAlert(__('Error'), __('Transaction status failed'), 'error');
 					return false;
 				}
 
 				if (txReceipt.to != gameContract) {
 					lockScreen(false);
-					showAlert('Error', 'This is not a transaction to the game contract', 'error');
+					showAlert(__('Error'), __('This is not a transaction to the game contract'), 'error');
 					return false;
 				}
 
 				let receiver = txReceipt.logs[0].topics[2];
 				if (receiver == null) {
 					lockScreen(false);
-					showAlert('Error', 'Transaction logs error', 'error');
+					showAlert(__('Error'), __('Transaction logs error'), 'error');
 					return false;
 				}
 				receiver = receiver.toLowerCase();
@@ -110,14 +115,14 @@
 				let sender = txReceipt.from.toLowerCase();
 				if (sender != userWallet) {
 					lockScreen(false);
-					showAlert('Error', 'This hash does not belong to this account', 'error');
+					showAlert(__('Error'), __('This hash does not belong to this account'), 'error');
 					return false;
 				}
 
 				let walletPag = walletPagos.toLowerCase().substr(2);
 				if (!receiver.includes(walletPag)) {
 					lockScreen(false);
-					showAlert('Error', 'Transaction destination wrong', 'error');
+					showAlert(__('Error'), __('Transaction destination wrong'), 'error');
 					return false;
 				}
 
@@ -126,7 +131,10 @@
 					const { title, message, redirect, success, currency } = response.data;
 
 					lockScreen(false);
-					if (currency) { $('#myCurrency').html(currency); }
+					if (currency) {
+						$('#myCurrency').html(currency);
+						exchangeApp.reset_transactions();
+					}
 
 					showAlert(title, message, success ? 'success' : 'danger');
 					if (redirect) {
@@ -142,7 +150,7 @@
 			});
 		};
 
-		const formDeposit = $("#form-deposit");
+		const formDeposit = $("#form-deposit", exchange);
 		if (formDeposit.length) {
 			formDeposit.on('submit', async function (e) {
 				lockScreen(true);
@@ -151,7 +159,7 @@
 				if (amount <= 0) {
 					lockScreen(false);
 
-					showAlert('Error', 'Amount must be greater than 0');
+					showAlert(__('Error'), __('Amount must be greater than 0'), 'error');
 					return false;
 				}
 				amount = parseFloat(amount * 10000).toFixed(0);
@@ -163,7 +171,7 @@
 					lockScreen(false);
 
 					let diffTokens	= parseFloat((amount - balance) / 10000).toFixed(4);
-					showAlert("Alert", `Insuficient Balance, you need +${diffTokens} more Tokens`, 'info');
+					showAlert(__("Alert"), __(`Insuficient Balance, you need +:amount more Tokens`, {amount: diffTokens}), 'info');
 					return false;
 				}
 
@@ -172,7 +180,7 @@
 					if (!txHash) {
 						lockScreen(false);
 
-						showAlert('Error', 'Error sending tokens', 'error');
+						showAlert(__('Error'), __('Error sending tokens'), 'error');
 						return false;
 					}
 					loadTokenBalance();
@@ -184,7 +192,11 @@
 					const { title, message, redirect, success, currency, transactionId } = response.data;
 
 					// Update interface with new user balance
-					if (currency) { $('#myCurrency').html(currency); }
+					exchangeApp.reset_transactions();
+					if (currency) {
+						$('#myCurrency').html(currency);
+
+					}
 					if (transactionId) { checkTransaction(transactionId); }
 
 					showAlert(title, message, success ? 'success' : 'danger');
@@ -193,11 +205,11 @@
 					}
 				} catch (err) {
 					if (err.code == -32603) {
-						showAlert("Error", 'Transaction underpriced!', 'error');
+						showAlert(__("Error"), __('Transaction underpriced!'), 'error');
 					} else if (err.code == 4001) {
-						showAlert("Error", "Transaction canceled", 'error');
+						showAlert(__("Error"), __("Transaction canceled"), 'error');
 					} else {
-						showAlert("Error", "Transaction error", 'error');
+						showAlert(__("Error"), __("Transaction error"), 'error');
 					}
 
 					return false;
@@ -207,7 +219,7 @@
 			});
 		}
 
-		const formWithdrawal = $("#form-withdrawal");
+		const formWithdrawal = $("#form-withdrawal", exchange);
 		if (formWithdrawal.length) {
 			formWithdrawal.on('submit', async function (e) {
 				lockScreen(true);
@@ -216,7 +228,7 @@
 				if (amount <= 0) {
 					lockScreen(false);
 
-					showAlert('Error', 'Amount must be greater than 0');
+					showAlert(__('Error'), __('Amount must be greater than 0'), 'error');
 					return false;
 				}
 
@@ -227,6 +239,7 @@
 				if (currency) {
 					loadTokenBalance();
 					$('#myCurrency').html(currency);
+					exchangeApp.reset_transactions();
 				}
 				if (transactionId) { checkTransaction(transactionId); }
 
