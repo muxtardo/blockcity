@@ -22,6 +22,8 @@ class Transaction extends Model
         'fee',
     ];
 
+
+
 	public function statusColor()
 	{
 		if ($this->status == 'success') {
@@ -43,13 +45,6 @@ class Transaction extends Model
 		}
 
 		return true;
-	}
-
-	public static function getTransactionApi($hash)
-	{
-		echo (config('game.api_web3_url') . '/transaction/' . $hash);
-		// $transaction	= Http::get(config('game.api_web3_url') . '/transaction/' . $hash)->json();
-		// return $transaction;
 	}
 
 	public function check()
@@ -115,6 +110,21 @@ class Transaction extends Model
 			'message'		=> 'Transaction completed',
 			'currency'		=> currency($user->currency),
 			'idTransaction'	=> $user->getPendingTransaction()
+		];
+	}
+
+	public function publicData()
+	{
+		return [
+			'id'			=> $this->id,
+			'type'			=> $this->type,
+			'amount'		=> currency($this->amount),
+			'status'		=> $this->status,
+			'statusColor'	=> $this->statusColor(),
+			'txid'			=> $this->txid,
+			'fee'			=> $this->fee,
+			'created_at'	=> $this->created_at->toDateTimeString(),
+			'updated_at'	=> $this->updated_at->toDateTimeString(),
 		];
 	}
 }

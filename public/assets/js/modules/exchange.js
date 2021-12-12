@@ -1,6 +1,77 @@
 (async function () {
 	const exchange = $('.exchange');
 	if (exchange.length) {
+		window.exchangeApp = {
+			data() {
+				return {
+					counter: 0,
+					transactions: Vue.reactive({ value: {}}),
+					current_page: 1,
+					number_per_page: 10,
+					total_transactions: 0,
+					last_load_page: 1,
+					isTestnet: isTestnet
+				}
+			},
+			methods: {
+
+				async load_transactions(page = 1) {
+					lockScreen(true);
+
+					const response = await axiosInstance.get('exchange/transactions', {
+						params: { page }
+					}).then(res => res.data);
+					const { transactions, stats: {
+						total: countTransactions
+					}} = response;
+					if (page == 1) { this.total_transactions = countTransactions; }
+
+					lockScreen(false);
+					const transactionsObject = transactions.reduce((acc, transaction) => ({...acc, [transaction.id]: transaction }), {});
+					return transactionsObject;
+				},
+				pageLoaded(number) {
+					const pages_loaded = Math.ceil(Object.values(this.transactions.value).length / this.number_per_page);
+
+					return this.last_load_page < number;
+				},
+				async nextPage(next) {
+					if (this.pageLoaded(next)) {
+						this.last_load_page = next;
+						lockScreen(true);
+
+						const transactions = await this.load_transactions(next);
+						this.transactions.value = Object.assign(this.transactions.value, transactions);
+
+						lockScreen(false);
+					}
+
+					this.$nextTick(() => {
+						this.current_page = next;
+					});
+				}
+			},
+			async mounted() {
+				this.transactions.value = Object.assign(this.transactions.value, await this.load_transactions());
+				this.nextPage(1);
+			},
+			computed: {
+				transactionsFiltered() {
+					const sorted	= Object.values(this.transactions.value).sort((a, b) => b.id - a.id);
+					const data		= sorted.slice((this.current_page - 1) * this.number_per_page, (this.current_page) * this.number_per_page);
+					return data;
+				},
+				totalPages() {
+					return Math.ceil(this.total_transactions / this.number_per_page);
+				},
+				loaded_all_transactions() {
+					return Object.values(this.transactions.value).length >= this.total_transactions;
+				},
+			}
+		}
+
+		window.foda = Vue.createApp(exchangeApp).mount('.user-transactions');
+
 		loadTokenBalance();
 
 		const formConsult = $("#form-consult");
