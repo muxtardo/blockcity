@@ -50,9 +50,9 @@
 									<form class="d-flex flex-wrap align-items-center">
 										<label for="status-select" class="me-2">{{ __('Sort By') }}</label>
 										<div class="me-sm-3">
-											<select class="form-select my-1 my-md-0" id="status-select" v-on:change="changeOrderBy($event)">
+											<select class="form-select my-1 my-md-0" id="status-select" v-model="orderBy" v-on:change="changeOrderBy($event)">
 												@foreach ($filters as $filter => $value)
-													<option value="{{ $filter }}" {{ ($filter == $filterDefault) ? 'selected' : '' }}>{{ __($value['name']) }}</option>
+													<option value="{{ $filter }}">{{ __($value['name']) }}</option>
 												@endforeach
 											</select>
 										</div>

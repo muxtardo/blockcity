@@ -56,13 +56,6 @@
 		let instanceInterval = null;
 		const Counter = {
 			data() {
-				let orderBy = 'claim_progress';
-				if (localStorage.getItem('orderBy') !== null) {
-					orderBy = localStorage.getItem('orderBy');
-				} else {
-					localStorage.setItem('orderBy', orderBy);
-				}
-
 				return {
 					counter: 0,
 					buildings: Vue.reactive({ value: {}}),
@@ -70,7 +63,7 @@
 					number_per_page: 6,
 					total_mint: 0,
 					last_load_page: 1,
-					orderBy: orderBy,
+					orderBy: 'claim_progress',
 				}
 			},
 			methods: {
@@ -276,6 +269,9 @@
 
 			},
 			async mounted() {
+				if (localStorage.getItem('orderBy') !== null) {
+					this.orderBy = localStorage.getItem('orderBy');
+				}
 				this.buildings.value = Object.assign(this.buildings.value, await this.load_buildings());
 				this.nextPage(1);
 				this.$nextTick(() => {
