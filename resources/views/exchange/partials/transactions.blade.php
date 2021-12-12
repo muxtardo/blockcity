@@ -29,7 +29,7 @@
 							</td>
 							<td class="text-center">
 								@if ($transaction->status == 'success' && $transaction->txid)
-									<a href="https://bscscan.com/tx/{{ $transaction->txid }}" target="_blank">BscScan</a>
+									<a href="https://testnet.bscscan.com/tx/{{ $transaction->txid }}" target="_blank">BscScan</a>
 								@else
 									--
 								@endif
