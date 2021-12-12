@@ -14,33 +14,33 @@ class BuildingsController extends Controller
 		'claim_progress' => [
 			'name' 		=> 'Claim Progress',
 			'column' 	=> 'user_buildings.last_claim_at',
-			'order' 	=> 'asc', 	
-		], 
+			'order' 	=> 'asc',
+		],
 		'name' => [
 			'name' 		=> 'Name',
 			'column' 	=> 'user_buildings.name',
-			'order' 	=> 'asc', 	
-		], 
+			'order' 	=> 'asc',
+		],
 		'rarity' => [
 			'name' 		=> 'Rarity',
 			'column' 	=> 'buildings.rarity',
-			'order' 	=> 'desc', 	
-		], 
+			'order' 	=> 'desc',
+		],
 		'level' => [
 			'name' 		=> 'Level',
 			'column' 	=> 'user_buildings.level',
-			'order' 	=> 'desc', 	
-		], 
+			'order' 	=> 'desc',
+		],
 		'status' => [
 			'name' 		=> 'Status',
 			'column' 	=> 'user_buildings.building_status_id',
-			'order' 	=> 'desc', 	
+			'order' 	=> 'desc',
 		],
 	];
 
 	protected $filterDefault = 'claim_progress';
 
-	private function getFilter() 
+	private function getFilter()
 	{
 		$filter = request()->input('filter');
 		if (!isset($this->filtersOrderBy[$filter])) {
@@ -63,7 +63,8 @@ class BuildingsController extends Controller
 	{
 		$filter = $this->getFilter();
 		$userBuildings		= $request->user()->buildings();
-		$getUserBuildings	= $userBuildings->select('user_buildings.*')->join('buildings', 'user_buildings.building_id', '=', 'buildings.id')->orderBy('highlight', 'desc')
+		$getUserBuildings	= $userBuildings->select('user_buildings.*')
+			->join('buildings', 'user_buildings.building_id', '=', 'buildings.id')->orderBy('highlight', 'desc')
 			->orderBy($filter['column'], $filter['order'])->paginate(6);
 
 		$buildings = [];

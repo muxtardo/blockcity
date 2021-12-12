@@ -4,7 +4,7 @@
 
 	if (userBuildings.length) {
 		const myModal = new bootstrap.Modal(document.getElementById('myModal'));
-		myModal._element.addEventListener('hidden.bs.modal', function (event) {
+		myModal._element.addEventListener('hidden.bs.modal', (event) => {
 			$(".building-hidden").removeClass('building-hidden');
 			$("body").css("overflow", "auto");
 			instanceHidden.hidden = false;
@@ -80,7 +80,9 @@
 				async load_buildings(page = 1) {
 					lockScreen(true);
 
-					const response = await axiosInstance.get('buildings', { params: { page, filter: this.orderBy } }).then(res => res.data);
+					const response = await axiosInstance.get('buildings', {
+						params: { page, filter: this.orderBy }
+					}).then(res => res.data);
 					const { buildings, stats: {
 						buildings: countBuildings,
 						workers: countWorkers,
@@ -105,11 +107,11 @@
 					const cost = this.buildings.value[id].status.cost;
 					this.doBuildAction('repair', id, cost);
 				},
-				async doBuildUpgrade(id) {
+				doBuildUpgrade(id) {
 					const cost = this.buildings.value[id].upgrade;
 					this.doBuildAction('upgrade', id, cost);
 				},
-				doBuildSell(id){
+				doBuildSell(id) {
 					showAlert(config.trans.comingSoonTitle, config.trans.comingSoonMessage, 'info');
 				},
 				async doBuildAction(action, id, cost = false){
@@ -124,9 +126,7 @@
 							confirmButtonText: config.trans.button.replace(':action', config.trans[action]),
 						}).then((result) => result.isConfirmed);
 
-						if (!confirmed) {
-							return;
-						}
+						if (!confirmed) { return; }
 					}
 
 					lockScreen(true);
@@ -180,10 +180,9 @@
 						const buildings = await this.load_buildings(next);
 						this.buildings.value = Object.assign(this.buildings.value, buildings);
 
-						console.log('aqui', this.buildings.value);
-
 						lockScreen(false);
 					}
+
 					this.$nextTick(() => {
 						this.current_page = next;
 						updateBuildings(this.buildings);
@@ -200,9 +199,7 @@
 						confirmButtonText: config.trans.button.replace(':action', config.trans['mint'])
 					}).then((result) => result.isConfirmed);
 
-					if (!confirmed) {
-						return;
-					}
+					if (!confirmed) { return; }
 
 					lockScreen(true);
 					try {
@@ -260,7 +257,6 @@
 				},
 				orderBy_highlight(fn) {
 					return (a, b) => {
-						//return fn(a,b);
 						switch (b.highlight + a.highlight) {
 							case 0: return fn(a, b);
 							case 1: return b.highlight - a.highlight;
@@ -282,9 +278,8 @@
 					this.$nextTick(() => {
 						enableTooltip();
 					});
-					const sorted = Object.values(this.buildings.value).sort(this.orderBy_highlight(this['orderBy_'+this.orderBy]));
-					console.log(sorted);
-					const data = sorted.slice((this.current_page - 1) * this.number_per_page, (this.current_page) * this.number_per_page);
+					const sorted	= Object.values(this.buildings.value).sort(this.orderBy_highlight(this['orderBy_' + this.orderBy]));
+					const data		= sorted.slice((this.current_page - 1) * this.number_per_page, (this.current_page) * this.number_per_page);
 					return data;
 				},
 				hasBuildings() {
@@ -292,7 +287,7 @@
 				},
 				totalPages() {
 					return Math.ceil(this.total_mint / this.number_per_page);
-				},				
+				},
 				loaded_all_buildings() {
 					return Object.values(this.buildings.value).length >= this.total_mint;
 				},
