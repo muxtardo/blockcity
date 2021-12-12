@@ -10,11 +10,62 @@ use App\Models\UserBuilding;
 
 class BuildingsController extends Controller
 {
+	protected $filtersOrderBy = [
+		'claim_progress' => [
+			'name' 		=> 'Claim Progress',
+			'column' 	=> 'user_buildings.last_claim_at',
+			'order' 	=> 'asc',
+		],
+		'name' => [
+			'name' 		=> 'Name',
+			'column' 	=> 'user_buildings.name',
+			'order' 	=> 'asc',
+		],
+		'rarity' => [
+			'name' 		=> 'Rarity',
+			'column' 	=> 'buildings.rarity',
+			'order' 	=> 'desc',
+		],
+		'level' => [
+			'name' 		=> 'Level',
+			'column' 	=> 'user_buildings.level',
+			'order' 	=> 'desc',
+		],
+		'status' => [
+			'name' 		=> 'Status',
+			'column' 	=> 'user_buildings.building_status_id',
+			'order' 	=> 'desc',
+		],
+	];
+
+	protected $filterDefault = 'claim_progress';
+
+	private function getFilter()
+	{
+		$filter = request()->input('filter');
+		if (!isset($this->filtersOrderBy[$filter])) {
+			$filter = $this->filterDefault;
+		}
+		return $this->filtersOrderBy[$filter];
+	}
+
+	public static function getFilters()
+	{
+		return (new BuildingsController)->filtersOrderBy;
+	}
+
+	public static function getFilterDefault()
+	{
+		return (new BuildingsController)->filterDefault;
+	}
+
 	public function index(Request $request)
 	{
+		$filter = $this->getFilter();
 		$userBuildings		= $request->user()->buildings();
-		$getUserBuildings	= $userBuildings->orderBy('highlight', 'desc')
-			->orderBy('last_claim_at', 'asc')->paginate(6);
+		$getUserBuildings	= $userBuildings->select('user_buildings.*')
+			->join('buildings', 'user_buildings.building_id', '=', 'buildings.id')->orderBy('highlight', 'desc')
+			->orderBy($filter['column'], $filter['order'])->paginate(6);
 
 		$buildings = [];
 		foreach ($getUserBuildings as $building) {
@@ -22,8 +73,8 @@ class BuildingsController extends Controller
 		}
 
 		return $this->json([
-			'success'	=> true,
-			'buildings'	=> $buildings,
+			'success'		=> true,
+			'buildings'		=> $buildings,
 			'stats'  	=> [
 				'currency'		=> currency($request->user()->currency),
 				'buildings'		=> $request->user()->buildings()->count(),

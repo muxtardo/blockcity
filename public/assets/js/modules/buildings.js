@@ -4,7 +4,7 @@
 
 	if (userBuildings.length) {
 		const myModal = new bootstrap.Modal(document.getElementById('myModal'));
-		myModal._element.addEventListener('hidden.bs.modal', function (event) {
+		myModal._element.addEventListener('hidden.bs.modal', (event) => {
 			$(".building-hidden").removeClass('building-hidden');
 			$("body").css("overflow", "auto");
 			instanceHidden.hidden = false;
@@ -30,7 +30,7 @@
 		}
 		function updateBuildings(buildings) {
 			const updateBuildingsData = () => {
-				buildings.value.forEach((building) => {
+				Object.values(buildings.value).forEach((building) => {
 					const { last_claim_at, next_claim_at, current_time } = building.claim.times;
 					const timeElapsed = (Date.now() - current_timestamp) / 1000;
 					const t1 = (current_time + timeElapsed) - last_claim_at;
@@ -58,19 +58,33 @@
 			data() {
 				return {
 					counter: 0,
-					buildings: Vue.reactive({value: []}),
+					buildings: Vue.reactive({ value: {}}),
 					current_page: 1,
 					number_per_page: 6,
 					total_mint: 0,
 					last_load_page: 1,
-					buildingsShow: [],
+					orderBy: 'claim_progress',
 				}
 			},
 			methods: {
+				changeOrderBy($event) {
+					const orderBy = $event.target.value;
+					localStorage.setItem('orderBy', orderBy);
+
+					this.orderBy = orderBy;
+					if (this.total_mint != Object.values(this.buildings.value).length) {
+						this.last_load_page = 0;
+					} else {
+						this.last_load_page = Math.ceil(Object.values(this.buildings.value).length / this.number_per_page);
+					}
+					this.nextPage(1);
+				},
 				async load_buildings(page = 1) {
 					lockScreen(true);
 
-					const response = await axiosInstance.get('buildings', { params: { page } }).then(res => res.data);
+					const response = await axiosInstance.get('buildings', {
+						params: { page, filter: this.orderBy }
+					}).then(res => res.data);
 					const { buildings, stats: {
 						buildings: countBuildings,
 						workers: countWorkers,
@@ -85,21 +99,22 @@
 					$("#myWorkers").html(countWorkers);
 
 					lockScreen(false);
-					return buildings;
+					buildingsObject = buildings.reduce((acc, building) => ({...acc, [building.id]: building }), {});
+					return buildingsObject;
 				},
 				doBuildClaim(id) {
 					this.doBuildAction('claim', id);
 				},
 				doBuildRepair(id) {
-					const cost = this.buildings.value.find(building => building.id == id).status.cost;
+					const cost = this.buildings.value[id].status.cost;
 					this.doBuildAction('repair', id, cost);
 				},
-				async doBuildUpgrade(id) {
-					const cost = this.buildings.value.find(building => building.id == id).upgrade;
+				doBuildUpgrade(id) {
+					const cost = this.buildings.value[id].upgrade;
 					this.doBuildAction('upgrade', id, cost);
 				},
-				doBuildSell(id){
-					showAlert('Coming soon!', 'This feature is not available yet', 'info');
+				doBuildSell(id) {
+					showAlert(config.trans.comingSoonTitle, config.trans.comingSoonMessage, 'info');
 				},
 				async doBuildAction(action, id, cost = false){
 					if (action != 'claim') {
@@ -113,9 +128,7 @@
 							confirmButtonText: config.trans.button.replace(':action', config.trans[action]),
 						}).then((result) => result.isConfirmed);
 
-						if (!confirmed) {
-							return;
-						}
+						if (!confirmed) { return; }
 					}
 
 					lockScreen(true);
@@ -133,7 +146,12 @@
 						$("#myDailyClaim").html(userDailyClaim);
 						$("#myWorkers").html(countWorkers);
 
-						this.buildings.value.splice(this.buildings.value.findIndex(building => building.id == id), 1, building);
+						this.buildings.value[id] = building;
+
+						if (!this.loaded_all_buildings) {
+							this.last_load_page = this.current_page - 1;
+							this.nextPage(this.current_page);
+						}
 
 						showAlert(title, message, success ? 'success' : 'danger');
 
@@ -151,7 +169,7 @@
 					}
 				},
 				pageLoaded(number) {
-					const pages_loaded = Math.ceil(this.buildings.value.length / this.number_per_page);
+					const pages_loaded = Math.ceil(Object.values(this.buildings.value).length / this.number_per_page);
 
 					return this.last_load_page < number;
 				},
@@ -162,10 +180,11 @@
 						lockScreen(true);
 
 						const buildings = await this.load_buildings(next);
-						this.buildings.value.push(...buildings);
+						this.buildings.value = Object.assign(this.buildings.value, buildings);
 
 						lockScreen(false);
 					}
+
 					this.$nextTick(() => {
 						this.current_page = next;
 						updateBuildings(this.buildings);
@@ -182,9 +201,7 @@
 						confirmButtonText: config.trans.button.replace(':action', config.trans['mint'])
 					}).then((result) => result.isConfirmed);
 
-					if (!confirmed) {
-						return;
-					}
+					if (!confirmed) { return; }
 
 					lockScreen(true);
 					try {
@@ -207,7 +224,7 @@
 						this.total_mint++;
 
 						showNewMint(name, image, rarity);
-						this.buildings.value.splice(0, 0, building);
+						this.buildings.value[building.id] = building;
 						this.nextPage(1);
 					} catch (e) {
 						const { title, message } = e.response.data;
@@ -216,10 +233,46 @@
 						lockScreen(false);
 					}
 				},
+				orderBy_claim_progress(a, b) {
+					return b.claim.progress - a.claim.progress;
+				},
+				orderBy_name(a, b) {
+					return a.name.localeCompare(b.name);
+				},
+				orderBy_rarity(a, b) {
+					return b.rarity - a.rarity;
+				},
+				orderBy_workers(a, b) {
+					return a.workers - b.workers;
+				},
+				orderBy_currency(a, b) {
+					return a.currency - b.currency;
+				},
+				orderBy_upgrade(a, b) {
+					return a.upgrade - b.upgrade;
+				},
+				orderBy_level(a, b) {
+					return b.level - a.level;
+				},
+				orderBy_status(a, b) {
+					return b.status.loss - a.status.loss;
+				},
+				orderBy_highlight(fn) {
+					return (a, b) => {
+						switch (b.highlight + a.highlight) {
+							case 0: return fn(a, b);
+							case 1: return b.highlight - a.highlight;
+							case 2: return b.id - a.id;
+						}
+					};
+				},
 
 			},
 			async mounted() {
-				this.buildings.value.push(...(await this.load_buildings()));
+				if (localStorage.getItem('orderBy') !== null) {
+					this.orderBy = localStorage.getItem('orderBy');
+				}
+				this.buildings.value = Object.assign(this.buildings.value, await this.load_buildings());
 				this.nextPage(1);
 				this.$nextTick(() => {
 					updateBuildings(this.buildings);
@@ -230,14 +283,19 @@
 					this.$nextTick(() => {
 						enableTooltip();
 					});
-					return this.buildings.value.slice((this.current_page - 1) * this.number_per_page, (this.current_page) * this.number_per_page);
+					const sorted	= Object.values(this.buildings.value).sort(this.orderBy_highlight(this['orderBy_' + this.orderBy]));
+					const data		= sorted.slice((this.current_page - 1) * this.number_per_page, (this.current_page) * this.number_per_page);
+					return data;
 				},
 				hasBuildings() {
-					return this.buildings.value.length > 0;
+					return Object.values(this.buildings.value).length > 0;
 				},
 				totalPages() {
 					return Math.ceil(this.total_mint / this.number_per_page);
-				}
+				},
+				loaded_all_buildings() {
+					return Object.values(this.buildings.value).length >= this.total_mint;
+				},
 			}
 		}
 

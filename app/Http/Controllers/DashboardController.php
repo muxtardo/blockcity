@@ -18,6 +18,8 @@ class DashboardController extends Controller
 		$this->params['totalBuildings']	= $userBuildings->count();
 
 		$this->params['page_title'] = __('My Houses');
+		$this->params['filters'] = BuildingsController::getFilters();
+		$this->params['filterDefault'] = BuildingsController::getFilterDefault();
 		$this->add_bc('#',	$this->params['page_title']);
 		return $this->render('dashboard.index');
 	}

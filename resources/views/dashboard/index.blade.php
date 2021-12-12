@@ -41,6 +41,36 @@
 		</div>
 
 		<div class="col-lg-9 building-list">
+			<div class="row">
+				<div class="col-12">
+					<div class="card">
+						<div class="card-body">
+							<div class="row justify-content-between">
+								<div class="col-md-12">
+									<form class="d-flex flex-wrap align-items-center">
+										<label for="status-select" class="me-2">{{ __('Sort By') }}</label>
+										<div class="me-sm-3">
+											<select class="form-select my-1 my-md-0" id="status-select" v-model="orderBy" v-on:change="changeOrderBy($event)">
+												@foreach ($filters as $filter => $value)
+													<option value="{{ $filter }}">{{ __($value['name']) }}</option>
+												@endforeach
+											</select>
+										</div>
+									</form>
+								</div>
+								<!--
+								<div class="col-md-4">
+									<div class="text-md-end mt-3 mt-md-0">
+										<button type="button" class="btn btn-success waves-effect waves-light me-1"><i class="mdi mdi-cog"></i></button>
+										<button type="button" class="btn btn-danger waves-effect waves-light me-1"><i class="mdi mdi-plus-circle me-1"></i> Add New</button>
+									</div>
+								</div>--><!-- end col-->
+							</div> <!-- end row -->
+						</div>
+					</div> <!-- end card -->
+				</div><!-- end col-->
+			</div>
+
 			@include('dashboard.partials.buildings')
 		</div>
 	</div>
@@ -68,6 +98,8 @@
 				repair: "{{ __('Repair') }}",
     			upgrade: "{{ __('Upgrade') }}",
 				mint: "{{ __('Mint') }}",
+				comingSoonTitle: "{{ __('Coming soon!') }}",
+				comingSoonMessage: "{{ __('This feature is not available yet') }}",
 			},
 			mint_cost: {{ config('game.mint_cost') }},
 			min_claim: {{ config('game.min_claim') }},
