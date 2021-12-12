@@ -207,7 +207,7 @@ class UserBuilding extends Model
 			'status'	=> [
 				'repair'	=> $this->needRepair(),
 				'color'		=> $this->status->color,
-				'name'		=> $this->status->name,
+				'name'		=> __($this->status->name),
 				'loss'		=> $this->status->loss,
 				'cost'		=> currency($this->repairCost())
 			],

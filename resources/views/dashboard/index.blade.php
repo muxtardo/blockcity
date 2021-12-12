@@ -91,17 +91,6 @@
 		moment.relativeTimeThreshold('h', 23); // greater than 20 minutes hidden the number of hours
 
 		const config = {
-			trans: {
-				confirmTitle: '{{ __("Are you sure?") }}',
-				confirmMint: '{{ __("You are about to spend :currency coins to mint a new building!") }}',
-				confirm: '{{ __("You are about to spend :currency coins to :action this house!") }}',
-				button: '{{ __("Yes, :action it!") }}',
-				repair: "{{ __('Repair') }}",
-    			upgrade: "{{ __('Upgrade') }}",
-				mint: "{{ __('Mint') }}",
-				comingSoonTitle: "{{ __('Coming soon!') }}",
-				comingSoonMessage: "{{ __('This feature is not available yet') }}",
-			},
 			mint_cost: {{ config('game.mint_cost') }},
 			min_claim: {{ config('game.min_claim') }},
 		};

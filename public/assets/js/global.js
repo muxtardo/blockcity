@@ -138,6 +138,10 @@ const checkTransaction = (transcId) => {
 
 			// Começa a verificar a próxima transação pendente
 			if (idTransaction) { checkTransaction(idTransaction); }
+
+			if (typeof exchangeApp !== 'undefined') {
+				exchangeApp.reset_transactions();
+			}
 		}
 	}, 5000);
 }
