@@ -126,5 +126,6 @@
     "Withdrawal": "הוצאה",
     "Check this Hash": "בדוק גיבוב זה",
     "Install MetaMask": "התקן MetaMask",
-    "No MetaMask detected, please install MetaMask!": "לא זוהה מטא מאסק, אנא התקן את מטא מאסק!"
+    "No MetaMask detected, please install MetaMask!": "לא זוהה מטא מאסק, אנא התקן את מטא מאסק!",
+    "install": "התקן"
 }

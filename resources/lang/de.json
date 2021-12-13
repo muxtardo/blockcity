@@ -125,5 +125,6 @@
     "Withdrawal": "Auszahlung",
     "Check this Hash": "Diesen Hash überprüfen",
     "Install MetaMask": "MetaMask installieren",
-    "No MetaMask detected, please install MetaMask!": "Kein MetaMask gefunden, bitte MetaMask installieren!"
+    "No MetaMask detected, please install MetaMask!": "Kein MetaMask gefunden, bitte MetaMask installieren!",
+    "install": "installieren"
 }
