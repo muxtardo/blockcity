@@ -123,5 +123,8 @@
     "Invalid receiver": "Receptor inválido",
     "Transaction completed": "Transacción completada",
     "Withdrawal": "Retiro",
-    "Check this Hash": "Compruebe este Hash"
+    "Check this Hash": "Compruebe este Hash",
+    "Install MetaMask": "Instalar MetaMask",
+    "No MetaMask detected, please install MetaMask!": "No se ha detectado MetaMask, por favor, instale MetaMask!",
+    "install": "instalar"
 }

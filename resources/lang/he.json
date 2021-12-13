@@ -124,5 +124,8 @@
     "Invalid receiver": "מקבל לא תקין",
     "Transaction completed": "העברה הושלמה",
     "Withdrawal": "הוצאה",
-    "Check this Hash": "בדוק גיבוב זה"
+    "Check this Hash": "בדוק גיבוב זה",
+    "Install MetaMask": "התקן MetaMask",
+    "No MetaMask detected, please install MetaMask!": "לא זוהה מטא מאסק, אנא התקן את מטא מאסק!",
+    "install": "התקן"
 }

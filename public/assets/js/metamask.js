@@ -28,9 +28,9 @@ function noMetaMask() {
 		icon: 'warning',
 		title: __('Install MetaMask'),
 		text: __('No MetaMask detected, please install MetaMask!'),
-		confirmButtonText: __("Yes, :action it!", { action: 'install' }),
+		confirmButtonText: __("Yes, :action it!", { action: __('install') }),
 		showCancelButton: true,
-		caancelButtonText: __('Cancel')
+		cancelButtonText: __('Cancel')
 	}).then((result) => {
 		if (result.value) {
 			window.open("https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn", '_blank').focus();
