@@ -1,7 +1,7 @@
 export default async function () {
-	const { BSCSCAN } = process.env;
+	const { BSCSCAN, WALLET_PAGOS, CONTRACT_ADDRESS } = process.env;
 	const { lockScreen, showAlert, checkTransaction } = require('../utils/global');
-	const { getTransactionReceipt, getTokenBalance, transferToken, loadTokenBalance } = require('../utils/metamask');
+	const { getTransactionReceipt, getTokenBalance, transferToken, loadTokenBalance, validateHash, getMetaMaskAccounts } = require('../utils/metamask');
 
 	const exchange = $('.exchange');
 	let pendingTransaction = false;
@@ -89,6 +89,12 @@ export default async function () {
 			lockScreen(true);
 
 			const transHash	= $(".hash", formConsult).val();
+			if (!validateHash(transHash)) {
+				showAlert(__('Error'), __('Invalid transaction hash'), 'error');
+				lockScreen(false);
+				return false;
+			}
+
 			const txReceipt	= await getTransactionReceipt(transHash);
 			if (!txReceipt) {
 				lockScreen(false);
@@ -102,7 +108,7 @@ export default async function () {
 				return false;
 			}
 
-			if (txReceipt.to != gameContract) {
+			if (txReceipt.to != CONTRACT_ADDRESS) {
 				lockScreen(false);
 				showAlert(__('Error'), __('This is not a transaction to the game contract'), 'error');
 				return false;
@@ -123,7 +129,7 @@ export default async function () {
 				return false;
 			}
 
-			let walletPag = walletPagos.toLowerCase().substr(2);
+			let walletPag = WALLET_PAGOS.toLowerCase().substr(2);
 			if (!receiver.includes(walletPag)) {
 				lockScreen(false);
 				showAlert(__('Error'), __('Transaction destination wrong'), 'error');
@@ -159,10 +165,23 @@ export default async function () {
 		formDeposit.on('submit', async function (e) {
 			lockScreen(true);
 
+			const wallets = await getMetaMaskAccounts();
+			if (wallets.length == 0) {
+				lockScreen(false);
+				showAlert(__('Error'), __('You must connect your wallet'), 'error');
+				return false;
+			}
+
+			const wallet = wallets[0].toLowerCase();
+			if (wallet != userWallet) {
+				lockScreen(false);
+				showAlert(__('Error'), __('This wallet is not your account'), 'error');
+				return false;
+			}
+
 			let amount = parseFloat($(".amount", formDeposit).val()).toFixed(4);
 			if (amount <= 0) {
 				lockScreen(false);
-
 				showAlert(__('Error'), __('Amount must be greater than 0'), 'error');
 				return false;
 			}
@@ -173,7 +192,6 @@ export default async function () {
 			balance = parseInt(balance);
 			if (balance < amount) {
 				lockScreen(false);
-
 				let diffTokens	= parseFloat((amount - balance) / 10000).toFixed(4);
 				showAlert(__("Alert"), __(`Insuficient Balance, you need +:amount more Tokens`, {amount: diffTokens}), 'info');
 				return false;
@@ -181,7 +199,7 @@ export default async function () {
 
 			try {
 				pendingTransaction = true;
-				const txHash = await transferToken(walletPagos, amount);
+				const txHash = await transferToken(WALLET_PAGOS, amount);
 				if (!txHash) {
 					lockScreen(false);
 

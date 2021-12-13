@@ -12,16 +12,16 @@ export default async function () {
 
 	function showNewMint(name, image, rarity) {
 		const stars = document.querySelectorAll('#myModal .stars-content > .stars');
-	
+
 		$("#buyHouse-name").text(name);
 		$("#buyHouse-image").attr('src', image);
-	
+
 		myModal.show();
-	
+
 		stars.forEach((star, index) => {
 			star.classList.remove('star-on');
 		});
-	
+
 		for (let i = 0; i < rarity; i++) {
 			setTimeout(() => {
 				stars[i].classList.add('star-on');

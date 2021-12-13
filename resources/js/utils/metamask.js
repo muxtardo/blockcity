@@ -1,6 +1,9 @@
 
-const { WEB3X, CHAIN_ID, CHAIN_NAME, BSCSCAN } = process.env;
-const { lockScreen, showAlert, storage_url } = require('../utils/global');
+const {
+	WEB3X, CHAIN_ID, CHAIN_NAME, BSCSCAN,
+	CONTRACT_ADDRESS, CONTRACT_SYMBOL, CONTRACT_DECIMALS
+} = process.env;
+const { lockScreen, showAlert, make_url, storage_url } = require('../utils/global');
 
 let providerMeta	= false;
 let	signer			= false;
@@ -29,7 +32,15 @@ const noMetaMask = () => {
 const addCustomToken = async () => {
 	return await ethereum.request({
 		method: 'wallet_watchAsset',
-		params: tokenParams
+		params: {
+			type: 'ERC20',
+			options: {
+				address:	CONTRACT_ADDRESS,
+				symbol:		CONTRACT_SYMBOL,
+				decimals:	CONTRACT_DECIMALS,
+				image:		make_url('favicon.ico')
+			}
+		}
 	});
 }
 
@@ -150,19 +161,37 @@ const getFromSign = async (secret, passphrase) => {
 	}
 }
 
+const getTransaction = async (txHash) => {
+	if (!providerMeta) {
+		return false;
+	}
+
+	if (!validateHash(txHash)) {
+		showAlert(__('Error'), __('Incorrect hash! Check it and try again.'), 'error');
+		return false;
+	}
+
+	const transaction = await providerMeta.getTransaction(txHash);
+	if (transaction) {
+		return transaction;
+	}
+
+	return false;
+};
+
 const getTransactionReceipt = async (txHash) => {
 	if (!providerMeta) {
 		return false;
 	}
 
-	if (txHash.length != 66) {
+	if (!validateHash(txHash)) {
 		showAlert(__('Error'), __('Incorrect hash! Check it and try again.'), 'error');
 		return false;
 	}
 
-	let txReceipt = await providerMeta.getTransactionReceipt(txHash);
-	if (txReceipt) {
-		return txReceipt;
+	const receipt = await providerMeta.getTransactionReceipt(txHash);
+	if (receipt) {
+		return receipt;
 	}
 
 	return false;
@@ -174,7 +203,7 @@ const getTokenBalance = async (wallet) => {
 	}
 
 	const contractAbi	= await $.getJSON(storage_url('contractAbi.json'));
-	const BNBContract	= new ethers.Contract(gameContract, contractAbi, signer);
+	const BNBContract	= new ethers.Contract(CONTRACT_ADDRESS, contractAbi, signer);
 	const resBalance	= await BNBContract.balanceOf(wallet);
 	if (resBalance) {
 		return Web3.utils.fromWei(resBalance._hex, 'wei');
@@ -188,7 +217,7 @@ const transferToken = async (wallet, amount) => {
 	}
 
 	const contractAbi	= await $.getJSON(storage_url('contractAbi.json'));
-	const BNBContract	= new ethers.Contract(gameContract, contractAbi, signer);
+	const BNBContract	= new ethers.Contract(CONTRACT_ADDRESS, contractAbi, signer);
 	const txHash		= await BNBContract.transfer(wallet, amount, {
 		'gasLimit': 150000,
 		'gasPrice': ethers.utils.parseUnits('10.0', 'gwei')
@@ -238,6 +267,10 @@ const loadTokenBalance = async () => {
 	myTokens.html(parseFloat(balance / 10000).toFixed(4));
 };
 
+const validateHash = (addr) => {
+  return /^0x([A-Fa-f0-9]{64})$/.test(addr);
+}
+
 try {
 	providerMeta	= new ethers.providers.Web3Provider(window.ethereum);
 	signer			= providerMeta.getSigner();
@@ -249,6 +282,7 @@ export {
 	addNetwork,
 	makeUserSign,
 	getFromSign,
+	getTransaction,
 	getTransactionReceipt,
 	getTokenBalance,
 	transferToken,
@@ -260,5 +294,6 @@ export {
 	checkChainId,
 	getActiveWallet,
 	changeNetwork,
-	loadTokenBalance
+	loadTokenBalance,
+	validateHash
 };
