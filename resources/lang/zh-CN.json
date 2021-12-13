@@ -118,5 +118,8 @@
     "Invalid chain ID. Please change your network in MetaMask and try again.": "无效链ID。请更改你的网络在MetaMask并再试一次。",
     "Failed to get your wallet address. Please try again.": "获取你的钱包地址失败。请再试一次。",
     "Invalid wallet address. Please reload the page and try again.": "无效钱包地址。请重新加载页面并再试一次。",
-    "Loading...": "加载中..."
+    "Loading...": "加载中...",
+    "Not your transaction": "不是你的交易",
+    "Invalid receiver": "无效接收者",
+    "Transaction completed": "交易完成"
 }
