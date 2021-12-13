@@ -122,5 +122,7 @@
     "Loading...": "Carregando...",
     "Not your transaction": "Não é sua transação",
     "Invalid receiver": "Destinatário inválido",
-    "Transaction completed": "Transação concluída"
+    "Transaction completed": "Transação concluída",
+    "Withdrawal": "Saque",
+    "Check this Hash": "Verificar este Hash"
 }

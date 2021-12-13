@@ -123,4 +123,6 @@
     "Not your transaction": "זה אינו העברה שלך",
     "Invalid receiver": "מקבל לא תקין",
     "Transaction completed": "העברה הושלמה",
+    "Withdrawal": "הוצאה",
+    "Check this Hash": "בדוק גיבוב זה"
 }
