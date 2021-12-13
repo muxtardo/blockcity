@@ -18,7 +18,7 @@ jobs:
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            cd /var/www/blockcity
+            cd /var/www/metacity
 
             git status
-            git pull https://fmedeiros95:${{ secrets.TOKEN }}@github.com/fmedeiros95/blockcity.git master
+            git pull https://fmedeiros95:${{ secrets.TOKEN }}@github.com/fmedeiros95/metacity.git master

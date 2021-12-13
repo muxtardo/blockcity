@@ -126,5 +126,6 @@
     "Check this Hash": "Diesen Hash überprüfen",
     "Install MetaMask": "MetaMask installieren",
     "No MetaMask detected, please install MetaMask!": "Kein MetaMask gefunden, bitte MetaMask installieren!",
-    "install": "installieren"
+    "install": "installieren",
+    "Not enough currency": "Nicht genug Münzen"
 }
