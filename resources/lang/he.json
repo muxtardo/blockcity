@@ -115,5 +115,9 @@
     "Error sending tokens": "שגיאה בשליחת מטבעות",
     "Transaction underpriced!": "העברה מחודשת!",
     "Transaction canceled!": "העברה בוטלה!",
-    "Transaction error": "שגיאה בהעברה"
+    "Transaction error": "שגיאה בהעברה",
+    "Invalid chain ID. Please change your network in MetaMask and try again.": "מזהה שרשרת לא תקין. אנא שנה את הרשת שלך ב-MetaMask ונסה שוב.",
+    "Failed to get your wallet address. Please try again.": "נכשל בקבלת כתובת הארנק. נסה שוב.",
+    "Invalid wallet address. Please reload the page and try again.": "כתובת ארנק לא תקינה. נסה לטעון את העמוד מחדש ולנסות שוב.",
+    "Loading...": "טוען..."
 }
