@@ -57,25 +57,14 @@
 		const domainName	= '{{ Request::server('SERVER_NAME') }}';
 		const site_url		= '{{ url('/') }}';
 		const current_page 	= '{{ Route::currentRouteName() }}';
-		const gameContract	= '{{ config('game.contract') }}';
-		const walletPagos	= '{{ config('game.wallet_pagos') }}';
-		const tokenParams	= {
-			type: 'ERC20',
-			options: {
-				address:	gameContract,
-				symbol:		'{{ config('game.symbol') }}',
-				decimals:	4,
-				image:		'{{ asset('favicon.ico') }}'
-			}
-		};
 
 		@if (Auth::check())
 			// Set user variables
-			let	userWallet		= '{{ Auth::user()->wallet }}';
-			let	userTransaction	= {{ Auth::user()->getPendingTransaction() ? Auth::user()->getPendingTransaction() : 'false' }};
+			const userWallet		= '{{ Auth::user()->wallet }}';
+			const userTransaction	= {{ Auth::user()->getPendingTransaction() ? Auth::user()->getPendingTransaction() : 'false' }};
 		@endif
 
-		const I18n = {!! $locale !!}
+		const I18n = {!! str_replace(["\n", str_repeat(' ', 4), '": "'], ['', '', '":"'], $locale) !!}
 	</script>
 	@yield('js')
 

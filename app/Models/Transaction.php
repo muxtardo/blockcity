@@ -48,13 +48,13 @@ class Transaction extends Model
 	public function check()
 	{
 		// Se tiver mais de 6 tentativas, não atualiza para falha
-		if (!$this->checkAttempts()) { return false; }
+		// if (!$this->checkAttempts()) { return false; }
 
 		// Verifica apenas transações pendentes
-		if ($this->status != 'pending') { return false; }
+		// if ($this->status != 'pending') { return false; }
 
 		// Atualiza as tentativas
-		$this->update([ 'attempts'	=> $this->attempts + 1, ]);
+		// $this->update([ 'attempts'	=> $this->attempts + 1, ]);
 
 		// Consulta a transação na API
 		$apiData	= Http::get(config('game.api_web3_url') . '/tokenTransaction/' . $this->txid)->json();

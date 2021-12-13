@@ -6,7 +6,7 @@ export default function() {
         const activeWallet = await getActiveWallet();
         if (activeWallet.toLowerCase() !== wallet) {
             lockScreen(false);
-            showAlert(__('Oops!'), __('Invalid wallet address. Please reload the page and try again.'), 'error');
+            showAlert(__('Error'), __('Invalid wallet address. Please reload the page and try again.'), 'error');
             return;
         }
 
@@ -40,24 +40,26 @@ export default function() {
         if (!isValidChainId) {
             if (!await changeNetwork()) {
                 lockScreen(false);
-                showAlert(__('Oops!'), __('Invalid chain ID. Please change your network in MetaMask and try again.'), 'error');
+                showAlert(__('Error'), __('Invalid chain ID. Please change your network in MetaMask and try again.'), 'error');
                 return;
             }
         }
 
         const wallets = await getMetaMaskAccounts();
-        if (wallets.length) {
-            let secret = localStorage.getItem("Signed" + wallets[0].toLowerCase());
+        if (wallets.length && wallets[0]) {
+			const useWallet = wallets[0].toLowerCase();
+            let secret = localStorage.getItem("Signed|" + useWallet);
+			console.log(secret);
             if (!secret) {
-                secret = await makeUserSign(wallets[0].toLowerCase(), passphrase);
-                localStorage.setItem("Signed" + wallets[0].toLowerCase(), secret);
+                secret = await makeUserSign(useWallet, passphrase);
+                localStorage.setItem("Signed|" + useWallet, secret);
             }
 
             const wallet = await getFromSign(secret, passphrase);
             authWithMetaMask(wallet.toLowerCase(), secret);
         } else {
             lockScreen(false);
-            showAlert(__('Oops!'), __('Failed to get your wallet address. Please try again.'), 'error');
+            showAlert(__('Error'), __('Failed to get your wallet address. Please try again.'), 'error');
         }
     });
 }

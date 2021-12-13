@@ -12,7 +12,6 @@ const mix = require('laravel-mix');
  */
 
 const env = process.env;
-
 const isTestNet = env.IS_TESTNET;
 
 mix.webpackConfig((webpack) => ({
@@ -27,6 +26,10 @@ mix.webpackConfig((webpack) => ({
                 CHAIN_ID: JSON.stringify(isTestNet ? env.TESTNET_CHAIN_ID : env.MAINNET_CHAIN_ID),
                 CHAIN_NAME: JSON.stringify(isTestNet ? env.TESTNET_CHAIN_NAME : env.MAINNET_CHAIN_NAME),
                 BSCSCAN: JSON.stringify(isTestNet ? env.TESTNET_BSCSCAN : env.MAINNET_BSCSCAN),
+				CONTRACT_SYMBOL: JSON.stringify(isTestNet ? env.TESTNET_CONTRACT_SYMBOL : env.MAINNET_CONTRACT_SYMBOL),
+				CONTRACT_ADDRESS: JSON.stringify(isTestNet ? env.TESTNET_CONTRACT_ADDRESS : env.MAINNET_CONTRACT_ADDRESS),
+				CONTRACT_DECIMALS: JSON.stringify(isTestNet ? env.TESTNET_CONTRACT_DECIMALS : env.MAINNET_CONTRACT_DECIMALS),
+				WALLET_PAGOS: JSON.stringify(isTestNet ? env.TESTNET_WALLET_PAGOS : env.MAINNET_WALLET_PAGOS),
 				PROD: !isTestNet
             }
         }),

@@ -142,4 +142,73 @@ class ExchangeController extends Controller
 			], 401);
 		}
 	}
+
+	public function payGasPrice(Request $request)
+	{
+		// Validate the form data
+		$validator = Validator::make($request->all(), [
+			'amount'	=> 'required|numeric|min:0.0001'
+		]);
+	}
+
+	public function withdrawal(Request $request)
+	{
+		// Validate the form data
+		$validator = Validator::make($request->all(), [
+			'amount'	=> 'required|numeric|min:0.0001',
+			// 'hash'		=> 'required|string|size:66',
+		]);
+
+		// If validation fails
+		if ($validator->fails()) {
+			return $this->json([
+				'success'	=> false,
+				'title'		=> __('Error'),
+				'message'	=> __('Invalid data')
+			], 401);
+		}
+
+		if (!config('game.withdraw')) {
+			return $this->json([
+				'success'	=> false,
+				'title'		=> __('Error'),
+				'message'	=> __('Withdrawal is disabled'),
+			], 401);
+		}
+
+		// Get post params
+		$params = $validator->validated();
+
+		if (!is_numeric($params['amount']) || $params['amount'] < 0) {
+			return $this->json([
+				'success'	=> false,
+				'title'		=> __('Error'),
+				'message'	=> __('Invalid amount'),
+			], 401);
+		}
+
+		if ($params['amount'] > Auth::user()->currency) {
+			return $this->json([
+				'success'	=> false,
+				'title'		=> __('Error'),
+				'message'	=> __('You don\'t have enough coins'),
+			], 401);
+		}
+
+		if ($params['amount'] < config('game.min_withdrawal')) {
+			return $this->json([
+				'success'	=> false,
+				'title'		=> __('Error'),
+				'message'	=> __('Minimum withdrawal amount is :min', [ 'min' => currency(config('game.min_withdrawal')) ]),
+			], 401);
+		}
+
+		if ($params['amount'] > config('game.max_withdrawal')) {
+			return $this->json([
+				'success'	=> false,
+				'title'		=> __('Error'),
+				'message'	=> __('Maximum withdrawal amount is :max', [ 'max' => currency(config('game.max_withdrawal')) ]),
+			], 401);
+		}
+	}
 }
