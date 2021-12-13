@@ -57,6 +57,7 @@
 		const domainName	= '{{ Request::server('SERVER_NAME') }}';
 		const site_url		= '{{ url('/') }}';
 		const isTestnet		= {{ config('game.testnet') ? 'true' : 'false' }};
+		const current_page 	= '{{ Route::currentRouteName() }}';
 		const gameContract	= '{{ config('game.contract') }}';
 		const walletPagos	= '{{ config('game.wallet_pagos') }}';
 		const tokenParams	= {
@@ -88,6 +89,9 @@
 
 	<!-- Custom Js -->
 
+	<script type="text/javascript" src="{{ asset('js/app.js') }}?c={{ filemtime(public_path('js/app.js')) }}"></script>
+	<!--
+
 	<script type="text/javascript" src="{{ asset('assets/js/i18n.js') }}?c={{ filemtime(public_path('assets/js/i18n.js')) }}"></script>
 	<script type="text/javascript" src="{{ asset('assets/js/global.js') }}?c={{ filemtime(public_path('assets/js/global.js')) }}"></script>
 	<script type="text/javascript" src="{{ asset('assets/js/metamask.js') }}?c={{ filemtime(public_path('assets/js/metamask.js')) }}"></script>
@@ -97,6 +101,7 @@
 	<script type="text/javascript" src="{{ asset('assets/js/modules/quests.js') }}?c={{ filemtime(public_path('assets/js/modules/quests.js')) }}"></script>
 	<script type="text/javascript" src="{{ asset('assets/js/modules/marketplace.js') }}?c={{ filemtime(public_path('assets/js/modules/marketplace.js')) }}"></script>
 	<script type="text/javascript" src="{{ asset('assets/js/modules/exchange.js') }}?c={{ filemtime(public_path('assets/js/modules/exchange.js')) }}"></script>
+	-->
 	@yield('script')
 </body>
 </html>

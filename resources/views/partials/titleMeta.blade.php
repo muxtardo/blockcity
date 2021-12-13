@@ -4,5 +4,7 @@
 <meta name="keywords" content="{{ env('APP_KEYWORDS') }}" />
 <meta name="description" content="{{ env('APP_DESCRIPTION') }}" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <!-- App favicon -->
 <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}" />
+

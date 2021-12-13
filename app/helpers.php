@@ -194,7 +194,7 @@ if (!function_exists('generateRandomWords')) {
 
 if (!function_exists('split_locales_list')) {
 	function split_locales_list($localesString) {
-		$localesArray = array_unique(array_map(function($value) { return explode("-", explode(";", $value)[0])[0]; }, explode(",", $localesString))); 
+		$localesArray = array_unique(array_map(function($value) { return explode(";", $value)[0]; }, explode(",", $localesString))); 
 		return $localesArray;
 	}	
 }
