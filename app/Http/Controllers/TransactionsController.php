@@ -18,6 +18,12 @@ class TransactionsController extends Controller
 			]);
 		}
 
-		return $this->json($transaction->check());
+		$check = $transaction->check();
+		if (!$check) {
+			return $this->json([
+				'success'	=> false
+			]);
+		}
+		return $this->json($check);
 	}
 }

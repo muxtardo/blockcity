@@ -77,7 +77,7 @@
 @endsection
 
 @section('js-libs')
-	<script src="https://unpkg.com/vue@next"></script>
+	<script src="https://unpkg.com/vue@3.2.26/dist/vue.global.prod.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/min/moment-with-locales.min.js"></script>
 @endsection
 

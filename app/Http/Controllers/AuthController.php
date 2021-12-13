@@ -27,8 +27,8 @@ class AuthController extends Controller
 		if ($validator->fails()) {
 			return $this->json([
 				'success'	=> false,
-				'title'		=> _('Error'),
-				'message'	=> _('Invalid credentials'),
+				'title'		=> __('Error'),
+				'message'	=> __('Invalid credentials'),
 			], 401);
 		}
 
@@ -36,19 +36,19 @@ class AuthController extends Controller
 		$credentials = $validator->validated();
 
 		// Search for the user by wallet
-		$user = User::getByWallet($credentials['wallet']);
+		$user = User::getByWallet(strtolower($credentials['wallet']));
 		if ($user && $user->secret != $credentials['secret']) {	// If the user exists and the secret is correct
 			return $this->json([
 				'success'	=> false,
-				'title'		=> _('Error'),
-				'message'	=> _('Invalid credentials'),
+				'title'		=> __('Error'),
+				'message'	=> __('Invalid credentials 2'),
 			], 401);
 		}
 
 		// If the user doesn't exist, create it!
 		if (!$user) {
 			$user = User::create([
-				'wallet' => $credentials['wallet'],
+				'wallet' => strtolower($credentials['wallet']),
 				'secret' => $credentials['secret'],
 			]);
 		}

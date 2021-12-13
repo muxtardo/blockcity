@@ -10,7 +10,7 @@ return [
 	'min_claim'				=> (int)	env('MIN_CLAIM',			30),
 	'max_build_level'		=> (int)	env('MAX_BUILD_LEVEL',		3),
 	'withdraw'				=> (bool)	env('WITHDRAW',				false),
-	'min_withdraw'			=> (float)	env('MIN_WITHDRAW',			10),
-	'max_withdraw'			=> (float)	env('MAX_WITHDRAW',			5000),
+	'min_withdrawal'		=> (float)	env('MIN_WITHDRAWAL',			10),
+	'max_withdrawal'		=> (float)	env('MAX_WITHDRAWAL',			5000),
 	'mint_cost'				=> (float)	env('MINT_COST',			100)
 ];

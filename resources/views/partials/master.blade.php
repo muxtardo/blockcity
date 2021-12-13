@@ -56,7 +56,7 @@
 	<script type="text/javascript">
 		const domainName	= '{{ Request::server('SERVER_NAME') }}';
 		const site_url		= '{{ url('/') }}';
-		const isTestnet		= {{ config('game.testnet') ? 'true' : 'false' }};
+		const current_page 	= '{{ Route::currentRouteName() }}';
 		const gameContract	= '{{ config('game.contract') }}';
 		const walletPagos	= '{{ config('game.wallet_pagos') }}';
 		const tokenParams	= {
@@ -75,28 +75,12 @@
 			let	userTransaction	= {{ Auth::user()->getPendingTransaction() ? Auth::user()->getPendingTransaction() : 'false' }};
 		@endif
 
-		// Instance of axios
-		const axiosInstance	= axios.create({
-			baseURL: site_url,
-			headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-		});
-
 		const I18n = {!! $locale !!}
-
 	</script>
 	@yield('js')
 
-	<!-- Custom Js -->
-
-	<script type="text/javascript" src="{{ asset('assets/js/i18n.js') }}?c={{ filemtime(public_path('assets/js/i18n.js')) }}"></script>
-	<script type="text/javascript" src="{{ asset('assets/js/global.js') }}?c={{ filemtime(public_path('assets/js/global.js')) }}"></script>
-	<script type="text/javascript" src="{{ asset('assets/js/metamask.js') }}?c={{ filemtime(public_path('assets/js/metamask.js')) }}"></script>
-	<script type="text/javascript" src="{{ asset('assets/js/modules/users.js') }}?c={{ filemtime(public_path('assets/js/modules/users.js')) }}"></script>
-	<script type="text/javascript" src="{{ asset('assets/js/modules/buildings.js') }}?c={{ filemtime(public_path('assets/js/modules/buildings.js')) }}"></script>
-	<script type="text/javascript" src="{{ asset('assets/js/modules/inventory.js') }}?c={{ filemtime(public_path('assets/js/modules/inventory.js')) }}"></script>
-	<script type="text/javascript" src="{{ asset('assets/js/modules/quests.js') }}?c={{ filemtime(public_path('assets/js/modules/quests.js')) }}"></script>
-	<script type="text/javascript" src="{{ asset('assets/js/modules/marketplace.js') }}?c={{ filemtime(public_path('assets/js/modules/marketplace.js')) }}"></script>
-	<script type="text/javascript" src="{{ asset('assets/js/modules/exchange.js') }}?c={{ filemtime(public_path('assets/js/modules/exchange.js')) }}"></script>
+	<!-- Game Js -->
+	<script type="text/javascript" src="{{ asset('assets/js/game.js') }}?c={{ filemtime(public_path('assets/js/game.js')) }}"></script>
 	@yield('script')
 </body>
 </html>
