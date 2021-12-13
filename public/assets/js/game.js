@@ -2179,7 +2179,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 function _ref() {
   _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6() {
-    var _require, lockScreen, showAlert, enableTooltip, current_timestamp, myModal, showNewMint, updateBuildings, instanceHidden, instanceInterval, buildingsApp;
+    var _require, lockScreen, showAlert, enableTooltip, current_timestamp, instanceHidden, instanceInterval, myModal, showNewMint, updateBuildings, buildingsApp;
 
     return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
       while (1) {
@@ -2215,17 +2215,7 @@ function _ref() {
               instanceInterval = setInterval(updateBuildingsData, 1000);
             };
 
-            _require = __webpack_require__(/*! ../utils/global */ "./resources/js/utils/global.js"), lockScreen = _require.lockScreen, showAlert = _require.showAlert, enableTooltip = _require.enableTooltip;
-            current_timestamp = Date.now();
-            myModal = new bootstrap.Modal(document.getElementById('myModal'));
-
-            myModal._element.addEventListener('hidden.bs.modal', function (event) {
-              $(".building-hidden").removeClass('building-hidden');
-              $("body").css("overflow", "auto");
-              instanceHidden.hidden = false;
-            });
-
-            showNewMint = function showNewMint(name, image, rarity) {
+            showNewMint = function _showNewMint(name, image, rarity) {
               var stars = document.querySelectorAll('#myModal .stars-content > .stars');
               $("#buyHouse-name").text(name);
               $("#buyHouse-image").attr('src', image);
@@ -2245,8 +2235,18 @@ function _ref() {
               }
             };
 
+            _require = __webpack_require__(/*! ../utils/global */ "./resources/js/utils/global.js"), lockScreen = _require.lockScreen, showAlert = _require.showAlert, enableTooltip = _require.enableTooltip;
+            current_timestamp = Date.now();
             instanceHidden = null;
             instanceInterval = null;
+            myModal = new bootstrap.Modal(document.getElementById('myModal'));
+
+            myModal._element.addEventListener('hidden.bs.modal', function (event) {
+              $(".building-hidden").removeClass('building-hidden');
+              $("body").css("overflow", "auto");
+              instanceHidden.hidden = false;
+            });
+
             buildingsApp = {
               data: function data() {
                 return {
@@ -2289,7 +2289,7 @@ function _ref() {
                             page = _arguments.length > 0 && _arguments[0] !== undefined ? _arguments[0] : 1;
                             lockScreen(true);
                             _context.next = 4;
-                            return axiosInstance.get('buildings', {
+                            return axios.get('buildings', {
                               params: {
                                 page: page,
                                 filter: _this.orderBy
@@ -2389,7 +2389,7 @@ function _ref() {
                             lockScreen(true);
                             _context2.prev = 8;
                             _context2.next = 11;
-                            return axiosInstance.post('buildings/' + action, {
+                            return axios.post('buildings/' + action, {
                               id: id
                             });
 
@@ -2525,7 +2525,7 @@ function _ref() {
                             lockScreen(true);
                             _context4.prev = 6;
                             _context4.next = 9;
-                            return axiosInstance.post('buildings/mint');
+                            return axios.post('buildings/mint');
 
                           case 9:
                             request = _context4.sent;
