@@ -1,17 +1,5 @@
 import __ from "./i18n";
 
-let lockActions = false;
-
-if (!isTestnet) {
-	const channel = new BroadcastChannel(domainName);
-	channel.postMessage({ action: "ping" });
-	channel.addEventListener("message", e => {
-		if (e.data.action == "ping") {
-			window.location.href	= "/duplicated";
-		}
-	});
-}
-
 const make_url = (url) => {
 	return site_url + '/' + url;
 }
@@ -65,8 +53,6 @@ const showAlert = (title, text, type) => {
 
 const lockScreen = (show) => {
 	if (show) {
-		lockActions = true;
-
 		var d	= $(document.createElement('DIV')).addClass('screen-lock');
 		var dd	= $(document.createElement('DIV')).addClass('screen-lock-text');
 
@@ -84,8 +70,6 @@ const lockScreen = (show) => {
 			});
 		}
 	} else {
-		lockActions = false;
-
 		$(document.body).css('overflow', 'auto');
 		$('.screen-lock, .screen-lock-text').remove();
 	}
@@ -123,7 +107,7 @@ const checkTransaction = (transcId) => {
 	clearInterval(transactionTimer);
 
 	transactionTimer = setInterval(async () => {
-		const response = await axiosInstance.post('transactionCheck', { id: transcId });
+		const response = await axios.post('transactionCheck', { id: transcId });
 		const { title, message, redirect, success, currency, idTransaction } = response.data;
 
 		if (redirect) { setTimeout(() => { window.location.href = redirect; }, 3000); }
@@ -192,4 +176,9 @@ export {
 	inDarkMode,
 	checkTransaction,
 	enableTooltip,
+	make_url,
+	asset_url,
+	image_url,
+	media_url,
+	storage_url
 }

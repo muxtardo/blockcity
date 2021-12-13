@@ -28,11 +28,8 @@
 								<b :class="'text-capitalize text-' + transaction.statusColor">@{{ transaction.status }}</b>
 							</td>
 							<td class="text-center">
-								<template v-if="transaction.status == 'success' && transaction.txid">
-									<a v-if="isTestnet" :href="'https://testnet.bscscan.com/tx/' + transaction.txid" target="_blank">
-										BscScan
-									</a>
-									<a v-else :href="'https://bscscan.com/tx/' + transaction.txid" target="_blank">
+								<template v-if="transaction.status.toLowerCase() == 'success' && transaction.txid">
+									<a :href="linkBSC + '/tx/' + transaction.txid" target="_blank">
 										BscScan
 									</a>
 								</template>
@@ -41,25 +38,6 @@
 							<td class="text-center">@{{ transaction.fee }}%</td>
 							<td class="text-center">--</td>
 						</tr>
-						{{-- @foreach ($transactions as $transaction)
-							<tr>
-								<th class="text-center" scope="row">{{ $transaction->created_at }}</th>
-								<td class="text-center">{{ Str::ucfirst($transaction->type) }}</td>
-								<td class="text-center">{{ currency($transaction->amount) }}</td>
-								<td class="text-center">
-									<b class="text-{{ $transaction->statusColor() }}">{{ __(Str::ucfirst($transaction->status)) }}</b>
-								</td>
-								<td class="text-center">
-									@if ($transaction->status == 'success' && $transaction->txid)
-										<a href="https://testnet.bscscan.com/tx/{{ $transaction->txid }}" target="_blank">BscScan</a>
-									@else
-										--
-									@endif
-								</td>
-								<td class="text-center">{{ $transaction->fee ? $transaction->fee . '%' : '--' }}</td>
-								<td class="text-center">--</td>
-							</tr>
-						@endforeach --}}
 					</tbody>
 				</table>
 			</div><!-- end table-responsive-->
@@ -75,12 +53,9 @@
 			</li>
 		</ul>
 	</div>
-	{{-- <div class="paginator-center">
-		{!! $transactions->render() !!}
-	</div> --}}
 </div>
 
 @section('js-libs')
-	<script src="https://unpkg.com/vue@next"></script>
+	<script src="https://unpkg.com/vue@3.2.26/dist/vue.global.prod.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/min/moment-with-locales.min.js"></script>
 @endsection

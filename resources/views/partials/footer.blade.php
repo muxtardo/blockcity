@@ -7,9 +7,9 @@
             </div>
             <div class="col-md-6">
                 <div class="text-md-end footer-links d-none d-sm-block">
-                    <a href="javascript:void(0);">{{ __('Wiki') }}</a>
-                    <a href="javascript:void(0);">{{ __('Telegram') }}</a>
-                    <a href="javascript:void(0);">{{ __('Discord') }}</a>
+					<a href="{{ config('game.whitepaper', '#') }}" target="_blank">{{ __('Wiki') }}</a>
+					<a href="{{ config('game.telegram', '#') }}" target="_blank">{{ __('Telegram') }}</a>
+                    <a href="{{ config('game.discord', '#') }}" target="_blank">{{ __('Discord') }}</a>
                 </div>
             </div>
         </div>

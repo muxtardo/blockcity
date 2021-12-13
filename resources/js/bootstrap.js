@@ -19,6 +19,17 @@ window.axios.defaults.baseURL = site_url;
 
 const current_page = window.current_page;
 
+const { PROD } = process.env;
+if (PROD) {
+	const channel = new BroadcastChannel(domainName);
+	channel.postMessage({ action: "ping" });
+	channel.addEventListener("message", e => {
+		if (e.data.action == "ping") {
+			window.location.href	= "/duplicated";
+		}
+	});
+}
+
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

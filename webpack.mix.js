@@ -27,12 +27,13 @@ mix.webpackConfig((webpack) => ({
                 CHAIN_ID: JSON.stringify(isTestNet ? env.TESTNET_CHAIN_ID : env.MAINNET_CHAIN_ID),
                 CHAIN_NAME: JSON.stringify(isTestNet ? env.TESTNET_CHAIN_NAME : env.MAINNET_CHAIN_NAME),
                 BSCSCAN: JSON.stringify(isTestNet ? env.TESTNET_BSCSCAN : env.MAINNET_BSCSCAN),
+				PROD: !isTestNet
             }
         }),
     ],
 }));
 
-mix.js('resources/js/app.js', 'public/js')
-    .postCss('resources/css/app.css', 'public/css', [
+mix.js('resources/js/game.js', 'public/assets/js')
+    .postCss('resources/css/game.css', 'public/assets/css', [
         //
     ]);

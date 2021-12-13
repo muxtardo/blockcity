@@ -1,24 +1,24 @@
 
 const { WEB3X, CHAIN_ID, CHAIN_NAME, BSCSCAN } = process.env;
+const { lockScreen, showAlert, storage_url } = require('../utils/global');
+
 let providerMeta	= false;
 let	signer			= false;
-try {
-	providerMeta	= new ethers.providers.Web3Provider(window.ethereum);
-	signer			= providerMeta.getSigner();
-} catch (err) {
-	noMetaMask();
-}
 
 const haveMetaMask = () => {
 	return typeof web3 !== 'undefined' && window.ethereum;
 };
 
 const noMetaMask = () => {
+	lockScreen(false);
+
 	Swal.fire({
 		icon: 'warning',
 		title: __('Install MetaMask'),
 		text: __('No MetaMask detected, please install MetaMask!'),
 		confirmButtonText: __("Yes, :action it!", { action: __("install") }),
+		showCancelButton: true,
+		cancelButtonText: __('Cancel')
 	}).then((result) => {
 		if (result.value) {
 			window.open("https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn", '_blank').focus();
@@ -151,6 +151,10 @@ const getFromSign = async (secret, passphrase) => {
 }
 
 const getTransactionReceipt = async (txHash) => {
+	if (!providerMeta) {
+		return false;
+	}
+
 	if (txHash.length != 66) {
 		showAlert(__('Error'), __('Incorrect hash! Check it and try again.'), 'error');
 		return false;
@@ -165,6 +169,10 @@ const getTransactionReceipt = async (txHash) => {
 };
 
 const getTokenBalance = async (wallet) => {
+	if (!providerMeta) {
+		return false;
+	}
+
 	const contractAbi	= await $.getJSON(storage_url('contractAbi.json'));
 	const BNBContract	= new ethers.Contract(gameContract, contractAbi, signer);
 	const resBalance	= await BNBContract.balanceOf(wallet);
@@ -175,6 +183,10 @@ const getTokenBalance = async (wallet) => {
 };
 
 const transferToken = async (wallet, amount) => {
+	if (!providerMeta) {
+		return false;
+	}
+
 	const contractAbi	= await $.getJSON(storage_url('contractAbi.json'));
 	const BNBContract	= new ethers.Contract(gameContract, contractAbi, signer);
 	const txHash		= await BNBContract.transfer(wallet, amount, {
@@ -219,6 +231,20 @@ const transferBNB = async (sender, receiver, amount) => {
 	});
 };
 
+const loadTokenBalance = async () => {
+	const myTokens = $("#myTokens");
+	let balance = await getTokenBalance(userWallet);
+	balance = parseInt(balance);
+	myTokens.html(parseFloat(balance / 10000).toFixed(4));
+};
+
+try {
+	providerMeta	= new ethers.providers.Web3Provider(window.ethereum);
+	signer			= providerMeta.getSigner();
+} catch (err) {
+	noMetaMask();
+}
+
 export {
 	addNetwork,
 	makeUserSign,
@@ -234,4 +260,5 @@ export {
 	checkChainId,
 	getActiveWallet,
 	changeNetwork,
+	loadTokenBalance
 };
