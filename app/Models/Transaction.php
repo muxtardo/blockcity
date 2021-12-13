@@ -22,8 +22,6 @@ class Transaction extends Model
         'fee',
     ];
 
-
-
 	public function statusColor()
 	{
 		if ($this->status == 'success') {
@@ -82,8 +80,8 @@ class Transaction extends Model
 		{
 			return [
 				'success'	=> false,
-				'title' 	=> 'Oops!',
-				'message'	=> 'Not your transaction'
+				'title' 	=> __('Error'),
+				'message'	=> __('Not your transaction')
 			];
 		}
 
@@ -93,8 +91,8 @@ class Transaction extends Model
 		{
 			return [
 				'success'	=> false,
-				'title' 	=> 'Oops!',
-				'message'	=> 'Invalid receiver'
+				'title' 	=> __('Error'),
+				'message'	=> __('Invalid receiver')
 			];
 		}
 
@@ -106,8 +104,8 @@ class Transaction extends Model
 
 		return [
 			'success'		=> true,
-			'title' 		=> 'Success!',
-			'message'		=> 'Transaction completed',
+			'title' 		=> __('Success'),
+			'message'		=> __('Transaction completed'),
 			'currency'		=> currency($user->currency),
 			'idTransaction'	=> $user->getPendingTransaction()
 		];

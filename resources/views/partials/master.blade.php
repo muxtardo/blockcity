@@ -23,6 +23,13 @@
 						"pageTitle"	=> isset($page_title) ? $page_title : false
 					])
 					<!-- end page title -->
+					@if (in_array(config('app.locale'), ['es', 'fr', 'he', 'pt-BR', 'zh-CN']))
+						<div class="alert alert-info bg-info text-white border-0" role="alert">
+							The translation was automatically generated,
+							if something was mistranslated and you are interested in helping to improve the translation,
+							please contact us!
+						</div>
+					@endif
 					@yield('content')
 				</div><!-- container -->
 			</div><!-- content -->

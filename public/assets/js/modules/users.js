@@ -19,7 +19,7 @@
 			if (!isValidChainId) {
 				if (!await changeNetwork()) {
 					lockScreen(false);
-					showAlert('Oops!', 'Invalid chain ID. Please change your network in MetaMask and try again.', 'error');
+					showAlert(__('Alert'), __('Invalid chain ID. Please change your network in MetaMask and try again.'), 'error');
 					return;
 				}
 			}
@@ -36,7 +36,7 @@
 				authWithMetaMask(wallet, secret);
 			} else {
 				lockScreen(false);
-				showAlert('Oops!', 'Failed to get your wallet address. Please try again.', 'error');
+				showAlert(__('Alert'), __('Failed to get your wallet address. Please try again.'), 'error');
 			}
 		});
 	}
@@ -45,7 +45,7 @@
 		const activeWallet = await getActiveWallet();
 		if (activeWallet !== wallet) {
 			lockScreen(false);
-			showAlert('Oops!', 'Invalid wallet address. Please reload the page and try again.', 'error');
+			showAlert(__('Alert'), __('Invalid wallet address. Please reload the page and try again.'), 'error');
 			return;
 		}
 

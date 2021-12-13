@@ -115,5 +115,14 @@
     "Error sending tokens": "Erro ao enviar tokens",
     "Transaction underpriced!": "Transação com preço baixo!",
     "Transaction canceled!": "Transação cancelada!",
-    "Transaction error": "Erro na transação"
+    "Transaction error": "Erro na transação",
+    "Invalid chain ID. Please change your network in MetaMask and try again.": "Chain ID inválida. Por favor, mude sua rede em MetaMask e tente novamente.",
+    "Failed to get your wallet address. Please try again.": "Falha ao obter seu endereço de carteira. Por favor, tente novamente.",
+    "Invalid wallet address. Please reload the page and try again.": "Endereço de carteira inválido. Por favor, recarregue a página e tente novamente.",
+    "Loading...": "Carregando...",
+    "Not your transaction": "Não é sua transação",
+    "Invalid receiver": "Destinatário inválido",
+    "Transaction completed": "Transação concluída",
+    "Withdrawal": "Saque",
+    "Check this Hash": "Verificar este Hash"
 }
