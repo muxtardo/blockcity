@@ -126,5 +126,6 @@
     "Check this Hash": "检查这个哈希",
     "Install MetaMask": "安装MetaMask",
     "No MetaMask detected, please install MetaMask!": "没有检测到MetaMask，请安装MetaMask！",
-    "install": "安装"
+    "install": "安装",
+    "Not enough currency": "不够币"
 }

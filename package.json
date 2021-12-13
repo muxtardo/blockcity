@@ -6,13 +6,15 @@
         "watch": "mix watch",
         "watch-poll": "mix watch -- --watch-options-poll=1000",
         "hot": "mix watch --hot",
-        "prod": "npm run production",
+        "prod": "PROD=true npm run production",
         "production": "mix --production"
     },
     "devDependencies": {
         "axios": "^0.21",
+        "javascript-obfuscator": "^3.0.0",
         "laravel-mix": "^6.0.6",
         "lodash": "^4.17.19",
-        "postcss": "^8.1.14"
+        "postcss": "^8.1.14",
+        "webpack-obfuscator": "^3.5.0"
     }
 }

@@ -103,20 +103,25 @@ const enableTooltip = () => {
 let runningCheck = false;
 let transactionTimer;
 const checkTransaction = (transcId) => {
+	if (runningCheck) {
+		return false;
+	}
 	runningCheck = true;
-	clearInterval(transactionTimer);
 
+	clearInterval(transactionTimer);
 	transactionTimer = setInterval(async () => {
 		const response = await axios.post('transactionCheck', { id: transcId });
-		const { title, message, redirect, success, currency, idTransaction } = response.data;
+		const { title, message, redirect, success, currency, idTransaction, attempts } = response.data;
 
 		if (redirect) { setTimeout(() => { window.location.href = redirect; }, 3000); }
+		if (attempts >= 6 || success) {
+			clearInterval(transactionTimer);
+		}
 
 		if (success) {
 			playSound(researchClick);
 			showAlert(title, message, success ? 'success' : 'danger');
 
-			clearInterval(transactionTimer);
 			runningCheck = false;
 
 			// Tenta atualizar na tela o saldo ddo usuário
