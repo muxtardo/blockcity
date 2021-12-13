@@ -37,7 +37,7 @@ class AuthController extends Controller
 
 		// Search for the user by wallet
 		$user = User::getByWallet($credentials['wallet']);
-		if ($user && $user->secret != $credentials['secret']) {	// If the user exists and the secret is correct
+		if ($user && strtolower($user->secret) != strtolower($credentials['secret'])) {	// If the user exists and the secret is correct
 			return $this->json([
 				'success'	=> false,
 				'title'		=> _('Error'),

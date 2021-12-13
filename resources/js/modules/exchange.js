@@ -4,6 +4,7 @@ export default async function () {
 	const { getTransactionReceipt, getTokenBalance, transferToken, loadTokenBalance } = require('../utils/metamask');
 
 	const exchange = $('.exchange');
+	let pendingTransaction = false;
 
 	const exchangeAppData = {
 		data() {
@@ -179,6 +180,7 @@ export default async function () {
 			}
 
 			try {
+				pendingTransaction = true;
 				const txHash = await transferToken(walletPagos, amount);
 				if (!txHash) {
 					lockScreen(false);
@@ -217,6 +219,7 @@ export default async function () {
 
 				return false;
 			} finally {
+				pendingTransaction = false;
 				lockScreen(false);
 			}
 		});
@@ -250,4 +253,10 @@ export default async function () {
 			if (redirect) { setTimeout(() => { window.location.href = redirect; }, 3000); }
 		});
 	}
+
+	$(window).on("beforeunload", function() {
+		if (pendingTransaction) {
+			return __('You have a pending transaction, are you sure you want to leave?');
+		}
+	});
 };

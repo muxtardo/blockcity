@@ -57,7 +57,7 @@ class Transaction extends Model
 		$this->update([ 'attempts'	=> $this->attempts + 1, ]);
 
 		// Consulta a transação na API
-		$apiData	= Http::get(config('game.api_web3_url') . '/transaction/' . $this->txid)->json();
+		$apiData	= Http::get(config('game.api_web3_url') . '/tokenTransaction/' . $this->txid)->json();
 		if (!$apiData) { return false; }
 		if (!$apiData['success']) { return false; }
 

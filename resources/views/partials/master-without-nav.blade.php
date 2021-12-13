@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ config('app.locale') }}" dir="{{ config('app.locale') == 'he' ? 'rtl' : 'ltr' }}">
 <head>
 	@include("partials/titleMeta", [
 		"title"	=> isset($page_title) ? $page_title : false

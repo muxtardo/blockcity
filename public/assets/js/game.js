@@ -2704,7 +2704,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 function _ref() {
   _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee8() {
-    var BSCSCAN, _require, lockScreen, showAlert, checkTransaction, _require2, getTransactionReceipt, getTokenBalance, transferToken, loadTokenBalance, exchange, exchangeAppData, formConsult, formDeposit, formWithdrawal;
+    var BSCSCAN, _require, lockScreen, showAlert, checkTransaction, _require2, getTransactionReceipt, getTokenBalance, transferToken, loadTokenBalance, exchange, pendingTransaction, exchangeAppData, formConsult, formDeposit, formWithdrawal;
 
     return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee8$(_context8) {
       while (1) {
@@ -2714,6 +2714,7 @@ function _ref() {
             _require = __webpack_require__(/*! ../utils/global */ "./resources/js/utils/global.js"), lockScreen = _require.lockScreen, showAlert = _require.showAlert, checkTransaction = _require.checkTransaction;
             _require2 = __webpack_require__(/*! ../utils/metamask */ "./resources/js/utils/metamask.js"), getTransactionReceipt = _require2.getTransactionReceipt, getTokenBalance = _require2.getTokenBalance, transferToken = _require2.transferToken, loadTokenBalance = _require2.loadTokenBalance;
             exchange = $('.exchange');
+            pendingTransaction = false;
             exchangeAppData = {
               data: function data() {
                 return {
@@ -3065,14 +3066,15 @@ function _ref() {
 
                         case 17:
                           _context6.prev = 17;
-                          _context6.next = 20;
+                          pendingTransaction = true;
+                          _context6.next = 21;
                           return transferToken(walletPagos, amount);
 
-                        case 20:
+                        case 21:
                           txHash = _context6.sent;
 
                           if (txHash) {
-                            _context6.next = 25;
+                            _context6.next = 26;
                             break;
                           }
 
@@ -3080,15 +3082,15 @@ function _ref() {
                           showAlert(__('Error'), __('Error sending tokens'), 'error');
                           return _context6.abrupt("return", false);
 
-                        case 25:
+                        case 26:
                           loadTokenBalance();
-                          _context6.next = 28;
+                          _context6.next = 29;
                           return axios.post('exchange/deposit', {
                             amount: amount / 10000,
                             hash: txHash.hash
                           });
 
-                        case 28:
+                        case 29:
                           response = _context6.sent;
                           _response$data2 = response.data, title = _response$data2.title, message = _response$data2.message, redirect = _response$data2.redirect, success = _response$data2.success, currency = _response$data2.currency, transactionId = _response$data2.transactionId; // Update interface with new user balance
 
@@ -3110,11 +3112,11 @@ function _ref() {
                             }, 3000);
                           }
 
-                          _context6.next = 41;
+                          _context6.next = 42;
                           break;
 
-                        case 37:
-                          _context6.prev = 37;
+                        case 38:
+                          _context6.prev = 38;
                           _context6.t0 = _context6["catch"](17);
 
                           if (_context6.t0.code == -32603) {
@@ -3127,17 +3129,18 @@ function _ref() {
 
                           return _context6.abrupt("return", false);
 
-                        case 41:
-                          _context6.prev = 41;
+                        case 42:
+                          _context6.prev = 42;
+                          pendingTransaction = false;
                           lockScreen(false);
-                          return _context6.finish(41);
+                          return _context6.finish(42);
 
-                        case 44:
+                        case 46:
                         case "end":
                           return _context6.stop();
                       }
                     }
-                  }, _callee6, null, [[17, 37, 41, 44]]);
+                  }, _callee6, null, [[17, 38, 42, 46]]);
                 }));
 
                 return function (_x2) {
@@ -3211,7 +3214,13 @@ function _ref() {
               }());
             }
 
-          case 14:
+            $(window).on("beforeunload", function () {
+              if (pendingTransaction) {
+                return __('You have a pending transaction, are you sure you want to leave?');
+              }
+            });
+
+          case 16:
           case "end":
             return _context8.stop();
         }
