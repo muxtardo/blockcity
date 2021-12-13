@@ -3283,7 +3283,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             case 2:
               activeWallet = _context.sent;
 
-              if (!(activeWallet !== wallet)) {
+              if (!(activeWallet.toLowerCase() !== wallet)) {
                 _context.next = 7;
                 break;
               }
@@ -3384,7 +3384,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 break;
               }
 
-              secret = localStorage.getItem("Signed" + wallets[0]);
+              secret = localStorage.getItem("Signed" + wallets[0].toLowerCase());
 
               if (secret) {
                 _context2.next = 25;
@@ -3392,11 +3392,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               }
 
               _context2.next = 23;
-              return makeUserSign(wallets[0], passphrase);
+              return makeUserSign(wallets[0].toLowerCase(), passphrase);
 
             case 23:
               secret = _context2.sent;
-              localStorage.setItem("Signed" + wallets[0], secret);
+              localStorage.setItem("Signed" + wallets[0].toLowerCase(), secret);
 
             case 25:
               _context2.next = 27;
@@ -3404,7 +3404,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
             case 27:
               wallet = _context2.sent;
-              authWithMetaMask(wallet, secret);
+              authWithMetaMask(wallet.toLowerCase(), secret);
               _context2.next = 33;
               break;
 
