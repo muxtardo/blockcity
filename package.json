@@ -11,8 +11,6 @@
         "axios": "^0.21",
         "javascript-obfuscator": "^3.0.0",
         "laravel-mix": "^6.0.6",
-        "laravel-mix-template-minifier": "^1.0.0",
-        "laravel-mix-views-minifier": "^2.0.1",
         "lodash": "^4.17.19",
         "postcss": "^8.1.14",
         "webpack-obfuscator": "^3.5.0"

@@ -19,9 +19,6 @@ const plugins = [];
 if (mix.inProduction()) {
 	const WebpackObfuscator = require('webpack-obfuscator');
 	plugins.push(new WebpackObfuscator(obfuscator.low));
-
-	// mix.minTemplate = require('laravel-mix-views-minifier')
-	// mix.minTemplate('storage/framework/views/*.php', 'storage/framework/views/')
 }
 
 mix.webpackConfig((webpack) => ({
