@@ -153,6 +153,8 @@ const getFromSign = async (secret, passphrase) => {
 			params: [ passphrase, secret ],
 		}).catch((err) => {
 			showAlert(__("Alert"), __("Your signature is invalid"), 'error');
+			localStorage.clear();
+			lockScreen(false);
 			return false;
 		})
 	} catch (err) {
