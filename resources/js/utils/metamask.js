@@ -3,7 +3,7 @@ const {
 	WEB3X, CHAIN_ID, CHAIN_NAME, BSCSCAN,
 	CONTRACT_ADDRESS, CONTRACT_SYMBOL, CONTRACT_DECIMALS
 } = process.env;
-const { lockScreen, showAlert, make_url, storage_url } = require('../utils/global');
+const { showAlert, make_url, storage_url } = require('../utils/global');
 
 let providerMeta	= false;
 let	signer			= false;
