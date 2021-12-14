@@ -15,3 +15,5 @@ yarn-error.log
 /.vscode
 /.package-lock.json
 /public/mix-manifest.json
+/public/assets/css/game.css
+/public/assets/js/game.*
