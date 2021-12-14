@@ -34,16 +34,13 @@ export default function() {
 
     $('.user-auth').on('click', async function (e) {
         e.preventDefault();
-
-        lockScreen(true);
-
         // Verify is user have MetaMask installed
         if (!haveMetaMask()) {
             noMetaMask();
             return;
         }
-
         try {
+            lockScreen(true);
             await checkChainId(); // Somente usado para testar se o usuário está conectado a rede correta
             const wallets = await getMetaMaskAccounts(); // Retorna um array com os endereços de cada carteira
 			const useWallet = wallets[0].toLowerCase(); // Usa a primeira carteira do array

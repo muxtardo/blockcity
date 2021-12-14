@@ -13,8 +13,6 @@ const haveMetaMask = () => {
 };
 
 const noMetaMask = () => {
-	lockScreen(false);
-
 	Swal.fire({
 		icon: 'warning',
 		title: __('Install MetaMask'),
