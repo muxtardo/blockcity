@@ -2,6 +2,14 @@ export default function() {
     const { lockScreen, showAlert } = require('../utils/global');
     const { haveMetaMask, noMetaMask, checkChainId, getMetaMaskAccounts, makeUserSign, getFromSign, changeNetwork, getActiveWallet } = require('../utils/metamask');
     const passphrase = `Secure Login ${site_url}`;
+    const getOrCreateSecret = async (wallet, passphrase) => {
+        let secret = localStorage.getItem("Signed|" + wallet);
+        if (!secret) {
+            secret = await makeUserSign(wallet, passphrase);
+            localStorage.setItem("Signed|" + wallet, secret);
+        }
+        return secret;
+    };
     const authWithMetaMask = async function (wallet, secret) {
         const activeWallet = await getActiveWallet();
         if (activeWallet.toLowerCase() !== wallet) {
@@ -35,31 +43,27 @@ export default function() {
             return;
         }
 
-        // Verify if active chain is the same as the one in the site
-        const isValidChainId = await checkChainId();
-        if (!isValidChainId) {
-            if (!await changeNetwork()) {
-                lockScreen(false);
-                showAlert(__('Error'), __('Invalid chain ID. Please change your network in MetaMask and try again.'), 'error');
-                return;
-            }
-        }
-
-        const wallets = await getMetaMaskAccounts();
-        if (wallets.length && wallets[0]) {
-			const useWallet = wallets[0].toLowerCase();
-            let secret = localStorage.getItem("Signed|" + useWallet);
-			console.log(secret);
-            if (!secret) {
-                secret = await makeUserSign(useWallet, passphrase);
-                localStorage.setItem("Signed|" + useWallet, secret);
-            }
-
+        try {
+            await checkChainId(); // Somente usado para testar se o usuário está conectado a rede correta
+            const wallets = await getMetaMaskAccounts(); // Retorna um array com os endereços de cada carteira
+			const useWallet = wallets[0].toLowerCase(); // Usa a primeira carteira do array
+            const secret = await getOrCreateSecret(useWallet, passphrase); // Gera ou recupera a chave privada do usuário
             const wallet = await getFromSign(secret, passphrase);
             authWithMetaMask(wallet.toLowerCase(), secret);
-        } else {
+        } catch (err) {
+            if (err.message == 'InvalidChainId') {
+                showAlert(__('Error'), __('Invalid chain ID. Please change your network in MetaMask and try again.'), 'error');
+            } else if (err.message == 'InvalidMetaMaskAccounts' || err instanceof TypeError) {
+                showAlert(__('Error'), __('Failed to get your wallet address. Please try again.'), 'error');
+            } else if (err.message == 'InvalidSignature') {
+                //showAlert(__("Alert"), __("Your signature is invalid. Please try again"), 'error');
+                localStorage.clear();
+                $('.user-auth').trigger('click');
+            } else if (err.message == 'FailedToGetWallet') {
+                showAlert(__("Alert"), __("Fail to get your wallet address"), 'error');
+            }
+        } finally {
             lockScreen(false);
-            showAlert(__('Error'), __('Failed to get your wallet address. Please try again.'), 'error');
         }
     });
 }

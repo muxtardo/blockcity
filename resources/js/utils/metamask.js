@@ -50,7 +50,7 @@ const getMetaMaskAccounts = async () => {
 			method: 'eth_requestAccounts'
 		});
 	} catch (err) {
-		return false;
+		throw new Error("InvalidMetaMaskAccounts");
 	}
 };
 
@@ -62,7 +62,7 @@ const checkChainId = async () => {
 
 		return chainId == CHAIN_ID;
 	} catch (err) {
-		return false;
+		throw new Error("InvalidChainId");
 	}
 };
 
@@ -148,16 +148,13 @@ const makeUserSign = async (string, passphrase) => {
 
 const getFromSign = async (secret, passphrase) => {
 	try {
-		return await ethereum.request({
+		const getSignature = await ethereum.request({
 			method: 'personal_ecRecover',
 			params: [ passphrase, secret ],
-		}).catch((err) => {
-			showAlert(__("Alert"), __("Your signature is invalid"), 'error');
-			return false;
-		})
+		});
+		return getSignature;
 	} catch (err) {
-		showAlert(__("Alert"), __("Fail to get your wallet address"), 'error');
-		return false;
+		throw new Error("InvalidSignature");
 	}
 }
 
