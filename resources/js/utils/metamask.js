@@ -3,7 +3,7 @@ const {
 	WEB3X, CHAIN_ID, CHAIN_NAME, BSCSCAN,
 	CONTRACT_ADDRESS, CONTRACT_SYMBOL, CONTRACT_DECIMALS
 } = process.env;
-const { showAlert, make_url, storage_url } = require('../utils/global');
+const { lockScreen, showAlert, make_url, storage_url } = require('../utils/global');
 
 let providerMeta	= false;
 let	signer			= false;
@@ -13,6 +13,8 @@ const haveMetaMask = () => {
 };
 
 const noMetaMask = () => {
+	lockScreen(false);
+
 	Swal.fire({
 		icon: 'warning',
 		title: __('Install MetaMask'),
@@ -48,7 +50,7 @@ const getMetaMaskAccounts = async () => {
 			method: 'eth_requestAccounts'
 		});
 	} catch (err) {
-		throw new Error("InvalidMetaMaskAccounts");
+		return false;
 	}
 };
 
@@ -60,7 +62,7 @@ const checkChainId = async () => {
 
 		return chainId == CHAIN_ID;
 	} catch (err) {
-		throw new Error("InvalidChainId");
+		return false;
 	}
 };
 
@@ -146,13 +148,16 @@ const makeUserSign = async (string, passphrase) => {
 
 const getFromSign = async (secret, passphrase) => {
 	try {
-		const getSignature = await ethereum.request({
+		return await ethereum.request({
 			method: 'personal_ecRecover',
 			params: [ passphrase, secret ],
-		});
-		return getSignature;
+		}).catch((err) => {
+			showAlert(__("Alert"), __("Your signature is invalid"), 'error');
+			return false;
+		})
 	} catch (err) {
-		throw new Error("InvalidSignature");
+		showAlert(__("Alert"), __("Fail to get your wallet address"), 'error');
+		return false;
 	}
 }
 
