@@ -1,6 +1,6 @@
 export default async function () {
 	const { lockScreen, showAlert, enableTooltip } = require('../utils/global');
-	const current_timestamp = Date.now();
+	const current_timestamp = Date.now(); // we save the timestamp of the page was loaded
 	let instanceHidden = null;
 	let instanceInterval = null;
 	const myModal = new bootstrap.Modal(document.getElementById('myModal'));
@@ -30,12 +30,17 @@ export default async function () {
 	}
 	function updateBuildings(buildings) {
 		const updateBuildingsData = () => {
+			const start_time = Date.now(); // we get the timestamp of the function was called
+			const used_current_time = Object.values(buildings.value)?.[0]?.claim?.times?.current_time; // we get the current_time of the server through by the first building
+			const timeElapsed = (start_time - current_timestamp) / 1000; // we calculate the time elapsed since the page was loaded (in seconds)
+			const current_time = (used_current_time + timeElapsed); // we estimate the current_time of the server (in seconds) by adding the time elapsed since the page was loaded to the current_time of the first building
+
 			Object.values(buildings.value).forEach((building) => {
-				const { last_claim_at, next_claim_at, current_time } = building.claim.times;
-				const timeElapsed = (Date.now() - current_timestamp) / 1000;
-				const t1 = (current_time + timeElapsed) - last_claim_at;
-				const t2 = next_claim_at - last_claim_at;
-				building.claim.progress = Math.min(100, t1 / t2 * 100).toFixed(2);
+				const { last_claim_at, next_claim_at } = building.claim.times;
+				const t1 = current_time - last_claim_at; // we calculate the time elapsed since the last claim
+				const t2 = next_claim_at - last_claim_at; // we calculate the time to the next claim
+				building.claim.progress_real = Math.min(100, t1 / t2 * 100) // we calculate the progress of the claim (in %) 
+				building.claim.progress = building.claim.progress_real.toFixed(2); // we round the progress to 2 decimal places
 				building.claim.available = (building.stats.daily * building.claim.progress/100).toFixed(4);
 				let claimColor = 'bg-success';
 				if (building.claim.progress < 30) {
@@ -234,7 +239,10 @@ export default async function () {
 				}
 			},
 			orderBy_claim_progress(a, b) {
-				return b.claim.progress - a.claim.progress;
+				if (!('progress_real' in b.claim) && !('progress_real' in a.claim)) {
+					return b.claim.progress - a.claim.progress;
+				}
+				return b.claim.progress_real - a.claim.progress_real;
 			},
 			orderBy_name(a, b) {
 				return a.name.localeCompare(b.name);

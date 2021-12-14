@@ -13,11 +13,11 @@ const mix = require('laravel-mix');
 
 const env = process.env;
 const isTestNet = env.IS_TESTNET;
-const obfuscator = require('./resources/js/utils/obfuscator');
-
 const plugins = [];
+
 if (mix.inProduction()) {
 	const WebpackObfuscator = require('webpack-obfuscator');
+    const obfuscator = require('./resources/js/utils/obfuscator');
 	plugins.push(new WebpackObfuscator(obfuscator.low));
 }
 
