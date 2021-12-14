@@ -1,5 +1,4 @@
 const mix = require('laravel-mix');
-const WebpackObfuscator = require('webpack-obfuscator');
 
 /*
  |--------------------------------------------------------------------------
@@ -17,8 +16,12 @@ const isTestNet = env.IS_TESTNET;
 const obfuscator = require('./resources/js/utils/obfuscator');
 
 const plugins = [];
-if (env.PROD !== undefined) {
+if (mix.inProduction()) {
+	const WebpackObfuscator = require('webpack-obfuscator');
 	plugins.push(new WebpackObfuscator(obfuscator.low));
+
+	// mix.minTemplate = require('laravel-mix-views-minifier')
+	// mix.minTemplate('storage/framework/views/*.php', 'storage/framework/views/')
 }
 
 mix.webpackConfig((webpack) => ({
