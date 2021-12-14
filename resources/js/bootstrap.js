@@ -14,11 +14,13 @@ window.axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('m
 window.axios.defaults.baseURL = site_url;
 
 // momentJs setting preferences
-window.moment.locale(document.documentElement.lang);
-window.moment.relativeTimeThreshold('s', 3);
-window.moment.relativeTimeThreshold('ss', 3); // less than 3 seconds hidden the number of seconds
-window.moment.relativeTimeThreshold('m', 59); // greater than 59 seconds hidden the number of minutes
-window.moment.relativeTimeThreshold('h', 23); // greater than 20 minutes hidden the number of hours
+if ('moment' in window) {
+	window.moment.locale(document.documentElement.lang);
+	window.moment.relativeTimeThreshold('s', 3);
+	window.moment.relativeTimeThreshold('ss', 3); // less than 3 seconds hidden the number of seconds
+	window.moment.relativeTimeThreshold('m', 59); // greater than 59 seconds hidden the number of minutes
+	window.moment.relativeTimeThreshold('h', 23); // greater than 20 minutes hidden the number of hours
+}
 
 
 /**
