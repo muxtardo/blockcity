@@ -83,7 +83,7 @@
 
 @section('js')
 	<script type="text/javascript">
-		// momentJs setting prefferences
+		// momentJs setting preferences
 		moment.locale('{{ config('app.locale') }}');
 		moment.relativeTimeThreshold('s', 3);
 		moment.relativeTimeThreshold('ss', 3); // less than 3 seconds hidden the number of seconds
