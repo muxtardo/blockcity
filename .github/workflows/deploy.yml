@@ -22,6 +22,3 @@ jobs:
 
             git status
             git pull https://fmedeiros95:${{ secrets.TOKEN }}@github.com/fmedeiros95/metacity.git master
-
-            yarn
-            yarn production
